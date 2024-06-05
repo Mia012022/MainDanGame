@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<!-- 頁尾 start -->
+<div class="footer row d-flex my-footer border-top border-opacity-10" style="white-space:nowrap;">
+    <div class="col-sm-4 flex-fill text-end">
+        <a href="#"><img class="my-footer-logo" src="~/image/logo-b.png" alt=""></a>
+    </div>
+    <nav class="col-sm-4">
+        <h5>常見問題 / 協助</h5>
+        <ul>
+            <li><a href="" class="list-group-item-action list-group-item w-25">帳號問題</a></li>
+            <li><a href="" class="list-group-item-action list-group-item w-25">訂單問題</a></li>
+            <li><a href="" class="list-group-item-action list-group-item w-25">條款與銷售細則</a></li>
+            <li><a href="" class="list-group-item-action list-group-item w-25">法律聲明</a></li>
+        </ul>
+    </nav>
+    <nav class="col-sm-3">
+        <div class="row w-25">
+            <div class="col-6 text-center fs-2 my-fb">
+                <a href="" class="list-group-item-action"><i class="bi bi-facebook"></i></a>
+            </div>
+            <div class="col-6 fs-2 my-yt">
+                <a href="" class="list-group-item-action"><i class="bi bi-youtube"></i></a>
+            </div>
+            <div class="col-6 text-center fs-2 my-tt">
+                <a href="" class="list-group-item-action"><i class="bi bi-twitter"></i></a>
+            </div>
+            <div class="col-6 fs-2 my-tw">
+                <a href="" class="list-group-item-action"><i class="bi bi-twitch"></i></a>
+            </div>
+        </div>
+    </nav>
+    <div class="fs-6"> © 2024 Dan Gaming. All rights reserved.</div>
+</div>
+<!-- 頁尾 end -->
+
+<script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).on("scroll", function () {
+        let value = $(document).scrollTop() > 20;
+
+        $(".my-header").css({
+            "background-color": value ? `rgb(172, 172, 172, 0.76)` : `rgb(52, 58, 64, 0)`,
+            "height": value ? "60px" : "80px",
+            "backdrop-filter": value ? "blur(5px)" : "blur(0px)"
+        })
+    })
+</script>
