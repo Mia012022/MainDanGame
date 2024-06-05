@@ -128,3 +128,5 @@ artifacts/
 _chutzpah/
 
 wwwroot/
+
+.vs/
