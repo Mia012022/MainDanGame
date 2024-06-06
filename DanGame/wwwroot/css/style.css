@@ -1,0 +1,73 @@
+.header{
+    margin: 0;
+}
+
+.my-header {
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    margin: 0px;
+    background-color: rgb(52, 58, 64, 0);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.375);
+    transition: background-color 0.5s, color 0.5s, height 0.5s;
+    backdrop-filter: blur(0px);
+    border-width: 0px;
+}
+
+body{
+    margin: 0;
+}
+
+a{
+    height: 100%;
+}
+
+.my-logo{
+    width: 100%;
+    object-fit: contain;
+    height: 100%;
+}
+
+.my-footer-logo {
+    max-width: 100%; 
+    height: auto; 
+    width: 150px;  
+}
+
+.footer{
+    padding: 20px 0 0 5px;
+    margin: 0;
+}
+
+.my-fb:hover {
+    color: rgb(0, 38, 255);
+}
+
+.my-yt:hover {
+    color: red;
+}
+
+.my-tt:hover {
+    color: rgb(0, 140, 255);
+}
+
+.my-tw:hover {
+    color: rgb(134, 34, 248);
+}
+
+.user-profilepic-container {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-profilepic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}

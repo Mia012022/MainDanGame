@@ -127,6 +127,4 @@ artifacts/
 # Chutzpah Test files
 _chutzpah/
 
-wwwroot/
-
 .vs/
