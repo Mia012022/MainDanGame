@@ -8,7 +8,7 @@ using Azure;
 
 namespace DanGame.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/app")]
     [ApiController]
     public class AppController : ControllerBase
     {

@@ -47,41 +47,34 @@
                     </dl>
                     <dl class="d-flex">
                         <dt style="margin: 10px;">類別</dt>
-                        @foreach (var tag in Model)
-                        {
-                            <dd style="margin: 10px;">
-                                <a href="#" class="list-group-item">@tag.TagName</a>
-                            </dd>
-                        }
+                        <div id="categories" style="margin: 10px;"></div>
                     </dl>
                 </div>
             </div>
         </div>
 
-        <div class="card mb-3 z-0 mx-3 mt-4 mb-4 modal_div_box">
+        <div id="app-detail" class="card mb-3 z-0 mx-3 mt-4 mb-4 modal_div_box">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <img src="@Model.AppDetail.HeaderImage"
+                    <img id="app-image" src=""
                          class="img-fluid rounded-start" alt="...">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body" style="padding: 10px 10px 0 10px;">
-                        <h4 class="card-title mx-2">@Model.AppDetail.AppName</h4>
-                        <div style="position: absolute; top: 15px; right: 50px; font-size: 15px;"> 下載次數 : @Model.AppDetail.Downloaded</div>
+                        <h4 class="card-title mx-2" id="app-name"></h4>
+                        <div style="position: absolute; top: 15px; right: 50px; font-size: 15px;" id="app-downloads"> 下載次數 : </div>
                         <div class="mb-3 mx-2">
-                            <p class="card-text border rounded">
-                                @Model.AppDetail.ShortDescription
-                            </p>
+                            <p class="card-text border rounded" id="app-description"></p>
                         </div>
                         <div class="d-flex">
                             <div>
                                 <p class="card-text">
                                     <small class="text-body-secondary border rounded-pill"
-                                           style="padding: 5px 15px; background-color: rgb(226, 226, 226);">@Model.GenreTag.TagName</small>
+                                           style="padding: 5px 15px; background-color: rgb(226, 226, 226);" id="app-genre"></small>
                                 </p>
                             </div>
                         </div>
-                        <div class="mt-3" style="position: absolute; bottom: 9%; left: 35%; font-size: 12px;"> 上架日期 : @Model.AppDetail.ReleaseDate</div>
+                        <div class="mt-3" style="position: absolute; bottom: 9%; left: 35%; font-size: 12px;" id="app-release-date"> 上架日期 : </div>
                         <div class="text-end">
                             <button class="btn btn-outline-primary" style="margin: 0 20px; position: absolute; bottom: 9%; right: 2%;">詳細資訊</button>
                         </div>
@@ -124,51 +117,57 @@
                 selectedItems = [];
                 $(".selected-item").text("");
             });
-
-            var tagLinks = document.querySelectorAll(".list-group-item");
-
-            // 为每个标签链接添加点击事件处理程序
-            tagLinks.forEach(function (link) {
-                link.addEventListener("click", function (event) {
-                    event.preventDefault(); // 阻止默认链接行为
-
-                    var selectedTag = link.innerText.trim(); // 获取点击的标签文本
-                    updateModal(selectedTag); // 更新模态框内容
-                });
-            });
-
-            // 更新模态框内容的函数
-            function updateModal(selectedTag) {
-                // 根据标签更新模态框内容，这里需要根据具体需求来实现
-                // 你可以使用 AJAX 请求从服务器获取相关数据，然后更新模态框内容
-                // 这里只是一个简单的示例，你可以根据实际情况进行修改
-                var modalTitle = document.querySelector(".modal_div_box .card-title");
-                var modalDescription = document.querySelector(".modal_div_box .card-text");
-
-                // 示例：将选定的标签作为标题显示在模态框中
-                modalTitle.innerText = selectedTag;
-
-                // 示例：将选定的标签作为描述显示在模态框中
-                modalDescription.innerText = "您选择了标签：" + selectedTag;
-            }
         });
 
-        function getAppsByTag(tagName) {
-            // 发送 POST 请求
-            $.ajax({
-                url: "/GetAppByTags", // 控制器的路由地址
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(tagName), // 将标签名作为 JSON 数据发送
-                success: function (data) {
-                    // 请求成功后的处理逻辑
-                    console.log("请求成功:", data);
-                },
-                error: function (xhr, status, error) {
-                    // 请求失败后的处理逻辑
-                    console.error("请求失败:", error);
-                }
+        const categoriesContainer = document.getElementById('categories');
+        const appDetailContainer = document.getElementById('app-detail');
+
+        // Fetch categories and display them
+        fetch('http://localhost:5000/api/app/GetAppByTags')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Categories fetched:', data);
+
+                data.forEach(category => {
+                    const ddElement = document.createElement('dd');
+                    ddElement.style.margin = '10px';
+
+                    const aElement = document.createElement('a');
+                    aElement.href = '#';
+                    aElement.className = 'list-group-item';
+                    aElement.textContent = category.tagName;
+                    aElement.addEventListener('click', () => fetchAppDetails(category.tagId, category.genreTagName));
+
+                    ddElement.appendChild(aElement);
+                    categoriesContainer.appendChild(ddElement);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
             });
+
+        // Fetch app details based on tagId and genreTagName
+        function fetchAppDetails(tagId, genreTagName) {
+            fetch(`http://localhost:5000/api/app/AppsDetail?tagId=${tagId}`)
+                .then(response => response.json())
+                .then(app => {
+                    console.log('App details fetched:', app);
+
+                    document.getElementById('app-image').src = app.HeaderImage;
+                    document.getElementById('app-name').textContent = app.AppName;
+                    document.getElementById('app-downloads').textContent = `下載次數 : ${app.Downloaded}`;
+                    document.getElementById('app-description').textContent = app.ShortDescription;
+                    document.getElementById('app-genre').textContent = genreTagName; // Use the genreTagName obtained from GetAppByTags
+                    document.getElementById('app-release-date').textContent = `上架日期 : ${app.ReleaseDate}`;
+
+                    appDetailContainer.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching app details:', error);
+                });
         }
+
+
+
     </script>
 </body>
