@@ -31,6 +31,7 @@ namespace DanGame.Controllers
                             appDesc = app.AppDetail.ShortDescription, 
                             releaseDate = app.AppDetail.ReleaseDate,
                             downloaded = app.AppDetail.Downloaded,
+                            price = app.AppDetail.Price,
                             tags = app.Tags
                         };
             return await query.ToListAsync();

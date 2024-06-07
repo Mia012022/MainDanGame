@@ -5,6 +5,64 @@
 	@model DanGame.Models.GameViewModel
 
 }
+<style>
+	.carousel-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		width: 100%;
+		margin: auto;
+		overflow: hidden;
+	}
+
+	.carousel-wrapper {
+		display: flex;
+		transition: transform 0.5s ease;
+		margin: 0 -95px;
+	}
+
+	.game-card {
+		flex: 0 0 280px;
+		margin: 10px;
+		border: none;
+	}
+
+		.game-card img {
+			border-radius: 10px;
+			width: 100%;
+		}
+
+	.carousel-control {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 40px;
+		height: 40px;
+		background-color: rgba(0, 0, 0, 0.5);
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		color: #fff;
+		font-size: 20px;
+	}
+
+	.carousel-control-prev {
+		left: 180px;
+		width: 50px;
+		height: 50px;
+		background-color: indigo;
+	}
+
+	.carousel-control-next {
+		right: 175px;
+		width: 50px;
+		height: 50px;
+		background-color: indigo;
+	}
+</style>
 
 <body class="area">
 
@@ -171,110 +229,132 @@
 
 	<br>
 	<br>
-	<div class="border" style="backdrop-filter: blur(3px); background-color: rgb(202, 202, 202, 0.5); height: 700px; padding: 40px 0;">
-		<div class="container">
-			<h1 class="text-center m-5 fw-bold"
-				style="font-size: 50px; color: white; text-shadow: black 0.2em 0.1em 0.2em;">
-				更多遊戲資訊
-			</h1>
-		</div>
-		<div id="carouselExampleCaptions" class="carousel slide z-0">
-			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-4" style="margin: 10px 0 10px 0;">
-								<div class="card">
-									<img src="~/image/test2.jpg" class="card-img-top" alt="...">
-									<div class="card-body">
-										<h5 class="card-title">Card 1</h5>
-										<button class="btn btn-secondary">詳細資訊</button>
-										<button class="btn btn-secondary float-end">
-											<div class="list-group-item-action"><i class="bi bi-cart-plus"></i></div>
-										</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-4" style="margin: 10px 0 10px 0;">
-								<div class="card">
-									<img src="~/image/test3.jpg" class="card-img-top" alt="...">
-									<div class="card-body">
-										<h5 class="card-title">Card 2</h5>
-										<button class="btn btn-secondary">詳細資訊</button>
-										<button class="btn btn-secondary float-end">
-											<div class="list-group-item-action"><i class="bi bi-cart-plus"></i></div>
-										</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-4" style="margin: 10px 0 10px 0;">
-								<div class="card">
-									<img src="~/image/test1.jpg" class="card-img-top" alt="...">
-									<div class="card-body">
-										<h5 class="card-title">Card 3</h5>
-										<button class="btn btn-secondary">詳細資訊</button>
-										<button class="btn btn-secondary float-end">
-											<div class="list-group-item-action"><i class="bi bi-cart-plus"></i></div>
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
+	<div style="background-color: rgb(202, 202, 202, 0.5); height: 700px; padding: 40px 0;" ">
+		<h1 class="text-center m-5 fw-bold" style="font-size: 50px; color: #000;">更多遊戲資訊</h1>
+
+		<div class="carousel-container">
+			<div class="carousel-control carousel-control-prev" onclick="moveCarousel(-1)">
+				&lt;
+			</div>
+			<div class="carousel-wrapper" id="carouselWrapper">
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片1">
+					<div class="card-body">
+						<h5 class="card-title">遊戲1</h5>
 					</div>
 				</div>
-				<div class="carousel-item">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-4" style="margin: 10px 0 10px 0;">
-								<div class="card">
-									<img src="~/image/test2.jpg" class="card-img-top" alt="...">
-									<div class="card-body">
-										<h5 class="card-title">Card 1</h5>
-										<button class="btn btn-secondary">詳細資訊</button>
-										<button class="btn btn-secondary float-end">
-											<div class="list-group-item-action"><i class="bi bi-cart-plus"></i></div>
-										</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-4" style="margin: 10px 0 10px 0;">
-								<div class="card">
-									<img src="~/image/test3.jpg" class="card-img-top" alt="...">
-									<div class="card-body">
-										<h5 class="card-title">Card 2</h5>
-										<button class="btn btn-secondary">詳細資訊</button>
-										<button class="btn btn-secondary float-end">
-											<div class="list-group-item-action"><i class="bi bi-cart-plus"></i></div>
-										</button>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-4" style="margin: 10px 0 10px 0;">
-								<div class="card">
-									<img src="~/image/test1.jpg" class="card-img-top" alt="...">
-									<div class="card-body">
-										<h5 class="card-title">Card 3</h5>
-										<button class="btn btn-secondary">詳細資訊</button>
-										<button class="btn btn-secondary float-end">
-											<div class="list-group-item-action"><i class="bi bi-cart-plus"></i></div>
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片2">
+					<div class="card-body">
+						<h5 class="card-title">遊戲2</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
+					</div>
+				</div>
+				<div class="card game-card">
+					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
+					<div class="card-body">
+						<h5 class="card-title">遊戲3</h5>
 					</div>
 				</div>
 			</div>
-			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-					data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Previous</span>
-			</button>
-			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-					data-bs-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Next</span>
-			</button>
+			<div class="carousel-control carousel-control-next" onclick="moveCarousel(1)">
+				&gt;
+			</div>
 		</div>
 	</div>
 
@@ -513,4 +593,16 @@
 			});
 		});
 	});
+
+	let currentIndex = 0;
+	const wrapper = document.getElementById('carouselWrapper');
+	const items = document.querySelectorAll('.game-card');
+	const totalItems = items.length;
+
+	function moveCarousel(direction) {
+		currentIndex = (currentIndex + direction + totalItems) % totalItems;
+
+		const offset = -currentIndex * 300;
+		wrapper.style.transform = `translateX(${offset}px)`;
+	}
 </script>
