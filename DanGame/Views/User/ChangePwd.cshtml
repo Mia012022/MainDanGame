@@ -1,0 +1,88 @@
+﻿@model DanGame.Models.UserProfileViewModel
+
+@{
+    ViewBag.Title = "Change Pwd";
+}
+
+<!-- 麵包屑 breadcrumb start ordered list 有序列表-->
+<div class="container-fluid overflow-x-auto" style="padding-top: 4rem;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mt-5 mx-5">
+            <li class="breadcrumb-item"><a class="text-decoration-none" asp-controller="Home" asp-action="Index">首頁</a></li>
+            <li class="breadcrumb-item">帳戶</li>
+        </ol>
+    </nav>
+</div>
+<!-- 麵包屑 breadcrumb end -->
+
+<div class="container-fluid overflow-x-auto">
+    <div class="row mx-5">
+        <div class="col d-flex justify-content-between align-items-center mb-2">
+            <h1>@Model.User.UserName 的帳戶</h1>
+            <button class="btn btn-outline-secondary text-end" id="logoutButton">登出</button>
+        </div>
+        <hr>
+    </div>
+    <div class="row justify-content-center mx-5 mt-1">
+        <div class="col-md-3">
+            <div>
+                <div class="d-flex flex-column">
+                    <div class="mb-3">
+                        <a asp-controller="User" asp-action="UserIndex" class="text-decoration-none">帳戶詳細資料</a>
+                    </div>
+                    <div class="mb-3">
+                        <a asp-controller="User" asp-action="Preferences" class="text-decoration-none">偏好設定</a>
+                    </div>
+                    <div class="mb-3">
+                        <a asp-controller="User" asp-action="Notification" class="text-decoration-none">通知設定</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="mb-3">
+                <label class="fs-4" for="">變更密碼</label>
+                <hr class="mt-1">
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+                <form id="PwdChangeForm" method="post" asp-controller="User" asp-action="ChangePwd">
+                    <div class="mb-3">
+                        <label class="form-label fs-6" for="password">請輸入舊密碼</label>
+                        <input class="form-control w-50" type="password" id="password" name="password" required>
+                        <label class="form-label fs-6" for="newpassword">選擇新密碼</label>
+                        <input class="form-control w-50" type="password" id="newpassword" name="newpassword" required>
+                        <label class="form-label fs-6" for="confirmpassword">確認新密碼</label>
+                        <div class="d-flex align-items-center">
+                            <input class="form-control w-50" type="password" id="confirmpassword" name="confirmpassword" required oninput="checkPasswordMatch()">
+                            <span id="checkmark" class="ms-2" style="display: none; color: green;">✔</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <!-- 如果密碼驗證失誤，顯示密碼錯誤
+                        如果密碼驗證成功，讓使用者登出要求重新登入&把舊的密碼刪除&新的密碼寫入SQL -->
+                        <button type="submit" class="btn btn-primary">確認變更</button>
+                    </div>
+                </form>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+
+<script>
+    function checkPasswordMatch() {
+        var newPassword = document.getElementById("newpassword").value;
+        var confirmPassword = document.getElementById("confirmpassword").value;
+        var checkmark = document.getElementById("checkmark");
+
+        if (newPassword === confirmPassword && newPassword.length > 0) {
+            checkmark.style.display = "inline";
+        } else {
+            checkmark.style.display = "none";
+        }
+    }
+</script>

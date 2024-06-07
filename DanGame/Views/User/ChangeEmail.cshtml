@@ -44,17 +44,23 @@
                 <div class="mb-3">
                     <label class="fs-4" for="">變更電子郵件地址</label>
                     <hr class="mt-1">
-                    <form id="EmailChangeForm" method="post">
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.ErrorMessage
+                        </div>
+                    }
+                    <form id="EmailChangeForm" method="post" asp-controller="User" asp-action="ChangeEmail">
                         <div class="mb-3">
                             <label class="form-label fs-6" for="">請輸入密碼</label>
-                            <input class="form-control w-50" type="text" name="" id="">
+                            <input class="form-control w-50" type="password" id="password" name="password" required>
                             <label class="form-label fs-6" for="">輸入新的電子郵件地址</label>
-                            <input class="form-control w-50" type="text" name="email" id="email">
+                            <input class="form-control w-50" type="text" name="email" id="email" pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="請輸入有效的電子郵件地址，如 example@example.com" required>
                         </div>
                         <div class="mb-3">
                             <!-- 如果密碼驗證失誤，顯示密碼錯誤
                             如果密碼驗證成功，讓使用者登出要求重新登入&把舊的email刪除&新的email寫入SQL -->
-                            <button type="submit" class="btn btn-primary" onclick="changeEmail()">確認變更</button>
+                            <button type="submit" class="btn btn-primary">確認變更</button>
                         </div>
                     </form>
                 </div>
@@ -63,8 +69,6 @@
         </div>
     </div>
 </div>
-
-@Html.AntiForgeryToken()
 
 <script>
     function changeEmail() {
