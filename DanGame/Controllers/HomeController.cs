@@ -26,6 +26,11 @@ namespace DanGame.Controllers
             return View();
         }
 
+        public IActionResult ranking()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
