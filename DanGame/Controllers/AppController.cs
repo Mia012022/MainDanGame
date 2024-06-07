@@ -20,11 +20,19 @@ namespace DanGame.Controllers
         }
 
         [HttpGet]
-        public async Task<List<App>> GetApps()
+        public async Task<dynamic> GetApps()
         {
             var query = from app in _context.Apps
                         where app.AppDetail.AppType == "game"
-                        select app;
+                        select new {
+                            appId=app.AppId, 
+                            appName=app.AppName, 
+                            headerImage = app.AppDetail.HeaderImage,
+                            appDesc = app.AppDetail.ShortDescription, 
+                            releaseDate = app.AppDetail.ReleaseDate,
+                            downloaded = app.AppDetail.Downloaded,
+                            tags = app.Tags
+                        };
             return await query.ToListAsync();
         }
 
