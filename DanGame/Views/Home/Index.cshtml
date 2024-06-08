@@ -229,10 +229,10 @@
 
 	<br>
 	<br>
-	<div style="background-color: rgb(202, 202, 202, 0.5); height: 700px; padding: 40px 0;" ">
+	<div class="border" style="background-color: rgb(202, 202, 202, 0.5); height: 700px; padding: 40px 0;">
 		<h1 class="text-center m-5 fw-bold" style="font-size: 50px; color: #000;">更多遊戲資訊</h1>
 
-		<div class="carousel-container">
+		<div class="carousel-container py-5">
 			<div class="carousel-control carousel-control-prev" onclick="moveCarousel(-1)">
 				&lt;
 			</div>
@@ -411,7 +411,7 @@
 								</label>
 							</div>
 							<div class="text-end" style="margin-top: 60px;">
-								<button type="button" class="btn btn-success">選擇</button>
+								<button type="button" class="btn btn-success" id="selectButton">選擇</button>
 							</div>
 						</div>
 					</div>
@@ -531,40 +531,8 @@
 </body>
 <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
 <script>
-	$(document).ready(function () {
-		var $header = $('.my-header');
-		$(window).scroll(function () {
-			if ($(this).scrollTop() > 20) {
-				$header.addClass('fixed').fadeIn();
-			} else {
-				$header.removeClass('fixed').fadeOut();
-			}
-		});
 
-		// 页面加载时默认选中第一个单选按钮
-		$("#option1").prop("checked", true);
-		$("#option1").parent().addClass("checkbgc");
-		// 初始化显示第一个 my-subscription，隐藏第二个 my-subscription
-		$(".my-subscription").eq(0).show();
-		$(".my-subscription").eq(1).hide();
-
-		// 监听单选按钮的点击事件
-		$("input[name='options']").change(function () {
-			// 判断选中的单选按钮
-			if ($("#option1").is(":checked")) {
-				$(".my-subscription").eq(0).show(); // 显示第一个 my-subscription
-				$(".my-subscription").eq(1).hide(); // 隐藏第二个 my-subscription
-				$(".checkbgc").removeClass("checkbgc");
-				$(this).parent().addClass("checkbgc");
-			} else if ($("#option2").is(":checked")) {
-				$(".my-subscription").eq(0).hide(); // 隐藏第一个 my-subscription
-				$(".my-subscription").eq(1).show(); // 显示第二个 my-subscription
-				$(".checkbgc").removeClass("checkbgc");
-				$(this).parent().addClass("checkbgc");
-			}
-		});
-	});
-
+	// 頁首
 	$(document).on("scroll", function () {
 		let value = $(document).scrollTop() > 20;
 
@@ -576,24 +544,65 @@
 		})
 	})
 
-	document.addEventListener("DOMContentLoaded", function () {
-		const qaItems = document.querySelectorAll(".myQAContent");
+	$(document).ready(function () {
+		var $header = $('.my-header');
+		$(window).scroll(function () {
+			if ($(this).scrollTop() > 20) {
+				$header.addClass('fixed').fadeIn();
+			} else {
+				$header.removeClass('fixed').fadeOut();
+			}
+		});
 
-		qaItems.forEach(item => {
-			item.addEventListener("click", function () {
-				const answerContent = this.nextElementSibling;
-				const symbol = this.querySelector(".symbol");
-				const isVisible = answerContent.style.display === "block";
+		// 頁面加載時，默認選中第一個單選按鈕
+		$("#option1").prop("checked", true);
+		$("#option1").parent().addClass("checkbgc");
+		// 初始化顯示第一個 my-subscription，隱藏第二個 my-subscription
+		$(".my-subscription").eq(0).show();
+		$(".my-subscription").eq(1).hide();
 
-				// Toggle the display of the answerContent
-				answerContent.style.display = isVisible ? "none" : "block";
+		// 監聽單選按鈕的點擊
+		$("input[name='options']").change(function () {
+			// 判斷選中的單選按鈕
+			if ($("#option1").is(":checked")) {
+				$(".my-subscription").eq(0).show(); // 顯示第一個 my-subscription
+				$(".my-subscription").eq(1).hide(); // 隱藏第二個 my-subscription
+				$(".checkbgc").removeClass("checkbgc");
+				$(this).parent().addClass("checkbgc");
+			} else if ($("#option2").is(":checked")) {
+				$(".my-subscription").eq(0).hide(); // 隱藏第一個 my-subscription
+				$(".my-subscription").eq(1).show(); // 顯示第二個 my-subscription
+				$(".checkbgc").removeClass("checkbgc");
+				$(this).parent().addClass("checkbgc");
+			}
+		});
 
-				// Toggle the + and - symbols
-				symbol.textContent = isVisible ? "+" : "-";
-			});
+		// 訂閱內容
+		$.ajax({
+			url: 'http://localhost:5000/api/api/SubscriptionPlan',
+			type: 'GET',
+			success: function (data) {
+				var subscriptionPlansContainer = $('#subscriptionPlansContainer');
+				$.each(data, function (index, plan) {
+					var html = '<div class="mw-50 col-sm-9 my-subscription">' +
+						'<h4 class="me-3 mt-4 fs-4" style="width: 120px; margin: 20px; background: ' + plan.themeColor + '; border-radius: 20px; padding: 5px; color: white;">' +
+						'&#160;' + plan.planName +
+						'</h4>' +
+						'<p class="ms-5 mt-3 fs-4">&#160;' + plan.description + '</p>' +
+						'<p class="ms-5 fs-5">&#160;' + plan.details + '</p>' +
+						'<p class="ms-5" style="font-size: 12px;">&#160;' + plan.paymentInfo + '</p>' +
+						'<p class="text-end fs-4">&#160; NT$' + plan.price + ' / ' + plan.duration + '<span class="fs-6">( ' + plan.savingInfo + ' )</span></p>' +
+						'</div>';
+					subscriptionPlansContainer.append(html);
+				});
+			},
+			error: function (error) {
+				console.log(error);
+			}
 		});
 	});
 
+	// 卡片版面
 	let currentIndex = 0;
 	const wrapper = document.getElementById('carouselWrapper');
 	const items = document.querySelectorAll('.game-card');
@@ -605,4 +614,22 @@
 		const offset = -currentIndex * 300;
 		wrapper.style.transform = `translateX(${offset}px)`;
 	}
+
+	// 常見問題縮放js
+	document.addEventListener("DOMContentLoaded", function () {
+		const qaItems = document.querySelectorAll(".myQAContent");
+
+		qaItems.forEach(item => {
+			item.addEventListener("click", function () {
+				const answerContent = this.nextElementSibling;
+				const symbol = this.querySelector(".symbol");
+				const isVisible = answerContent.style.display === "block";
+
+				answerContent.style.display = isVisible ? "none" : "block";
+
+				symbol.textContent = isVisible ? "+" : "-";
+			});
+		});
+	});
+
 </script>

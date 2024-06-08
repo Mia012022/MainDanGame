@@ -32,6 +32,16 @@ namespace DanGame.Controllers
             return user;
         }
 
-        // 其他API动作方法...
-    }
+		// 其他API动作方法...
+		[HttpGet("SubscriptionPlan")]
+		public async Task<ActionResult<IEnumerable<SubscriptionPlan>>> GetSubscriptionPlans()
+		{
+			var subscriptionPlans = await _context.SubscriptionPlans.ToListAsync();
+			if (subscriptionPlans == null || subscriptionPlans.Count == 0)
+			{
+				return NotFound();
+			}
+			return subscriptionPlans;
+		}
+	}
 }
