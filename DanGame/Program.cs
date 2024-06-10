@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using OpenAI.Extensions;
 using DanGame.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,9 @@ builder.Services.AddControllers();
 
 // 加入 IHttpContextAccessor 服務
 builder.Services.AddHttpContextAccessor();
+
+// 加入Open AI 服務
+builder.Services.AddOpenAIService();
 
 // 加入session服務
 builder.Services.AddSession(options =>
