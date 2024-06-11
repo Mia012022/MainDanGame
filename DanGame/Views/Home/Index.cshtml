@@ -19,19 +19,17 @@
 	.carousel-wrapper {
 		display: flex;
 		transition: transform 0.5s ease;
-		margin: 0 -95px;
 	}
 
 	.game-card {
 		flex: 0 0 280px;
 		margin: 10px;
 		border: none;
+		border-radius: 10px;
+		width: 100%;
 	}
 
-		.game-card img {
-			border-radius: 10px;
-			width: 100%;
-		}
+
 
 	.carousel-control {
 		position: absolute;
@@ -62,6 +60,7 @@
 		height: 50px;
 		background-color: indigo;
 	}
+
 </style>
 
 <body class="area">
@@ -232,127 +231,21 @@
 	<div class="border" style="background-color: rgb(202, 202, 202, 0.5); height: 700px; padding: 40px 0;">
 		<h1 class="text-center m-5 fw-bold" style="font-size: 50px; color: #000;">更多遊戲資訊</h1>
 
-		<div class="carousel-container py-5">
-			<div class="carousel-control carousel-control-prev" onclick="moveCarousel(-1)">
+		<div class="carousel-container py-4">
+			<div class="carousel-control carousel-control-prev" id="prevButton" onclick="moveCarousel(-1)">
 				&lt;
 			</div>
 			<div class="carousel-wrapper" id="carouselWrapper">
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片1">
+				<div class="card game-card-border">
+					<img src="" class="card-img-top" alt="">
 					<div class="card-body">
-						<h5 class="card-title">遊戲1</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片2">
-					<div class="card-body">
-						<h5 class="card-title">遊戲2</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
-					</div>
-				</div>
-				<div class="card game-card">
-					<img src="https://via.placeholder.com/700x500" class="card-img-top" alt="遊戲圖片3">
-					<div class="card-body">
-						<h5 class="card-title">遊戲3</h5>
+						<h5 class="card-title"></h5>
+						<p>NT$ </p>
+						<button>詳細資料</button>
 					</div>
 				</div>
 			</div>
-			<div class="carousel-control carousel-control-next" onclick="moveCarousel(1)">
+			<div class="carousel-control carousel-control-next" id="nextButton" onclick="moveCarousel(1)">
 				&gt;
 			</div>
 		</div>
@@ -367,9 +260,10 @@
 	</h1>
 	<div class="container border rounded"
 		 style="padding-top: 15px; padding-bottom: 20px; margin-top: 50px; margin-bottom: 50px; padding-left: 40px; padding-right: 20px;  background-color: rgb(202, 202, 202, 0.5);">
-		<div class="tab-content" id="myTabContent">
+		<div class="tab-content" id="subscriptionPlansContainer">
 			<div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
-				<div class="container mt-3 row d-flex" style="height: 300px; margin-bottom: 25px;">
+				<div class=" container mt-3 row d-flex" style="height: 300px; margin-bottom: 25px;">
+
 					<div class="mw-50 col-sm-9 my-subscription">
 						<h4 class="me-3 mt-4 fs-4"
 							style="width: 120px; margin: 20px; background: rgba(255, 208, 1, 0.7); border-radius: 20px; padding: 5px; color: white;">
@@ -399,16 +293,17 @@
 						<p class="text-end fs-4">&#160; NT$899 / 3個月 <span class="fs-6">( 一個月約 NT$300 )</span></p>
 					</div>
 					<div class="col-sm-3">
-						<div class="btn-group d-block  border-start" role="group" aria-label="Basic example"
+						<div class="btn-group d-block  border-start button-container" role="group" aria-label="Basic example"
 							 style="height: 300px; padding: 10px;">
 							<h4 class="mt-3 ps-2"> 請選擇 </h4>
 							<div class="btn-group-vertical d-block" role="group">
 								<label class="btn mt-3 ms-4 w-75" style="border-radius: 10px;">
-									<input type="radio" name="options" id="option1"> 一個月方案
+									<input type="radio" name="options" id="option1" class="button active" onclick="toggleButtons(1)"> 一個月方案
 								</label>
 								<label class="btn mt-3 ms-4 w-75" style="border-radius: 10px;">
-									<input type="radio" name="options" id="option2"> 三個月方案
+									<input type="radio" name="options" id="option2" class="button" onclick="toggleButtons(2)"> 三個月方案
 								</label>
+								<div class="slider" id="slider"></div>
 							</div>
 							<div class="text-end" style="margin-top: 60px;">
 								<button type="button" class="btn btn-success" id="selectButton">選擇</button>
@@ -496,7 +391,7 @@
 				<div class="my-3">
 					<div class="border rounded bg-light text-dark py-3 px-3 mx-3 myQAContent">　遊戲無法啟動，該怎麼辦？<span class="symbol">+</span></div>
 					<div class="py-3 px-3 mx-3 answerContent text-white fw-bold">
-						請首先確保您的設備滿足遊戲的最低系統要求，並且已安裝最新的驅動程序。<br>
+						首先請確保您的設備滿足遊戲的最低系統要求，並且已安裝最新的驅動程序。<br>
 						如果問題仍然存在，請聯繫我們的技術支持團隊。
 					</div>
 				</div>
@@ -582,7 +477,7 @@
 			url: 'http://localhost:5000/api/api/SubscriptionPlan',
 			type: 'GET',
 			success: function (data) {
-				var subscriptionPlansContainer = $('#subscriptionPlansContainer');
+				var subscriptionPlansContainer = $('.subscriptionPlansContainer');
 				$.each(data, function (index, plan) {
 					var html = '<div class="mw-50 col-sm-9 my-subscription">' +
 						'<h4 class="me-3 mt-4 fs-4" style="width: 120px; margin: 20px; background: ' + plan.themeColor + '; border-radius: 20px; padding: 5px; color: white;">' +
@@ -591,8 +486,8 @@
 						'<p class="ms-5 mt-3 fs-4">&#160;' + plan.description + '</p>' +
 						'<p class="ms-5 fs-5">&#160;' + plan.details + '</p>' +
 						'<p class="ms-5" style="font-size: 12px;">&#160;' + plan.paymentInfo + '</p>' +
-						'<p class="text-end fs-4">&#160; NT$' + plan.price + ' / ' + plan.duration + '<span class="fs-6">( ' + plan.savingInfo + ' )</span></p>' +
-						'</div>';
+						'<p class="text-end fs-4">&#160; NT$' + plan.price + ' / ' + plan.duration + '<span class="fs-6">( ' + plan.savingInfo + ' )</span></p>' + '</div>'
+						;
 					subscriptionPlansContainer.append(html);
 				});
 			},
@@ -604,15 +499,51 @@
 
 	// 卡片版面
 	let currentIndex = 0;
-	const wrapper = document.getElementById('carouselWrapper');
 	const items = document.querySelectorAll('.game-card');
 	const totalItems = items.length;
 
 	function moveCarousel(direction) {
+		const wrapper = document.getElementById('carouselWrapper');
 		currentIndex = (currentIndex + direction + totalItems) % totalItems;
 
 		const offset = -currentIndex * 300;
 		wrapper.style.transform = `translateX(${offset}px)`;
+	}
+	$.ajax({
+		url: 'http://localhost:5000/api/app',
+		type: 'GET',
+		success: function (data) {
+			var carouselWrapper = $('#carouselWrapper');
+			$.each(data, function (index, item) {
+				// 建立一個新的遊戲卡元素
+				var gameCard = $('<div>', { class: 'card game-card' });
+				var img = $('<img>', { class: 'card-img-top', alt: '', src: item.headerImage });
+				var cardBody = $('<div>', { class: 'card-body' });
+				var cardTitle = $('<h5>', { class: 'card-title', text: item.appName });
+				var price = $('<p>', { text: 'NT$ ' + item.price });
+				var button = $('<button>', { text: '詳細資料' });
+
+				cardBody.append(cardTitle, price, button);
+				gameCard.append(img, cardBody);
+				carouselWrapper.append(gameCard);
+			});
+		}
+	});
+
+	function toggleButtons(buttonId) {
+		var button1 = document.getElementById('option1');
+		var button2 = document.getElementById('option2');
+		var slider = document.getElementById('slider');
+
+		if (buttonId === 1) {
+			slider.style.left = '0%';
+			button1.classList.add('active');
+			button2.classList.remove('active');
+		} else {
+			slider.style.left = '50%';
+			button1.classList.remove('active');
+			button2.classList.add('active');
+		}
 	}
 
 	// 常見問題縮放js
