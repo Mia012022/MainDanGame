@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using DanGame.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<DanGameContext>(options =>
 // 設定控制器和視圖服務
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -55,17 +57,6 @@ app.UseAuthorization();
 // 加入session中介軟體
 app.UseSession();
 
-//// 添加身份驗證服務
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//	.AddCookie(options =>
-//	{
-//		options.LoginPath = "/User/Login"; // 設定登錄頁面路徑
-//		//options.LogoutPath = "/Account/Logout"; // 設定登出頁面路徑
-//		options.AccessDeniedPath = "/Account/AccessDenied"; // 設定拒絕訪問頁面路徑
-//	});
-
-//// 添加授權服務
-//builder.Services.AddAuthorization();
 
 app.MapControllerRoute(
     name: "default",

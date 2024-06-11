@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 //using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace DenGame.Controllers
 {
@@ -15,12 +16,14 @@ namespace DenGame.Controllers
 		private readonly IWebHostEnvironment _env;
 		private readonly ILogger<ForumController> _logger;
 		private readonly DanGameContext _context;
+		
 
 		public ForumController(IWebHostEnvironment env, ILogger<ForumController> logger, DanGameContext context)
 		{
 			_env = env;
 			_logger = logger;
 			_context = context;
+			
 		}
 		//---------------論壇首頁 有做分頁-------------
 		public async Task<IActionResult> Index(string category = "全部主題", int page = 1)
@@ -77,9 +80,14 @@ namespace DenGame.Controllers
 			return View(viewModel);
 		}
 		//----------------快來發文吧------------------
-		[Authorize]
+		
 		public IActionResult Post()
 		{
+			var userIds = (HttpContext.Session.GetString("UserId"));
+			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			{
+				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+			}
 			return View();
 		}
 		//-----------------文章細節---------------------
@@ -136,16 +144,22 @@ namespace DenGame.Controllers
 			return View(viewModel);
 		}
 		//------------------個人主頁---------------------
-		public async Task<IActionResult> ForumUser(int id)
+		
+		public async Task<IActionResult> ForumUser()
 		{
-			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
-			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == id);
-			var forumuser = await _context.ArticleLists.Where(x => x.UserId == id).ToListAsync();
-			var comment = await _context.ArticalComments.Where(x => x.UserId == id).ToListAsync();
-			var like = await _context.ArticalLikes.Where(x => x.UserId == id).ToListAsync();
-			var commentlike = await _context.ArticalCommentLikes.Where(x => x.UserId == id).ToListAsync();
+			var userIds = (HttpContext.Session.GetString("UserId"));
+			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			{
+				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+			}
+			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId);
+			var forumuser = await _context.ArticleLists.Where(x => x.UserId == userId).ToListAsync();
+			var comment = await _context.ArticalComments.Where(x => x.UserId == userId).ToListAsync();
+			var like = await _context.ArticalLikes.Where(x => x.UserId == userId).ToListAsync();
+			var commentlike = await _context.ArticalCommentLikes.Where(x => x.UserId == userId).ToListAsync();
 			var likedArticles = await _context.ArticalLikes
-			.Where(like => like.UserId == id)
+			.Where(like => like.UserId == userId)
 			.Select(like => like.Artical)
 			.ToListAsync();
 			if (user == null)
@@ -161,6 +175,7 @@ namespace DenGame.Controllers
 				Comments = comment,
 				CommentLikes = commentlike,
 				LikedArticles = likedArticles
+				
 			};
 
 			return View(viewModel);
@@ -175,6 +190,11 @@ namespace DenGame.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Upload(IFormFile file, string title, string description, string Category)
 		{
+			var userIds = (HttpContext.Session.GetString("UserId"));
+			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			{
+				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+			}
 			if (file != null && file.Length > 0)
 			{
 				using (var memoryStream = new MemoryStream())
