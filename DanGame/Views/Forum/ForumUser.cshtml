@@ -1,0 +1,174 @@
+﻿﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model DanGame.Models.UserArticlesViewModel
+@{
+	ViewData["Title"] = "ForumUser";
+}
+<style>
+	.hhh {
+		height: 100px;
+	}
+</style>
+<div class="hhh"></div>
+<div class="container">
+
+
+<div class="d-flex mb-3 ">
+	<div>
+		<img class="rounded-circle" style="width: 70px;height:70px;object-fit:cover;"
+			 src="@Model.UserProfile.ProfilePictureUrl">
+		</img>
+	</div>
+	<div class="m-3">
+		<span class="text-primary">@Model.User.UserName</span>
+		<div>
+			<span class="text-secondary ">@Model.Articles.Count</span>
+			<span class="text-secondary ">文章</span>
+			<span class="text-secondary ms-2">@Model.Comments.Count</span>
+			<span class="text-secondary ">評論</span>
+			<span class="text-secondary ms-2">@Model.Likes.Count</span>
+			<span class="text-secondary ">收藏</span>
+			<span class="text-secondary ms-2">0</span>
+			<span class="text-secondary ">讚數</span>
+			<span class="text-secondary ms-2">0</span>
+			<span class="text-secondary ">追蹤</span>
+			<span class="text-secondary ms-2">0</span>
+			<span class="text-secondary ">粉絲</span>
+		</div>
+
+	</div>
+</div>
+
+<div class="d-flex  m-auto">
+	<div class="shadow border border-1 rounded w-100 m-auto mt-4 me-3">
+		<div class="m-4 ">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">文章</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">評論</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">收藏</button>
+				</li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+					@if (!Model.Articles.Any())
+					{
+						<div class="row justify-content-center">
+							<img src="https://www.hoyolab.com/_nuxt/img/7ea569b.png" style="width:250px" />
+							<div><p class="text-center">你還沒有已發表的內容喔!</p></div>
+
+						</div>
+					}
+					else
+					{
+
+
+						@foreach (var item in Model.Articles)
+						{
+
+							<div class="row mb-2 mt-2">
+								<div class="col-10 "><a asp-action="Artical" asp-route-id="@item.ArticalId" class="text-decoration-none"> @Html.DisplayFor(modelItem => item.ArticalTitle)</a></div>
+								<div class="col-1 "><a asp-action="Edit" asp-route-id="@item.ArticalId" class="text-decoration-none">編輯</a></div>
+								<div class="col-1"><a asp-action="DeleteArticle" asp-route-id="@item.ArticalId" class="text-decoration-none">刪除</a></div>
+
+							</div>
+						}
+					}
+				</div>
+				<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+					@if (!Model.Comments.Any())
+					{
+						<div class="row justify-content-center">
+							<img src="https://www.hoyolab.com/_nuxt/img/2247615.png" style="width:250px" />
+							<div><p class="text-center">你還沒有已評論的內容喔!</p></div>
+
+						</div>
+					}
+					else
+					{
+
+
+						@foreach (var comment in Model.Comments)
+						{
+							<div class="row mb-2 mt-2">
+								<div class="col-11 "><a asp-action="Artical" asp-route-id="@comment.ArticalId" class="text-decoration-none"> @Html.DisplayFor(modelItem => comment.CommentContent)</a></div>
+
+								<div class="col-1"><a asp-action="" asp-route-id="@comment.CommentId" class="text-decoration-none">刪除</a></div>
+
+							</div>
+						}
+					}
+				</div>
+
+				<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+					@if (!Model.LikedArticles.Any())
+					{
+						<div class="row justify-content-center">
+							<img src="https://www.hoyolab.com/_nuxt/img/2247615.png" style="width:250px" />
+							<div><p class="text-center">你還沒有已收藏的內容喔!</p></div>
+						</div>
+					}
+					else
+					{
+						@foreach (var articalLike in Model.LikedArticles)
+						{
+							<div class="row mb-2 mt-2">
+								<div class="col-11 "><a asp-action="Artical" asp-route-id="@articalLike.ArticalId" class="text-decoration-none"> @Html.DisplayFor(modelItem => articalLike.ArticalTitle)</a></div>
+
+
+							</div>
+						}
+					}
+
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+	<!-- 右側 -->
+	<div class="m-1 p-1 w-25">
+
+		<div class="mt-1  p-3 rounded ">
+			<div class="list-group">
+				<a href="/Forum/Post" class="btn btn-outline-secondary">快來發文吧!</a>
+			</div>
+
+		</div>
+		<div class="mt-1  p-3 rounded ">
+
+			<div class="card" style="width: 18rem;">
+				<div class="card-header">
+					誰追蹤你
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">An item</li>
+					<li class="list-group-item">A second item</li>
+					<li class="list-group-item">A third item</li>
+				</ul>
+			</div>
+		</div>
+		<div class="mt-1  p-3 rounded ">
+
+			<div class="card" style="width: 18rem;">
+				<div class="card-header">
+					我的粉絲
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">An item</li>
+					<li class="list-group-item">A second item</li>
+					<li class="list-group-item">A third item</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

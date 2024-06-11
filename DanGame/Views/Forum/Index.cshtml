@@ -1,0 +1,262 @@
+﻿﻿@* @model IEnumerable<DenGame.Models.ArticleList> *@
+@model DanGame.Models.PageListViewModel
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@{
+	ViewData["Title"] = "Index";
+	var parser = new DanGame.Helpers.HtmlParser();
+
+
+}
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="~/css/forumIndex.css" />
+	<link rel="stylesheet" href="~/css/PagedList.css" />
+	<script src="~/js/jquery-dateformat.min.js"></script>
+	<script src="https://kit.fontawesome.com/b5dde33e16.js" crossorigin="anonymous"></script>
+@* 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> *@
+</head>
+<style>
+	.bgpurple {
+		
+		background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)), url('../img/purple.png') no-repeat 0% 20%/ cover;
+		border-radius: 10px; /* 邊角圓滑 */
+		box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* 模糊邊框 */
+		background-attachment: fixed;
+		background-size: cover;
+		height: 120vh;
+	}
+
+
+	.articalcontent img, iframe {
+		width: 150px;
+		height: 120px;
+		object-fit: cover;
+	}
+
+	.two-lines {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.purple{
+		background: #cc7edd;
+		background: linear-gradient(to bottom, #cc7edd 0%, #8c56c5 50%, #D07ECC 100%);
+	}
+</style>
+
+<body>
+	<div class="bgpurple">
+
+	
+	<div class="m-1 mt-5 pt-5 container m-auto mb-5">
+		<div class="d-flex">
+			<div class="m-1 w-100 rounded">
+				<div class="p-1">
+					<div class="d-flex justify-content-around w-25 m-auto">
+						@Html.PagedListPager(Model.ArticleList, page => Url.Action("Index", new { page }))
+
+					</div>
+					<a href="@Url.Action("Index", new { category = "全部主題" })" class="btn btn-light">全部主題</a>
+					<a href="@Url.Action("Index", new { category = "綜合討論" })" class="btn btn-light ms-2">綜合討論</a>
+					<a href="@Url.Action("Index", new { category = "資訊快報" })" class="btn btn-light ms-2">資訊快報</a>
+					<a href="@Url.Action("Index", new { category = "心得攻略" })" class="btn btn-light ms-2">心得攻略</a>
+					<a href="@Url.Action("Index", new { category = "實況專區" })" class="btn btn-light ms-2">實況專區</a>
+					@* <a href="" class="btn btn-outline-secondary">全部主題</a>
+					<a href="" class="btn btn-outline-secondary">綜合討論</a>
+					<a href="" class="btn btn-outline-secondary">資訊快報</a>
+					<a href="" class="btn btn-outline-secondary">心得攻略</a>
+					<a href="" class="btn btn-outline-secondary">實況專區</a> *@
+				</div>
+
+				<table class="table table-striped table-hover shadow">
+					<thead >
+						<tr>
+							<th scope="col"></th>
+							<th scope="col">文章列表</th>
+							<th scope="col"><div class="d-flex justify-content-center">@* <i class="bi bi-eye"></i> *@</div></th>
+							<th scope="col"><div class="d-flex justify-content-center">@* <i class="bi bi-chat-left"></i> *@</div></th>
+							<th scope="col"><div class="d-flex justify-content-center">@* <i class="bi bi-calendar"></i> *@</div></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model.ArticleList)
+						{
+							var concatenatedContent = parser.ConcatenateParagraphContents(item.ArticalContent);
+							<tr>
+								<th scope="col" class="align-middle">
+									<div class="d-flex justify-content-center text-muted" style="font-size:x-small">@item.ArticleCategory</div>
+								</th>
+								<td class="title align-middle">
+									<a asp-action="Artical" asp-route-id="@item.ArticalId" class="d-flex text-decoration-none">
+										<div>
+											<img src="data:image;base64,@Convert.ToBase64String(item.ArticalCoverPhoto)"
+												 alt="" style="width:150px;height: 90px; object-fit: cover;" class="rounded">
+										</div>
+
+										<div class="imglist-text">
+											<div class="b-list_title fw-bold ">@item.ArticalTitle</div>
+											<div class="b-list_brief text-secondary articalcontent two-lines">
+												<p>@Html.Raw(concatenatedContent)</p>
+											</div>
+										</div>
+									</a>
+								</td>
+								<td class="align-middle " style=" font-size:x-small">
+									<div class="d-flex justify-content-center text-muted"><div><i class="fa-solid fa-eye me-1"></i><span>@item.ArticalViews.Count</span></div></div>
+								</td>
+								<td class="align-middle" style="font-size:x-small">
+									<div class="d-flex justify-content-center text-muted"><div><i class="fa-solid fa-message me-1"></i><span>@item.ArticalComments.Count</span></div></div>
+								</td>
+								@{
+									// var dateTimeStr = item.ArticalCreateDate;
+									// DateTime dateTime = DateTime.Parse(dateTimeStr);
+								}
+								<td class="align-middle" style=" font-size:x-small; white-space: pre-line;">
+									<div class="d-flex justify-content-center text-muted"> <div class="ArticalCreateDate" timestramp="@(((DateTimeOffset)item.ArticalCreateDate).ToUnixTimeSeconds()*1000)"></div> </div>
+								</td>
+							</tr>
+						}
+
+					</tbody>
+				</table>
+				<div class="d-flex justify-content-around w-25 m-auto">
+					@Html.PagedListPager(Model.ArticleList, page => Url.Action("Index", new { page }))
+
+				</div>
+			</div>
+			<div class="m-1 p-1">
+				<div class="p-3 rounded">
+					<form asp-action="Search" method="get" asp-controller="Forum">
+						<div class="input-group">
+							<input type="search" name="searchTerm" class="w-75 form-control" placeholder="搜尋文章">
+							<div class="input-group-append">
+								<button type="submit" class="btn btn-light "><i class="fa-solid fa-magnifying-glass"></i></button>
+							</div>
+						</div>
+					</form>
+
+				</div>
+				<div class="mt-1  p-3 rounded ">
+					<div class="list-group">
+						<a href="/Forum/Post" class="btn btn-light">快來發文吧!</a>
+					</div>
+
+				</div>
+				<div class="mt-1  p-3 rounded ">
+					<div class="list-group">
+						<a href="/Forum/ForumUser/" class="btn btn-light">個人主頁</a>
+					</div>
+				</div>
+				<div class="mt-1  p-3 rounded ">
+					<div class="card">
+						<div class="card-header">
+							近期活躍達人
+						</div>
+						<ul class="list-group list-group-flush">
+							@foreach (var user in Model.TopUsers)
+							{
+								<li class="list-group-item d-flex">
+									<div>
+											<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@user.UserId" class="text-decoration-none">
+												<img src="@user.ProfilePictureUrl" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;">
+											</a>
+									</div>
+									
+										<div>
+											<span>
+												@user.UserName
+											</span>
+											<p style="font-size:x-small">最近發表1篇文章</p>
+										</div>
+										
+
+									
+									
+								</li>
+							}
+
+							@* 	<li class="list-group-item">A second item</li>
+							<li class="list-group-item">A third item</li> *@
+						</ul>
+					</div>
+				</div>
+				<div class="mt-1  p-3 rounded ">
+					<div class="card">
+						<div class="card-header">
+							熱門推薦文章
+						</div>
+						<ul class="list-group list-group-flush">
+							@foreach (var popular in Model.PopularArticle)
+							{
+								<li class="list-group-item">
+									@{
+										string word = popular.ArticalTitle;
+										string result = word.Length > 15 ? (word.Substring(0, 15) + "..")  : word;
+									}
+									<a asp-action="Artical" asp-controller="Forum" asp-route-id="@popular.ArticalID" class="text-decoration-none" style="font-size:small">
+										@result
+									</a>
+									
+									</li>
+							}
+							
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+	<script>
+		$(document).ready(function () {
+			$("oembed").each(function () {
+				var url = $(this).attr("url");
+				if (url.includes("youtube.com")) {
+					var videoId = url.split("v=")[1];
+					var embedUrl = "https://www.youtube.com/embed/" + videoId;
+					$(this).replaceWith('<iframe width="560" height="315" src="' + embedUrl + '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>');
+				}
+			});
+			$(".ArticalCreateDate").each(function () {
+				let time = new Date(Number($(this).attr("timestramp")));
+				$(this).html(DateFormat.format.prettyDate(time));
+			})
+		});
+
+		// 取得所有具有 editTime class 的元素
+		const editTimeElements = document.getElementsByClassName('editTime');
+
+		// 對每個元素進行編輯時間格式化
+		Array.from(editTimeElements).forEach((element) => {
+			const editTimeValue = element.textContent.trim();
+			const formattedEditTime = formatEditTime(editTimeValue);
+			element.textContent = formattedEditTime;
+		});
+
+		function formatEditTime(editTime) {
+			const now = new Date();
+			const editDate = new Date(editTime);
+			const diff = Math.abs(now - editDate);
+
+			const minutes = Math.floor(diff / (1000 * 60));
+			const hours = Math.floor(diff / (1000 * 60 * 60));
+			const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+			if (days > 0) {
+				return days + " 天前";
+			} else if (hours > 0) {
+				return hours + " 小時前";
+			} else {
+				return minutes + " 分鐘前";
+			}
+		}
+	</script>
+
+</body>

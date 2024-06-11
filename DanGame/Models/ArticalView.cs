@@ -11,5 +11,6 @@ public partial class ArticalView
 
     public int UserId { get; set; }
 
-    public virtual User User { get; set; } = null!;
+	public virtual ArticleList Artical { get; set; } = null!;
+	public virtual User User { get; set; } = null!;
 }

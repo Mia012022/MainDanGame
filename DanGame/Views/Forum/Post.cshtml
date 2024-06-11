@@ -1,0 +1,317 @@
+﻿﻿@{
+	ViewData["Title"] = "Post";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<script src="~/ckeditor5/build/ckeditor.js"></script>
+	@* <link rel="stylesheet" href="css/editor.css"> *@
+	<link rel="stylesheet" href="~/css/post.css" asp-append-version="true" />
+	@* <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script> *@
+	<script src="https://kit.fontawesome.com/b5dde33e16.js" crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<style>
+	.bgpurple {
+		background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)), url('../img/purple.png') no-repeat 0% 20%/ cover;
+		border-radius: 10px; /* 邊角圓滑 */
+		box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* 模糊邊框 */
+		background-attachment: fixed;
+		background-size: cover;
+		height: 170vh;
+	}
+	.hhh{
+		height:100px;
+	}
+</style>
+<body>
+	<div class="bgpurple">
+	<div class="hhh"></div>
+		<div class="shadow border border-1 rounded container m-auto mt-5 bg-white bg-opacity-75 pb-4">
+			<form class="m-2" asp-action="Upload" asp-controller="Forum" method="post" enctype="multipart/form-data">
+				<h3 class="border-bottom p-2">發文</h3>
+				<div class="form-row">
+					<div id="closeLabel" class="form-group col-md-6 mb-1">
+						<i class="bi bi-card-image"></i><label class="ms-1" for="file">封面</label>
+						<input id="imageInput" type="file" name="file" class="form-control">
+					</div>
+					@* 移除button *@
+					<div class="d-flex justify-content-end mt-0">
+						<button id="editImage" style="display:none;" class="btn "><i class="bi bi-pencil-square"></i></button>
+
+						<button id="deleteImage" style="display:none;" class="btn  ms-2"><i class="bi bi-trash"></i></button>
+					</div>
+					<div class="form-group mb-4 mt-2">
+						<i class="bi bi-vector-pen"></i><label for="title" class="ms-1">標題</label>
+						<div class="input-group">
+							<input id="textInput" type="text" name="title" class="form-control" maxlength="50" auto-height
+								   placeholder="請輸入標題(必填)">
+							<div class="input-group-append">
+								<span id="charCount" class="input-group-text">0/50</span>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="form-group mb-4">
+
+						<!-- 富文本編輯器 -->
+						<i class="bi bi-pencil-fill"></i><label for="description" class="ms-1">內文</label>
+
+						<textarea id="editor" class="editor" name="description" placeholder="請輸入正文"></textarea>
+					</div>
+
+					<div class="form-group mb-4">
+						<label for="">文章分類</label><i class="bi bi-check-all"></i>
+						<select name="Category" id="category" class="form-control">
+							<option value="綜合討論">綜合討論</option>
+							<option value="資訊快報">資訊快報</option>
+							<option value="心得攻略">心得攻略</option>
+							<option value="實況專區">實況專區</option>
+						</select>
+					</div>
+				</div>
+
+				@* 預覽畫面 *@
+				<div id="preview" class="preview">
+					<div class="previewSide">
+						<span class="close">&times;</span>
+						<h3 id="previewTitle"></h3>
+						<div> <span id="previewCategory" class="bg-primary m-2 p-1 rounded text-white"></span></div>
+						<hr>
+						<!-- user -->
+						<div class="d-flex mb-3">
+							<div>
+								<img class="rounded-circle" style="width: 50px;"
+									 src="https://upload-os-bbs.hoyolab.com/upload/2024/04/24/d6048f30e1ec7c52013ad5ed41500099_293482052564117040.png?x-oss-process=image%2Fresize%2Cs_600%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_80">
+								</img>
+							</div>
+							<div class="ms-1">
+								<span class="text-primary ">坂坂悠</span>
+								<p id="current-time" class="text-secondary " style="font-size: x-small;"></p>
+							</div>
+						</div>
+						@* <img id="previewImage" src="" alt="Image Preview" style="display:none;width:100%;height:500px;object-fit:cover;"> *@
+						<div id="previewContent"></div>
+					</div>
+				</div>
+				<div class="row justify-content-center">
+					@* 預覽BUTTON *@
+					<div class="col-6 ">
+						<div class="row justify-content-center">
+							<button id="previewBtn" class="btn btn-light w-50">預覽</button>
+						</div>
+
+					</div>
+					@* 發表BUTTON *@
+					<div class="col-6 ">
+						<div class="row justify-content-center">
+							<button type="submit" class="btn btn-light w-50">發表</button>
+						</div>
+					</div>
+				</div>
+
+
+
+			</form>
+
+		</div>
+	</div>
+	<script>
+		class MyUploadAdapter {
+			constructor(loader) {
+				// The file loader instance to use during the upload.
+				this.loader = loader;
+			}
+
+			// Starts the upload process.
+			upload() {
+				return this.loader.file
+					.then(file => new Promise((resolve, reject) => {
+						this._initRequest();
+						this._initListeners(resolve, reject, file);
+						this._sendRequest(file);
+					}));
+			}
+
+			// Aborts the upload process.
+			abort() {
+				if (this.xhr) {
+					this.xhr.abort();
+				}
+			}
+
+			// Initializes the XMLHttpRequest object using the URL passed to the constructor.
+			_initRequest() {
+				const xhr = this.xhr = new XMLHttpRequest();
+
+				// Note that your request may look different. It is up to you and your editor
+				// integration to choose the right communication channel. This example uses
+				// a POST request with JSON as a data structure but your configuration
+				// could be different.
+				xhr.open('POST', '/Forum/UploadImage', true);
+				xhr.responseType = 'json';
+			}
+
+			// Initializes XMLHttpRequest listeners.
+			_initListeners(resolve, reject, file) {
+				const xhr = this.xhr;
+				const loader = this.loader;
+				const genericErrorText = `Couldn't upload file: ${file.name}.`;
+
+				xhr.addEventListener('error', () => reject(genericErrorText));
+				xhr.addEventListener('abort', () => reject());
+				xhr.addEventListener('load', () => {
+					const response = xhr.response;
+
+					// This example assumes the XHR server's "response" object will come with
+					// an "error" which has its own "message" that can be passed to reject()
+					// in the upload promise.
+					//
+					// Your integration may handle upload errors in a different way so make sure
+					// it is done properly. The reject() function must be called when the upload fails.
+					if (!response || response.error) {
+						return reject(response && response.error ? response.error.message : genericErrorText);
+					}
+
+					// If the upload is successful, resolve the upload promise with an object containing
+					// at least the "default" URL, pointing to the image on the server.
+					// This URL will be used to display the image in the content. Learn more in the
+					// UploadAdapter#upload documentation.
+					resolve({
+						default: response.url
+					});
+				});
+
+				// Upload progress when it is supported. The file loader has the #uploadTotal and #uploaded
+				// properties which are used e.g. to display the upload progress bar in the editor
+				// user interface.
+				if (xhr.upload) {
+					xhr.upload.addEventListener('progress', evt => {
+						if (evt.lengthComputable) {
+							loader.uploadTotal = evt.total;
+							loader.uploaded = evt.loaded;
+						}
+					});
+				}
+			}
+
+			// Prepares the data and sends the request.
+			_sendRequest(file) {
+				// Prepare the form data.
+				const data = new FormData();
+
+				data.append('upload', file);
+
+				// Important note: This is the right place to implement security mechanisms
+				// like authentication and CSRF protection. For instance, you can use
+				// XMLHttpRequest.setRequestHeader() to set the request headers containing
+				// the CSRF token generated earlier by your application.
+
+				// Send the request.
+				this.xhr.send(data);
+			}
+		}
+
+		function MyCustomUploadAdapterPlugin(editor) {
+			editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+				// Configure the URL to the upload script in your back-end here!
+				return new MyUploadAdapter(loader);
+			};
+		}
+		var myEditor;
+		ClassicEditor
+			.create(document.querySelector('#editor'), {
+				extraPlugins: [MyCustomUploadAdapterPlugin]
+			})
+			.then(editor => {
+				myEditor = editor;
+				window.editor = editor;
+			})
+			.catch(error => {
+				console.error(error);
+			});
+		$(document).ready(function () {
+			$('#imageInput').on('change', function (e) {
+				var file = e.target.files[0];
+				var reader = new FileReader();
+
+				reader.onload = function (e) {
+					var imageData = e.target.result;
+					$('#closeLabel').after('<div id="imageDisplayArea" style="width:100%;"></div>');
+					$('#imageDisplayArea').html('<img src="' + imageData + '" alt="Selected Image" style="width:100%;height:500px;object-fit:cover;">');
+					$('#closeLabel').css('display', 'none');
+					$('#deleteImage').show();
+					$('#editImage').show();
+				};
+
+				reader.readAsDataURL(file);
+			});
+			//移除照片
+			$('#deleteImage').on('click', function () {
+				event.preventDefault();
+				$('#imageDisplayArea').remove();
+				$('#imageInput').val('');
+				$('#deleteImage').hide();
+				$('#editImage').hide();
+				$('#closeLabel').show();
+			});
+			// 監聽字數
+			$('#textInput').on('input', function () {
+				var currentLength = $(this).val().length;
+				$('#charCount').text(currentLength + '/50');
+			});
+
+			//預覽畫面
+			$('#previewBtn').on('click', function () {
+				event.preventDefault();
+
+				var title = $('#textInput').val();
+				var content = $('.editor').val();
+				var image = $('#imageInput')[0].files[0];
+				var category = $('#category').val();
+				$('#previewTitle').text(title);
+				$('#previewContent').html(myEditor.getData());
+				$('#previewCategory').text(category);
+				if (image) {
+					var reader = new FileReader();
+					reader.onload = function (e) {
+						$("#previewImage").attr("src", e.target.result).show();
+					}
+					reader.readAsDataURL(image);
+				} else {
+					$("#previewImage").hide();
+				}
+				$('#preview').show();
+			});
+			$('.close').on('click', function () {
+				$('#preview').hide();
+			});
+
+
+		});
+
+		window.onload = function () {
+			let now = new Date();
+			let year = now.getFullYear();
+			let month = now.getMonth() + 1;
+			let date = now.getDate();
+			let hours = now.getHours();
+			let minutes = now.getMinutes();
+			let seconds = now.getSeconds();
+			let currentTime = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+			document.getElementById('current-time').textContent = currentTime;
+		}
+	</script>
+	@* <script src="~/js/post.js"></script> *@
+
+
+</body>
+
+</html>
