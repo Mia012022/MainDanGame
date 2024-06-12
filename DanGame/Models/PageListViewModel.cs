@@ -11,6 +11,7 @@ namespace DanGame.Models
 		public List<TopUserViewModel>? TopUsers { get; set; }
 
 		public List<PopularArticleViewModel> PopularArticle { get; set; }
+		
 
 	}
 	public class PopularArticleViewModel
@@ -20,4 +21,5 @@ namespace DanGame.Models
 		public string ArticalTitle { get; set; }
 		public string ArticalContent { get; set; }
 	}
+	
 }

@@ -16,14 +16,14 @@ namespace DenGame.Controllers
 		private readonly IWebHostEnvironment _env;
 		private readonly ILogger<ForumController> _logger;
 		private readonly DanGameContext _context;
-		
+
 
 		public ForumController(IWebHostEnvironment env, ILogger<ForumController> logger, DanGameContext context)
 		{
 			_env = env;
 			_logger = logger;
 			_context = context;
-			
+
 		}
 		//---------------論壇首頁 有做分頁-------------
 		public async Task<IActionResult> Index(string category = "全部主題", int page = 1)
@@ -69,18 +69,20 @@ namespace DenGame.Controllers
 								.OrderByDescending(u => u.ArticleCount)
 								.Take(3)
 								.ToListAsync();
+		
 			var viewModel = new PageListViewModel
 			{
 				ArticleList = article,
 				ArticalComments = await _context.ArticalComments.ToListAsync(),
 				ArticalViews = await _context.ArticalViews.ToListAsync(),
 				TopUsers = topuser,
-				PopularArticle = popularArticle
+				PopularArticle = popularArticle,
+				
 			};
 			return View(viewModel);
 		}
 		//----------------快來發文吧------------------
-		
+
 		public IActionResult Post()
 		{
 			var userIds = (HttpContext.Session.GetString("UserId"));
@@ -144,7 +146,7 @@ namespace DenGame.Controllers
 			return View(viewModel);
 		}
 		//------------------個人主頁---------------------
-		
+
 		public async Task<IActionResult> ForumUser()
 		{
 			var userIds = (HttpContext.Session.GetString("UserId"));
@@ -175,7 +177,7 @@ namespace DenGame.Controllers
 				Comments = comment,
 				CommentLikes = commentlike,
 				LikedArticles = likedArticles
-				
+
 			};
 
 			return View(viewModel);
