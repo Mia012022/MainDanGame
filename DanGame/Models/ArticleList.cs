@@ -23,5 +23,7 @@ public partial class ArticleList
 
     public virtual ICollection<ArticalLike> ArticalLikes { get; set; } = new List<ArticalLike>();
 
+    public virtual ICollection<ArticalView> ArticalViews { get; set; } = new List<ArticalView>();
+
     public virtual User User { get; set; } = null!;
 }

@@ -61,9 +61,9 @@ public partial class DanGameContext : DbContext
 
     public virtual DbSet<UserProfile> UserProfiles { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Server=.;Database=DanGame;Integrated Security=True;Encrypt=False;");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=26.80.144.54;Database=DanGame;User Id=sa;Password=P@ssw0rd;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -125,9 +125,7 @@ public partial class DanGameContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("AppID");
             entity.Property(e => e.AppName).HasMaxLength(128);
-            entity.Property(e => e.AppType)
-                .HasMaxLength(10)
-                .IsFixedLength();
+            entity.Property(e => e.AppType).HasMaxLength(10);
             entity.Property(e => e.BackgroundImage).HasMaxLength(256);
             entity.Property(e => e.CapsuleImage).HasMaxLength(256);
             entity.Property(e => e.DevloperName).HasMaxLength(32);
@@ -145,7 +143,7 @@ public partial class DanGameContext : DbContext
 
         modelBuilder.Entity<AppMedium>(entity =>
         {
-            entity.HasKey(e => new { e.MediaId, e.AppId, e.MediaType }).HasName("PK__AppMedia__18E7E81F0E09CEC5");
+            entity.HasKey(e => new { e.MediaId, e.AppId, e.MediaType }).HasName("PK__AppMedia__18E7E81F9EA5609B");
 
             entity.Property(e => e.MediaId).HasColumnName("MediaID");
             entity.Property(e => e.AppId).HasColumnName("AppID");
@@ -171,7 +169,9 @@ public partial class DanGameContext : DbContext
             entity.Property(e => e.CommentId).HasColumnName("CommentID");
             entity.Property(e => e.ArticalId).HasColumnName("ArticalID");
             entity.Property(e => e.CommentContent).HasMaxLength(100);
-            entity.Property(e => e.CommentCreateDate).HasColumnType("datetime");
+            entity.Property(e => e.CommentCreateDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Artical).WithMany(p => p.ArticalComments)
@@ -182,7 +182,7 @@ public partial class DanGameContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.ArticalComments)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Comment_User");
+                .HasConstraintName("FK_ArticalComment_User");
         });
 
         modelBuilder.Entity<ArticalCommentLike>(entity =>
@@ -212,9 +212,7 @@ public partial class DanGameContext : DbContext
 
             entity.ToTable("ArticalCommentReply");
 
-            entity.Property(e => e.ReplyId)
-                .ValueGeneratedNever()
-                .HasColumnName("ReplyID");
+            entity.Property(e => e.ReplyId).HasColumnName("ReplyID");
             entity.Property(e => e.CommentId).HasColumnName("CommentID");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -258,6 +256,11 @@ public partial class DanGameContext : DbContext
             entity.Property(e => e.ArticalViewId).HasColumnName("ArticalViewID");
             entity.Property(e => e.ArticalId).HasColumnName("ArticalID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.Artical).WithMany(p => p.ArticalViews)
+                .HasForeignKey(d => d.ArticalId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ArticalView_ArticleList");
 
             entity.HasOne(d => d.User).WithMany(p => p.ArticalViews)
                 .HasForeignKey(d => d.UserId)
@@ -335,9 +338,7 @@ public partial class DanGameContext : DbContext
             entity.Property(e => e.JoinDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Status)
-                .HasMaxLength(10)
-                .IsFixedLength();
+            entity.Property(e => e.Status).HasMaxLength(10);
 
             entity.HasOne(d => d.ChatRoom).WithMany(p => p.ChatRoomMembers)
                 .HasForeignKey(d => d.ChatRoomId)
@@ -358,7 +359,7 @@ public partial class DanGameContext : DbContext
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CardNumber)
-                .HasMaxLength(19)
+                .HasMaxLength(16)
                 .IsUnicode(false);
             entity.Property(e => e.BillingAddress).HasMaxLength(200);
             entity.Property(e => e.BillingAddress2).HasMaxLength(200);
@@ -384,6 +385,8 @@ public partial class DanGameContext : DbContext
         modelBuilder.Entity<Friendship>(entity =>
         {
             entity.HasKey(e => new { e.UserId, e.FriendUserId }).HasName("PK_FriendList");
+
+            entity.ToTable(tb => tb.HasTrigger("trg_ValidateFriendship"));
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.FriendUserId).HasColumnName("FriendUserID");
@@ -469,7 +472,9 @@ public partial class DanGameContext : DbContext
         {
             entity.HasKey(e => new { e.PaymentId, e.OrderId });
 
-            entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+            entity.Property(e => e.PaymentId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("PaymentID");
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.PaymentDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.PaymentMethod).HasMaxLength(10);
@@ -482,7 +487,7 @@ public partial class DanGameContext : DbContext
 
         modelBuilder.Entity<ShoppingCart>(entity =>
         {
-            entity.HasKey(e => new { e.UserId, e.AppId }).HasName("PK__Shopping__9F6A03D15F9C7729");
+            entity.HasKey(e => new { e.UserId, e.AppId }).HasName("PK__Shopping__9F6A03D11565CDFF");
 
             entity.ToTable("ShoppingCart");
 
@@ -495,7 +500,7 @@ public partial class DanGameContext : DbContext
             entity.HasOne(d => d.App).WithMany(p => p.ShoppingCarts)
                 .HasForeignKey(d => d.AppId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ShoppingC__AppID__5F7E2DAC");
+                .HasConstraintName("FK__ShoppingC__AppID__0A9D95DB");
 
             entity.HasOne(d => d.User).WithMany(p => p.ShoppingCarts)
                 .HasForeignKey(d => d.UserId)
@@ -544,6 +549,9 @@ public partial class DanGameContext : DbContext
                 .HasColumnName("PlanID");
             entity.Property(e => e.Description).HasMaxLength(128);
             entity.Property(e => e.PlanName).HasMaxLength(16);
+            entity.Property(e => e.SafeMessage)
+                .HasMaxLength(50)
+                .HasColumnName("safeMessage");
             entity.Property(e => e.ThemeColor).HasMaxLength(18);
         });
 

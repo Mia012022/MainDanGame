@@ -1,5 +1,6 @@
 using DanGame.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace DanGame.Controllers
@@ -7,27 +8,47 @@ namespace DanGame.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+		private DanGameContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+
+		public HomeController( DanGameContext dbContext)
+		{
+
+			_context = dbContext;
+
+		}
+
+		public IActionResult Index()
         {
-            _logger = logger;
-        }
+			//// 檢查是否有已登入的session
+			//if (HttpContext.Session.GetString("UserId") != null)
+			//{
+			//    // 如果已登入，導向UserController的UserIndex頁面
+			//    return RedirectToAction("UserIndex", "User");
+			//}
 
-        public IActionResult Index()
-        {
-            //// 檢查是否有已登入的session
-            //if (HttpContext.Session.GetString("UserId") != null)
-            //{
-            //    // 如果已登入，導向UserController的UserIndex頁面
-            //    return RedirectToAction("UserIndex", "User");
-            //}
-
-            //// 否則顯示Index頁面
-            return View();
+			//// 否則顯示Index頁面
+			///
+			var query = from app in _context.Apps
+						where app.AppDetail.AppType == "game"
+						select new
+						{
+							appId = app.AppId,
+							appName = app.AppName,
+							headerImage = app.AppDetail.HeaderImage,
+							appDesc = app.AppDetail.ShortDescription,
+							releaseDate = app.AppDetail.ReleaseDate,
+							downloaded = app.AppDetail.Downloaded,
+							price = app.AppDetail.Price,
+							tags = app.Tags
+						};
+			return View(new { apps = query.ToArray(), subscriptionPlans =  _context.SubscriptionPlans.ToList()
+		});
         }
 
         public IActionResult ranking()
         {
+
             return View();
         }
 

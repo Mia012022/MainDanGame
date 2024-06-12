@@ -11,7 +11,7 @@ public partial class ChatRoomMember
 
     public DateTime JoinDate { get; set; }
 
-    public string? Status { get; set; }
+    public string Status { get; set; } = null!;
 
     public virtual ChatRoom ChatRoom { get; set; } = null!;
 
