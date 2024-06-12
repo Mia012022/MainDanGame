@@ -68,8 +68,8 @@
 							<input type="hidden" name="articalId" value="@Model.Article.ArticalId" />
 							<input id="input-box" type="text" name="comment" class="form-control" placeholder="快來發表你的評論吧">
 							<div class="input-group-append">
-								<button id="emoji-button" class="btn btn-outline-secondary " type="button"><i class="bi bi-emoji-smile  "></i></button>
-								<button type="submit" class="btn btn-outline-secondary ">發送</button>
+								<button id="emoji-button" class="btn btn-outline-secondary" type="button"><i class="bi bi-emoji-smile  "></i></button>
+								<button type="submit" class="btn btn-outline-secondary">發送</button>
 							</div>
 						</div>
 						<div id="emoji-picker">
@@ -101,7 +101,7 @@
 							<span>@comment.CommentContent</span>
 							<div class="text-secondary" style="font-size: x-small;">
 								<span class="ms-1 CommentCreateDate" timestramp="@(((DateTimeOffset)comment.CommentCreateDate).ToUnixTimeSeconds()*1000)"></span>
-								<span class="ms-3"><button class="reply-button" data-comment-id="@comment.CommentId">回覆</button></span>
+								<span class="ms-3"><button class="reply-button btn btn-light" style="font-size:x-small" data-comment-id="@comment.CommentId">回覆</button></span>
 
 								<div class="btn-group btn-group-sm ">
 									<button class="btn "><i class="bi bi-heart" style="font-size: x-small;"></i><span class=" ms-1" style="font-size: x-small;">@comment.ArticalCommentLikes.Count</span></button>
@@ -122,8 +122,8 @@
 										<span class="text-primary">@reply.User.UserName</span>
 										<span>@reply.ReplyContent</span>
 										<div class="text-secondary" style="font-size: x-small;">
-											<span class="ms-1">@reply.CreatedAt</span>
-											<span class="ms-3"><button class="reply-button" data-comment-id="@comment.CommentId" data-reply-id="@reply.ReplyId" data-username="@reply.User.UserName">回覆</button></span>
+											<span class="ms-1 CreatedAt" timestramp="@(((DateTimeOffset)reply.CreatedAt).ToUnixTimeSeconds()*1000)"></span>
+											<span class="ms-3"><button class="reply-button btn btn-light" style="font-size:x-small" data-comment-id="@comment.CommentId" data-reply-id="@reply.ReplyId" data-username="@reply.User.UserName">回覆</button></span>
 											<div class="btn-group btn-group-sm">
 												<button class="btn "><i class="bi bi-heart" style="font-size: x-small;"></i></button>
 
@@ -242,6 +242,10 @@
 
 		})
 		$(".CommentCreateDate").each(function () {
+			let time = new Date(Number($(this).attr("timestramp")));
+			$(this).html(DateFormat.format.prettyDate(time));
+		})
+		$(".CreatedAt").each(function () {
 			let time = new Date(Number($(this).attr("timestramp")));
 			$(this).html(DateFormat.format.prettyDate(time));
 		})

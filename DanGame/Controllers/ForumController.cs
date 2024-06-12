@@ -313,11 +313,16 @@ namespace DenGame.Controllers
 		[HttpPost]
 		public async Task<IActionResult> AddComment(string comment, int articalId)
 		{
+			var userIds = (HttpContext.Session.GetString("UserId"));
+			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			{
+				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+			}
 			if (ModelState.IsValid)
 			{
 				var newComment = new ArticalComment
 				{
-					UserId = 2,
+					UserId = userId,
 					ArticalId = articalId,
 					CommentContent = comment,
 					CommentCreateDate = DateTime.Now
@@ -335,11 +340,16 @@ namespace DenGame.Controllers
 		[HttpPost]
 		public async Task<IActionResult> AddReply(string comment, int commentId)
 		{
+			var userIds = (HttpContext.Session.GetString("UserId"));
+			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			{
+				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+			}
 			if (ModelState.IsValid)
 			{
 				var replyComment = new ArticalCommentReply
 				{
-					UserId = 3,
+					UserId = userId,
 					CommentId = commentId,
 					ReplyContent = comment,
 					CreatedAt = DateTime.Now
