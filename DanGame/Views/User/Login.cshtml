@@ -11,8 +11,8 @@
             <br>
         <form method="post" asp-controller="User" asp-action="Login">
                 <div class="p-2">
-                    <label for="account">帳號：</label>
-                <input type="text" id="account" name="useremail" pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="請輸入有效的電子郵件地址，如 example@example.com"
+                    <label for="useremail">帳號：</label>
+                <input type="text" id="useremail" name="useremail" pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="請輸入有效的電子郵件地址，如 example@example.com"
                         required>
                 </div>
                 <div class="p-2">
@@ -48,7 +48,7 @@
                 -->
                 <div class="p-2">
                     <a href="./forget_pw.html" style="padding-left: 100px;">忘記密碼</a>
-                    <a href="./register.html" style="padding-left: 30px;">註冊</a>
+                    <a asp-controller="User" asp-action="Register" style="padding-left: 30px;">註冊</a>
                 </div>
                 <div class="p-2">
                     <button type="submit" class="btn btn-primary">登入</button>

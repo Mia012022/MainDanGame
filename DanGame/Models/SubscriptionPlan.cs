@@ -17,5 +17,7 @@ public partial class SubscriptionPlan
 
     public string ThemeColor { get; set; } = null!;
 
+    public string? SafeMessage { get; set; }
+
     public virtual ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
 }

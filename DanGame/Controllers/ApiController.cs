@@ -1,13 +1,33 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using DanGame.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
+public class AuthorizeUserAttribute : ActionFilterAttribute
+{
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        var session = context.HttpContext.Session;
+        var userId = session.GetInt32("UserId");
+
+        if (!userId.HasValue)
+        {
+            context.Result = new UnauthorizedResult();
+        }else
+        {
+            // 若在後續代碼中使用userId，可以將其添加到 context.HttpContext.Items 中
+            context.HttpContext.Items["UserId"] = userId.Value;
+        }
+        base.OnActionExecuting(context);
+    }
+}
 
 namespace DanGame.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ApiController(DanGameContext dbContext) : ControllerBase
     {

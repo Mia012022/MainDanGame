@@ -19,9 +19,13 @@ public partial class ArticleList
 
     public string? ArticleCategory { get; set; }
 
+    public int? ViewCount { get; set; }
+
     public virtual ICollection<ArticalComment> ArticalComments { get; set; } = new List<ArticalComment>();
 
     public virtual ICollection<ArticalLike> ArticalLikes { get; set; } = new List<ArticalLike>();
+
+    public virtual ICollection<ArticalView> ArticalViews { get; set; } = new List<ArticalView>();
 
     public virtual User User { get; set; } = null!;
 }
