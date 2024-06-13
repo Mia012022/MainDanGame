@@ -121,6 +121,67 @@ namespace DanGame.Controllers
 
         }
 
+        // API: GET API/User/ShoppingCart 取得個人購物車品項
+        [HttpGet("User/ShoppingCart")]
+        [AuthorizeUser]
+        async public Task<ShoppingCart[]> GetUserShoppingItem()
+        {
+            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+
+            var query = from shoppingCart in _context.ShoppingCarts
+                        where shoppingCart.UserId == userId
+                        select shoppingCart;
+
+            return await query.ToArrayAsync();
+        }
+
+        // API: POST API/User/ShoppingCart 新增個人購物車品項
+        [HttpPost("User/ShoppingCart")]
+        [AuthorizeUser]
+        async public Task<ShoppingCart[]> AddUserShoppingItem([FromBody] int appId)
+        {
+            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+
+            var newShoppingItem = new ShoppingCart()
+            {
+                UserId = userId,
+                AppId = appId,
+                AddedTime = DateTime.UtcNow,
+            };
+
+            _context.ShoppingCarts.Add(newShoppingItem);
+
+            var query = from shoppingCart in _context.ShoppingCarts
+                        where shoppingCart.UserId == userId
+                        select shoppingCart;
+
+            await _context.SaveChangesAsync();
+
+            return await query.ToArrayAsync();
+        }
+
+        // API: DELETE API/User/ShoppingCart 刪除個人購物車品項
+        [HttpDelete("User/ShoppingCart")]
+        [AuthorizeUser]
+        async public Task<ShoppingCart[]> DelUserShoppingItem([FromBody] int appId)
+        {
+            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+
+            var query = from shoppingCart in _context.ShoppingCarts
+                        where shoppingCart.UserId == userId
+                        select shoppingCart;
+
+            var target = query.Where((c) => c.AppId == appId).First();
+
+            if (target != null)
+            {
+                _context.ShoppingCarts.Remove(target);
+                await _context.SaveChangesAsync();
+            }
+
+            return await query.ToArrayAsync();
+        }
+
         // API: GET API/App/All-Games 取得所有類型為 game 的 App
         [HttpGet("App/All-Games")]
         public async Task<App[]> GetGames()
@@ -150,18 +211,7 @@ namespace DanGame.Controllers
             return await query.ToArrayAsync();
         }
 
-        /// <summary>
-        /// 取得指定 App 的所有可下載內容 (DLC) 的詳細資料。
-        /// </summary>
-        /// <remarks>
-        /// 此 API 端點用於獲取多個指定應用程式 (App) 的所有可下載內容 (DLC) 的詳細資訊。
-        /// 需要提供 App 的 ID 陣列，將傳回應用程式的所有 DLC 的詳細資料。
-        /// </remarks>
-        /// <param name="appIds"> App ID 陣列。</param>
-        /// <returns>
-        /// 回傳一個包含動態物件的陣列，其中每個物件包含應用程式的 ID、名稱及其 DLC 的詳細資訊。
-        /// 若指定的 App ID 不存在，將傳回空陣列。
-        /// </returns>
+        // API: POST API/App/DLCs 取得 App DLC 詳細資料 
         [HttpPost("App/DLCs")]
         public async Task<dynamic> GetAppDLCsDetail([FromBody] int[] appIds)
         {
@@ -177,18 +227,7 @@ namespace DanGame.Controllers
             return await query.ToArrayAsync();
         }
 
-        /// <summary>
-        /// 根據 Tag ID 取得對應的 App 列表。
-        /// </summary>
-        /// <remarks>
-        /// 此 API 端點用於根據多個標籤 ID 獲取對應的應用程式 (Apps) 清單。
-        /// 需要提供 Tag ID 陣列，將傳回每個 Tag 對應的 App 資訊。
-        /// </remarks>
-        /// <param name="tagIds"> Tag ID 陣列。</param>
-        /// <returns>
-        /// 回傳一個包含動態物件的陣列，每個物件包含標籤的 ID、名稱及其對應的應用程式清單。
-        /// 若指定的 Tag ID 不存在，將傳回空陣列。
-        /// </returns>
+        // API: POST API/App/By-Tag 取得所有含有此 Tag 的 App
         [HttpPost("App/By-Tag")]
         public async Task<dynamic> GetAppsByTags([FromBody] int[] tagIds)
         {
