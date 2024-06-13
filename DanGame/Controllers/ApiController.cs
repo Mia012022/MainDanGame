@@ -24,24 +24,6 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
         base.OnActionExecuting(context);
     }
 }
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Filters;
-
-public class AuthorizeUserAttribute : ActionFilterAttribute
-{
-    public override void OnActionExecuting(ActionExecutingContext context)
-    {
-        var session = context.HttpContext.Session;
-        var userIdStr = session.GetString("UserId");
-
-        if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out _))
-        {
-            context.Result = new UnauthorizedResult();
-        }
-        base.OnActionExecuting(context);
-    }
-}
 
 namespace DanGame.Controllers
 {
@@ -187,7 +169,7 @@ namespace DanGame.Controllers
         public async Task<App[]> GetGames()
         {
             var query = from app in _context.Apps
-                        where app.AppDetail.AppType == "game"
+                        where app.AppDetail != null && app.AppDetail.AppType == "game"
                         select app;
             return await query.ToArrayAsync();
         }
