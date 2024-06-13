@@ -28,4 +28,6 @@ public partial class ArticleList
 	public virtual User User { get; set; } = null!;
 	[NotMapped]
 	public IFormFile File { get; set; } = null!;
+    
+   
 }

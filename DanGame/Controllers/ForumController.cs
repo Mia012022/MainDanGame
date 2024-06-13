@@ -8,7 +8,8 @@ using Microsoft.Extensions.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNetCore.Http;
+using DanGame.Extensions;
 namespace DenGame.Controllers
 {
 	public class ForumController : Controller
@@ -37,8 +38,10 @@ namespace DenGame.Controllers
 						   select a)
 						   .Include(a => a.ArticalComments)
 						   .Include(a => a.ArticalViews)
+						   .Include(u => u.User)
+						   .ThenInclude(u => u.UserProfile)
 						   .ToPagedList(pageNumber, pageSize);
-
+			
 			var popularArticle = await (from v in _context.ArticalViews
 										join l in _context.ArticleLists on v.ArticalId equals l.ArticalId
 										group new { v, l } by new { v.ArticalId, l.ArticalTitle, l.ArticalContent } into g
@@ -147,7 +150,43 @@ namespace DenGame.Controllers
 		}
 		//------------------個人主頁---------------------
 
-		public async Task<IActionResult> ForumUser()
+		public async Task<IActionResult> ForumUser(int id)
+		{
+			//var userIds = (HttpContext.Session.GetString("UserId"));
+			//if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			//{
+			//	return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+			//}
+			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
+			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == id);
+			var forumuser = await _context.ArticleLists.Where(x => x.UserId == id).ToListAsync();
+			var comment = await _context.ArticalComments.Where(x => x.UserId == id).ToListAsync();
+			var like = await _context.ArticalLikes.Where(x => x.UserId == id).ToListAsync();
+			var commentlike = await _context.ArticalCommentLikes.Where(x => x.UserId == id).ToListAsync();
+			var likedArticles = await _context.ArticalLikes
+			.Where(like => like.UserId == id)
+			.Select(like => like.Artical)
+			.ToListAsync();
+			if (user == null)
+			{
+				return NotFound();
+			}
+			var viewModel = new UserArticlesViewModel
+			{
+				User = user,
+				UserProfile = userProfile,
+				Articles = forumuser,
+				Likes = like,
+				Comments = comment,
+				CommentLikes = commentlike,
+				LikedArticles = likedArticles
+
+			};
+
+			return View(viewModel);
+		}
+		//--------------會員個人主頁----------------
+		public async Task<IActionResult> ForumUserPersonal()
 		{
 			var userIds = (HttpContext.Session.GetString("UserId"));
 			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
@@ -182,7 +221,6 @@ namespace DenGame.Controllers
 
 			return View(viewModel);
 		}
-
 		//------------------發表上傳文章-----------------
 		[HttpGet]
 		public IActionResult Upload()
@@ -372,5 +410,43 @@ namespace DenGame.Controllers
 				.ToList();
 			return View(articles);
 		}
+		//未解決
+		//public async Task<IActionResult> ViewArticle(int id)
+		//{
+		//	var article = await _context.ArticleLists.FindAsync(id);
+
+		//	if (article == null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	// 獲取當前用戶的ID
+		//	var userIdString = HttpContext.Session.GetString("UserId");
+		//	if (string.IsNullOrEmpty(userIdString))
+		//	{
+		//		return Unauthorized(); // 如果用戶未登錄，則返回未授權
+		//	}
+		//	int userId = int.Parse(userIdString);
+
+		//	// 檢查 Session 中是否已經有該文章的瀏覽記錄
+		//	//var viewedArticles = HttpContext.Session.Get<List<int>>("ViewedArticles") ?? new List<int>();
+
+		//	//if (!viewedArticles.Contains(id))
+		//	//{
+		//		// 增加 `ArticalView` 記錄
+		//		// 增加瀏覽次數
+		//		article.ViewCount++;
+		//		_context.Update(article);
+		//		await _context.SaveChangesAsync();
+
+				
+
+		//		// 將文章ID添加到 Session 中
+		//		//viewedArticles.Add(id);
+		//		//HttpContext.Session.Set("ViewedArticles", viewedArticles);
+		//	//}
+
+		//	return View(article);
+		//}
 	}
 }
