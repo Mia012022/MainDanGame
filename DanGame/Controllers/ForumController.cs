@@ -55,6 +55,7 @@ namespace DenGame.Controllers
 									   .OrderByDescending(g => g.Amount)
 									   .Take(3)
 									   .ToListAsync();
+			
 			// 查询每个用户的文章数量并取前3名
 			var oneWeekAgo = DateTime.Now.AddDays(-7);
 			var topuser = await (from a in _context.ArticleLists
@@ -88,11 +89,11 @@ namespace DenGame.Controllers
 
 		public IActionResult Post()
 		{
-			var userIds = (HttpContext.Session.GetString("UserId"));
-			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
-			{
-				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
-			}
+			//var userIds = (HttpContext.Session.GetString("UserId"));
+			//if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			//{
+			//	return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+			//}
 			return View();
 		}
 		//-----------------文章細節---------------------
