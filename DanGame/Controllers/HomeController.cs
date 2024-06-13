@@ -1,7 +1,9 @@
-using DanGame.Models;
+﻿using DanGame.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace DanGame.Controllers
 {
@@ -9,7 +11,7 @@ namespace DanGame.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 		private DanGameContext _context;
-
+		private static readonly HttpClient _httpClient = new HttpClient();
 
 		public HomeController( DanGameContext dbContext)
 		{
@@ -20,14 +22,14 @@ namespace DanGame.Controllers
 
 		public IActionResult Index()
         {
-			//// �ˬd�O�_���w�n�J��session
+			//// 檢查是否有已登入的session
 			//if (HttpContext.Session.GetString("UserId") != null)
 			//{
-			//    // �p�G�w�n�J�A�ɦVUserController��UserIndex����
+			//    // 如果已登入，導向UserController的UserIndex頁面
 			//    return RedirectToAction("UserIndex", "User");
 			//}
 
-			//// �_�h���Index����
+			//// 否則顯示Index頁面
 			///
 			var query = from app in _context.Apps
 						where app.AppDetail.AppType == "game"
@@ -52,7 +54,53 @@ namespace DanGame.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+		public IActionResult Privacy()
+		{
+			return View();
+		}
+
+		public async Task<IActionResult> game()
+		{
+			string apiUrl = "http://localhost:5000/api/app";
+			List<App> apps = null;
+			try
+			{
+				var client = _httpClientFactory.CreateClient();
+				var response = await client.GetStringAsync(apiUrl);
+				apps = JsonConvert.DeserializeObject<List<App>>(response);
+			}
+			catch (Exception ex)
+			{
+				// 记录异常信息
+				Console.WriteLine($"Error fetching or deserializing data: {ex.Message}");
+				// 处理异常，例如返回错误视图或其他
+				return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+			}
+
+			if (apps == null)
+			{
+				// 处理没有获取到数据的情况
+				return View("NoData");
+			}
+
+			var tagIds = new List<int> { 1, 28 }; // 动作为 tagId 1，模拟为 tagId 28
+			var taggedApps = new Dictionary<string, List<App>>();
+
+			// 获取带有指定标签的应用
+			foreach (var tagId in tagIds)
+			{
+				var appsWithTag = apps.Where(app => app.Tags.Any(tag => tag.TagId == tagId)).ToList();
+				string tagName = tagId == 1 ? "動作" : "模擬";
+				taggedApps[tagName] = appsWithTag;
+			}
+
+			// 获取所有应用
+			taggedApps["所有遊戲"] = apps;
+
+			return View(taggedApps);
+		}
+
+		public IActionResult category()
         {
             return View();
         }
