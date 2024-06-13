@@ -1,0 +1,61 @@
+﻿@model IEnumerable<DanGame.Models.ArticleList>;
+@{
+	ViewData["Title"] = "Search";
+	var parser = new DanGame.Helpers.HtmlParser();
+}
+
+<style>
+	.two-lines {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	.hhh {
+		height: 100px;
+	}
+</style>
+<div class="hhh"></div>
+<div class="container">
+<h2>搜尋文章</h2>
+<ul>
+
+	@foreach (var article in Model)
+	{
+		var concatenatedContent = parser.ConcatenateParagraphContents(article.ArticalContent);
+		<li>
+			<a asp-action="Artical" asp-route-id="@article.ArticalId" class=" text-decoration-none">
+				<div>
+					<h4>
+						@article.ArticalTitle
+					</h4>
+				</div>
+
+				<div>
+					<p class="two-lines text-secondary">@Html.Raw(concatenatedContent)</p>
+				</div>
+				
+			</a>
+		</li>
+	}
+
+	</ul>
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+
+</div>

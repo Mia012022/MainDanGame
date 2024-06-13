@@ -5,6 +5,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using DanGame.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddDbContext<DanGameContext>(options =>
 // 設定控制器和視圖服務
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
+
 
 // Add services to the container.
 builder.Services.AddControllers();
