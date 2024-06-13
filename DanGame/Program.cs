@@ -26,6 +26,9 @@ builder.Services.AddControllers();
 // 加入 IHttpContextAccessor 服務
 builder.Services.AddHttpContextAccessor();
 
+// Configure HttpClient
+builder.Services.AddHttpClient();
+
 // 加入session服務
 builder.Services.AddSession(options =>
 {
@@ -57,11 +60,9 @@ app.UseAuthorization();
 // 加入session中介軟體
 app.UseSession();
 
-
+//app.MapControllers(); 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-//app.MapControllers(); 
 
 app.Run();

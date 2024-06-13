@@ -7,6 +7,8 @@ namespace DanGame.Models
     {
         public User? User { get; set; }
         public UserProfile? UserProfile { get; set; }
+        public List<CreditCardInfo>? CreditCardInfos { get; set; }
+        public Subscription? UserSubscription { get; set; }
     }
 }
 
