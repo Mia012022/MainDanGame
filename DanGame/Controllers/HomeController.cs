@@ -1,16 +1,19 @@
 using DanGame.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Text;
 
 namespace DanGame.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly DanGameContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, DanGameContext dbContext)
         {
             _logger = logger;
+            _context = dbContext;
         }
 
         public IActionResult Index()
@@ -23,6 +26,21 @@ namespace DanGame.Controllers
             //}
 
             //// 否則顯示Index頁面
+            return View();
+        }
+
+        [HttpGet("/Game/{id}")]
+        public IActionResult Game(int id)
+        {
+            var query = from appDetail in _context.AppDetails
+                        where appDetail.AppId == id
+                        select new { detail = appDetail, media = appDetail.App.AppMedia, DLCs = appDetail.App.Dlcapps.Select((d) => d.AppDetail)};
+            return View(query.FirstOrDefault());
+        }
+
+        [HttpGet("/test")]
+        public IActionResult test()
+        {
             return View();
         }
 
