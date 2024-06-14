@@ -23,23 +23,33 @@
 
 	#navbarCa {
 		overflow: hidden;
-		
+	}
+
+	#rightside {
+		overflow: hidden;
 	}
 
 	.sticky {
 		position: fixed;
 		top: 0;
-		border-radius:10px;
-		background-color:lightpink;
-		
+		border-radius: 10px;
+		background-color: lightpink;
 	}
 
-		.sticky {
-			padding-top: 60px;
+	.sticky {
+		padding-top: 60px;
+	}
+
+		.sticky a {
+			color: ghostwhite;
 		}
-		.sticky a{
-			color:ghostwhite;
-		}
+
+	.stickyOne {
+		position: fixed;
+		top: 0;
+		right: 16%;
+		padding-top:60px;
+	}
 
 </style>
 
@@ -87,12 +97,13 @@
 
 					@foreach (var item in Model.ArticleList)
 					{
+
 						var concatenatedContent = parser.ConcatenateParagraphContents(item.ArticalContent);
 						<div class="bg-light bg-opacity-75 p-4 arbg">
 							<!-- 第一行 -->
 							<div class="mb-3">
 								<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@item.User.UserId" class="text-decoration-none">
-									<img src="@item.User.UserProfile.ProfilePictureUrl" class="rounded-circle" style="width:30px;height:30px;object-fit:cover;">
+									<img src="@item.User.UserProfile.ProfilePictureUrl" class="rounded-circle" style="width:20px;height:20px;object-fit:cover;">
 
 									<span class="text-black-50">@item.User.UserName</span>
 								</a>
@@ -111,15 +122,18 @@
 
 
 										<div class="mt-4 row">
-											<div class="ArticalCreateDate col-2 text-secondary" timestramp="@(((DateTimeOffset)item.ArticalCreateDate).ToUnixTimeSeconds()*1000)" style=" font-size:small;"></div>
-											<div class="col text-secondary" style=" font-size:small;"><i class="fa-solid fa-eye me-1"></i><span>@item.ArticalViews.Count</span></div>
-											<div class="col text-secondary" style=" font-size:small;"><i class="fa-solid fa-message me-1"></i><span>@item.ArticalComments.Count</span></div>
-											<div class="col-8"></div>
+											<div class="col-2"><span class="bg-primary bg-opacity-50 p-1 rounded text-white" style="font-size:small">@item.ArticleCategory</span> </div>
+											<div class="ArticalCreateDate col-2 text-secondary p-1" timestramp="@(((DateTimeOffset)item.ArticalCreateDate).ToUnixTimeSeconds()*1000)" style=" font-size:small;"></div>
+											<div class="col text-secondary p-1" style=" font-size:small;"><i class="fa-solid fa-eye me-1"></i><span>@item.ViewCount</span></div>
+											<div class="col text-secondary p-1" style=" font-size:small;"><i class="fa-solid fa-message me-1"></i><span>@(Model.TotalCounts.TryGetValue(item.ArticalId , out var totalCount)?totalCount:0)</span></div>
+											<div class="col text-secondary p-1" style=" font-size:small;"><i class="bi bi-heart-fill me-1"></i><span>@(Model.LikeCounts.TryGetValue(item.ArticalId, out var likeCount) ? likeCount : 0)</span></div>
+
+											<div class="col-5"></div>
 
 										</div>
 									</div>
 									<!-- 封面 -->
-									<div class="col-2">
+									<div class="col-3">
 										<img src="data:image;base64,@Convert.ToBase64String(item.ArticalCoverPhoto)"
 											 alt="" style="width:150px;height: 90px; object-fit: cover;" class="rounded">
 
@@ -140,89 +154,91 @@
 				</div>
 
 				@* 搜尋文章 *@
-				<div class="m-1 p-1" id="rightside">
-					<div class="p-3 ">
-						<form asp-action="Search" method="get" asp-controller="Forum">
-							<div class="custom-search">
-								<input type="search" name="searchTerm" class="custom-search-input" placeholder="搜尋文章">
-								<div class="custom-search-botton">
-									
-									<i class="fa-solid fa-magnifying-glass align-middle"></i> 
+				<div class="m-1 p-1 w-25">
+					<div id="rightside">
+						<div class="p-3 ">
+							<form asp-action="Search" method="get" asp-controller="Forum">
+								<div class="custom-search">
+									<input type="search" name="searchTerm" class="custom-search-input" placeholder="搜尋文章">
+									<div class="custom-search-botton">
+
+										<i class="fa-solid fa-magnifying-glass align-middle"></i>
+									</div>
+
 								</div>
-								
-							</div>
-						</form>
+							</form>
 
-					</div>
-					<div class="mt-1  p-3 rounded ">
-						<div class="list-group">
-							<a href="/Forum/Post" class="btn btn-light">快來發文吧!</a>
 						</div>
-
-					</div>
-					<div class="mt-1  p-3 rounded ">
-						<div class="list-group">
-							<a href="/Forum/ForumUserPersonal" class="btn btn-light">個人主頁</a>
-						</div>
-					</div>
-					<div class="mt-1  p-3 rounded ">
-						<div class="card">
-							<div class="card-header">
-								<div>近期活躍達人</div>
+						<div class="mt-1  p-3 rounded ">
+							<div class="list-group">
+								<a href="/Forum/Post" class="btn btn-light">快來發文吧!<i class="bi bi-file-earmark-post text-secondary"></i></a>
 							</div>
-							<ul class="list-group list-group-flush">
-								@foreach (var user in Model.TopUsers)
-								{
-									<li class="list-group-item d-flex">
-										<div>
-											<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@user.UserId" class="text-decoration-none">
-												<img src="@user.ProfilePictureUrl" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;">
+
+						</div>
+						<div class="mt-1  p-3 rounded ">
+							<div class="list-group">
+								<a href="/Forum/ForumUserPersonal" class="btn btn-light">個人主頁<i class="bi bi-house text-info"></i></a>
+							</div>
+						</div>
+						<div class="mt-1  p-3 rounded ">
+							<div class="card">
+								<div class="card-header">
+									<div style="font-weight:700;">近期活躍達人<i class="bi bi-award text-warning"></i></div>
+								</div>
+								<ul class="list-group list-group-flush">
+									@foreach (var user in Model.TopUsers)
+									{
+										<li class="list-group-item d-flex">
+											<div>
+												<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@user.UserId" class="text-decoration-none">
+													<img src="@user.ProfilePictureUrl" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;">
+												</a>
+											</div>
+
+											<div>
+												<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@user.UserId" class="text-decoration-none">
+													<span class="text-black">
+														@user.UserName
+
+													</span>
+												</a>
+												<p style="font-size:x-small;color:darkmagenta">最近發表@(user.ArticleCount)篇文章</p>
+											</div>
+
+
+
+
+										</li>
+									}
+
+									@* 	<li class="list-group-item">A second item</li>
+									<li class="list-group-item">A third item</li> *@
+								</ul>
+							</div>
+						</div>
+						<div class="mt-1  p-3 rounded ">
+							<div class="card">
+								<div class="card-header">
+									<div style="font-weight:700;">熱門推薦文章<i class="bi bi-fire text-danger"></i></div>
+								</div>
+								<ul class="list-group list-group-flush">
+									@foreach (var popular in Model.PopularArticle)
+									{
+										<li class="list-group-item">
+											@{
+												string word = popular.ArticalTitle;
+												string result = word.Length > 15 ? (word.Substring(0, 15) + "..") : word;
+											}
+											<a asp-action="Artical" asp-controller="Forum" asp-route-id="@popular.ArticalID" class="text-decoration-none" style="font-size:small;color:crimson;">
+												@result
 											</a>
-										</div>
 
-										<div>
-											<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@user.UserId" class="text-decoration-none">
-												<span class="text-black-50">
-													@user.UserName
-
-												</span>
-											</a>
-											<p style="font-size:x-small">最近發表@(user.ArticleCount)篇文章</p>
-										</div>
+										</li>
+									}
 
 
-
-
-									</li>
-								}
-
-								@* 	<li class="list-group-item">A second item</li>
-								<li class="list-group-item">A third item</li> *@
-							</ul>
-						</div>
-					</div>
-					<div class="mt-1  p-3 rounded ">
-						<div class="card">
-							<div class="card-header">
-								熱門推薦文章
+								</ul>
 							</div>
-							<ul class="list-group list-group-flush">
-								@foreach (var popular in Model.PopularArticle)
-								{
-									<li class="list-group-item">
-										@{
-											string word = popular.ArticalTitle;
-											string result = word.Length > 15 ? (word.Substring(0, 15) + "..") : word;
-										}
-										<a asp-action="Artical" asp-controller="Forum" asp-route-id="@popular.ArticalID" class="text-decoration-none" style="font-size:small">
-											@result
-										</a>
-
-									</li>
-								}
-
-
-							</ul>
 						</div>
 					</div>
 				</div>
@@ -250,33 +266,6 @@
 			})
 		});
 
-		// 取得所有具有 editTime class 的元素
-		const editTimeElements = document.getElementsByClassName('editTime');
-
-		// 對每個元素進行編輯時間格式化
-		Array.from(editTimeElements).forEach((element) => {
-			const editTimeValue = element.textContent.trim();
-			const formattedEditTime = formatEditTime(editTimeValue);
-			element.textContent = formattedEditTime;
-		});
-
-		function formatEditTime(editTime) {
-			const now = new Date();
-			const editDate = new Date(editTime);
-			const diff = Math.abs(now - editDate);
-
-			const minutes = Math.floor(diff / (1000 * 60));
-			const hours = Math.floor(diff / (1000 * 60 * 60));
-			const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-			if (days > 0) {
-				return days + " 天前";
-			} else if (hours > 0) {
-				return hours + " 小時前";
-			} else {
-				return minutes + " 分鐘前";
-			}
-		}
 
 		window.onscroll = function () { myFunction() };
 
@@ -293,7 +282,8 @@
 				rightside.classList.add("stickyOne");
 			} else {
 				navbar.classList.remove("sticky");
-				rightside.classList.remove
+				rightside.classList.remove("stickyOne");
+
 			}
 		}
 	</script>

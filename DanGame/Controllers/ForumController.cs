@@ -37,11 +37,27 @@ namespace DenGame.Controllers
 						   orderby a.ArticalId descending
 						   select a)
 						   .Include(a => a.ArticalComments)
+						   .ThenInclude(a => a.ArticalCommentReplies)
 						   .Include(a => a.ArticalViews)
 						   .Include(u => u.User)
 						   .ThenInclude(u => u.UserProfile)
 						   .ToPagedList(pageNumber, pageSize);
-			
+
+			var commentCounts = new Dictionary<int, int>();
+			var replyCounts = new Dictionary<int, int>();
+			var totalCounts = new Dictionary<int, int>();
+			var likeCounts = new Dictionary<int, int>();
+			foreach (var articleA in article)
+			{
+				int commentCount = articleA.ArticalComments.Count;
+				int replyCount = articleA.ArticalComments.Sum(c => c.ArticalCommentReplies.Count);
+				int likeCount = await _context.ArticalLikes.CountAsync(l => l.ArticalId == articleA.ArticalId);
+				int totalCount = commentCount + replyCount;
+				commentCounts[articleA.ArticalId] = commentCount;
+				replyCounts[articleA.ArticalId] = replyCount;
+				likeCounts[articleA.ArticalId] = likeCount;
+				totalCounts[articleA.ArticalId] = totalCount;
+			}
 			var popularArticle = await (from v in _context.ArticalViews
 										join l in _context.ArticleLists on v.ArticalId equals l.ArticalId
 										group new { v, l } by new { v.ArticalId, l.ArticalTitle, l.ArticalContent } into g
@@ -81,7 +97,11 @@ namespace DenGame.Controllers
 				ArticalViews = await _context.ArticalViews.ToListAsync(),
 				TopUsers = topuser,
 				PopularArticle = popularArticle,
-				
+				CommentCounts = commentCounts,
+				ReplyCounts = replyCounts,
+				TotalCounts = totalCounts,
+				LikeCounts = likeCounts
+
 			};
 			return View(viewModel);
 		}
@@ -89,6 +109,12 @@ namespace DenGame.Controllers
 
 		public IActionResult Post()
 		{
+			var userId = HttpContext.Session.GetInt32("UserId");
+
+			if (!userId.HasValue)
+			{
+				return RedirectToAction("Login", "User");
+			}
 			//var userIds = (HttpContext.Session.GetString("UserId"));
 			//if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
 			//{
@@ -189,10 +215,11 @@ namespace DenGame.Controllers
 		//--------------會員個人主頁----------------
 		public async Task<IActionResult> ForumUserPersonal()
 		{
-			var userIds = (HttpContext.Session.GetString("UserId"));
-			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			var userId = HttpContext.Session.GetInt32("UserId");
+
+			if (!userId.HasValue)
 			{
-				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+				return RedirectToAction("Login", "User");
 			}
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId);
@@ -354,10 +381,11 @@ namespace DenGame.Controllers
 		[HttpPost]
 		public async Task<IActionResult> AddComment(string comment, int articalId)
 		{
-			var userIds = (HttpContext.Session.GetString("UserId"));
-			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			var userId = HttpContext.Session.GetInt32("UserId");
+
+			if (!userId.HasValue)
 			{
-				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+				return RedirectToAction("Login", "User");
 			}
 			if (ModelState.IsValid)
 			{
@@ -381,10 +409,11 @@ namespace DenGame.Controllers
 		[HttpPost]
 		public async Task<IActionResult> AddReply(string comment, int commentId)
 		{
-			var userIds = (HttpContext.Session.GetString("UserId"));
-			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			var userId = HttpContext.Session.GetInt32("UserId");
+
+			if (!userId.HasValue)
 			{
-				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+				return RedirectToAction("Login", "User");
 			}
 			if (ModelState.IsValid)
 			{
@@ -411,43 +440,34 @@ namespace DenGame.Controllers
 				.ToList();
 			return View(articles);
 		}
-		//未解決
-		//public async Task<IActionResult> ViewArticle(int id)
-		//{
-		//	var article = await _context.ArticleLists.FindAsync(id);
-
-		//	if (article == null)
-		//	{
-		//		return NotFound();
-		//	}
-
-		//	// 獲取當前用戶的ID
-		//	var userIdString = HttpContext.Session.GetString("UserId");
-		//	if (string.IsNullOrEmpty(userIdString))
-		//	{
-		//		return Unauthorized(); // 如果用戶未登錄，則返回未授權
-		//	}
-		//	int userId = int.Parse(userIdString);
-
-		//	// 檢查 Session 中是否已經有該文章的瀏覽記錄
-		//	//var viewedArticles = HttpContext.Session.Get<List<int>>("ViewedArticles") ?? new List<int>();
-
-		//	//if (!viewedArticles.Contains(id))
-		//	//{
-		//		// 增加 `ArticalView` 記錄
-		//		// 增加瀏覽次數
-		//		article.ViewCount++;
-		//		_context.Update(article);
-		//		await _context.SaveChangesAsync();
-
+		//---------------------瀏覽文章--------------------
+		public async Task<IActionResult> ViewArticle(int id)
+		{
+			// 檢查用戶是否已經查看過該文章
+			var sessionKey = $"viewed_{id}";
+			var article = await _context.ArticleLists.FindAsync(id);
+			if (HttpContext.Session.GetString(sessionKey) == null)
+			{
 				
+				if (article == null)
+				{
+					return NotFound();
+				}
 
-		//		// 將文章ID添加到 Session 中
-		//		//viewedArticles.Add(id);
-		//		//HttpContext.Session.Set("ViewedArticles", viewedArticles);
-		//	//}
+				// 增加觀看次數
+				article.ViewCount++;
+				_context.Update(article);
+				await _context.SaveChangesAsync();
 
-		//	return View(article);
-		//}
+				// 將已查看標記寫入 Session
+				HttpContext.Session.SetString(sessionKey, "true");
+				
+			}
+			return View(article);
+
+
+
+
+		}
 	}
 }

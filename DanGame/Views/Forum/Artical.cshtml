@@ -1,6 +1,4 @@
-﻿
-
-@{
+﻿@{
 	ViewData["Title"] = "Artical";
 }
 @model DanGame.Models.ArticlePageViewModel
@@ -24,15 +22,22 @@
 		text-decoration: none;
 	}
 
-	. {
+	/* . {
 		box-sizing: border-box;
+	} */
+	body{
+		width:auto;
+	}
+
+	.row {
+		margin-left: 0;
 	}
 </style>
 
 <body>
-	<div class="d-flex  m-auto container mt-5 pt-5 mb-4">
-		<div class="shadow border border-1 rounded w-100 m-auto mt-4 me-3">
-			<div class="m-4 ">
+	<div class="d-flex container mt-5 pt-5 mb-4">
+		<div class="shadow border border-1 rounded w-100 mt-4">
+			<div class="m-4">
 				<h3>@Model.Article.ArticalTitle</h3>
 				<div> <span class="bg-primary bg-opacity-50 m-2 p-1 rounded text-white">@Model.Article.ArticleCategory</span></div>
 				<hr>
