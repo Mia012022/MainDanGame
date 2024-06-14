@@ -1,0 +1,56 @@
+h3{
+    color:gainsboro;
+    margin: 30px 0px;
+}
+.check_container {
+    height: 2000px;
+    // border: 3px solid red;
+    background-image: linear-gradient(to right, #eea2a2 0%, #bbc1bf 19%, #57c6e1 42%, #b49fda 79%, #7ac5d8 100%);
+    margin: auto;
+    width: 100%;
+    min-width: 1500px;
+    padding-top: 200px;
+    display: flex;
+    align-items: first flex-start;
+    justify-content: center;
+
+    .main {
+        background-color: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px black;
+        min-height: 800px;
+        padding: 20px;
+        max-width: 1000px;
+        margin: auto;
+        border-radius: 3px;
+        margin: 0;
+        margin-right: 50px;
+
+        input:not([type="checkbox"]):focus {
+            border: 2px solid deepskyblue;
+            background: #242929;
+            color: white;
+            caret-color: red;
+        }
+    }
+
+    .checkmedthod {
+        min-width: 300px;
+        margin: auto;
+        padding: 20px;
+        margin: 0;
+    }
+
+    .divcardNumber {
+        position: relative;
+       
+
+        #checkEye {
+            position: absolute;
+            top: 75%;
+            right: 30px;
+            transform: translateY(-50%);
+            color:black;
+        }
+    }
+}

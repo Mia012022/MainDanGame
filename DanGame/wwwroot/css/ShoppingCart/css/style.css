@@ -18,7 +18,7 @@ body{
     margin: 0;
 }
 
-.my-header a {
+.my-header a{
     height: 100%;
 }
 
@@ -53,21 +53,4 @@ body{
 
 .my-tw:hover {
     color: rgb(134, 34, 248);
-}
-
-.user-profilepic-container {
-    width: 200px;
-    height: 200px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.user-profilepic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 50%;
 }
