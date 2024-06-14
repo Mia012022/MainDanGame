@@ -1,0 +1,24 @@
+﻿﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model DanGame.Models.ArticleList
+@{
+}
+<style>
+	.hhh {
+		margin-top: 100px;
+	}
+</style>
+<div class="hhh">
+</div>
+<div class="container">
+
+
+	<h3>確定要刪除這筆資料嗎?</h3>
+	<form action="/Forum/Delete" method="post">
+		<input type="hidden" id="ArticalId" name="ArticalId"
+			   value="@Model.ArticalId" />
+		<input type="submit" value="確定" class="btn btn-outline-danger" /> |
+		<a href="/Forum/ForumUser" class="btn btn-outline-info">取消</a>
+	</form>
+</div>

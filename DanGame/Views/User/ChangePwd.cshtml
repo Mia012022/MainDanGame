@@ -18,7 +18,7 @@
 <div class="container-fluid overflow-x-auto">
     <div class="row mx-5">
         <div class="col d-flex justify-content-between align-items-center mb-2">
-            <h1>@Model.User.UserName 的帳戶</h1>
+            <h1>@Model.User?.UserName 的帳戶</h1>
             <button class="btn btn-outline-secondary text-end" id="logoutButton">登出</button>
         </div>
         <hr>
@@ -30,12 +30,12 @@
                     <div class="mb-3">
                         <a asp-controller="User" asp-action="UserIndex" class="text-decoration-none">帳戶詳細資料</a>
                     </div>
-                    <div class="mb-3">
+                    @* <div class="mb-3">
                         <a asp-controller="User" asp-action="Preferences" class="text-decoration-none">偏好設定</a>
                     </div>
                     <div class="mb-3">
                         <a asp-controller="User" asp-action="Notification" class="text-decoration-none">通知設定</a>
-                    </div>
+                    </div> *@
                 </div>
             </div>
         </div>
