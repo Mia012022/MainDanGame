@@ -12,22 +12,25 @@ using System.Text;
 using System.Collections;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Net.WebRequestMethods;
+using Azure.Core;
+using static OpenAI.ObjectModels.StaticValues.AssistantsStatics.MessageStatics;
 
 
-public class AuthorizeUserAttribute : ActionFilterAttribute
-{
-    public override void OnActionExecuting(ActionExecutingContext context)
-    {
-        var session = context.HttpContext.Session;
-        var userIdStr = session.GetString("UserId");
+//public class AuthorizeUserAttribute : ActionFilterAttribute
+//{
+//    public override void OnActionExecuting(ActionExecutingContext context)
+//    {
+//        var session = context.HttpContext.Session;
+//        var userIdStr = session.GetString("UserId");
 
-        if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out _))
-        {
-            context.Result = new UnauthorizedResult();
-        }
-        base.OnActionExecuting(context);
-    }
-}
+//        if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out _))
+//        {
+//            context.Result = new UnauthorizedResult();
+//        }
+//        base.OnActionExecuting(context);
+//    }
+//}
+
 
 
 
@@ -38,6 +41,11 @@ namespace DanGame.Controllers
     public class ShoppingCartController : Controller
     {
         private DanGameContext context;
+
+        [HttpGet("User/Profile")]
+        [AuthorizeUser]
+
+
         [HttpGet("apps")]
         public List<App> Apps()
         {
@@ -51,7 +59,8 @@ namespace DanGame.Controllers
         public IActionResult getcreditinfos()
 
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var session = Request.HttpContext.Session;
+            var userId = session.GetInt32("UserId");
             var query = from o in context.CreditCardInfos
                         where o.UserId == userId
                         select o;
@@ -66,7 +75,8 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         async public Task<ShoppingCart[]> GetUserShoppingItem()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var session = Request.HttpContext.Session;
+            var userId = session.GetInt32("UserId");
 
             var query = from shoppingCart in context.ShoppingCarts
                         where shoppingCart.UserId == userId
@@ -93,7 +103,8 @@ namespace DanGame.Controllers
         public async Task<ActionResult<CreditCardInfo>> PostCreditCardInfo([FromBody] CreditCardInfo creditCardInfo, [FromQuery] bool save) //這邊帶兩個參數，透過 save: $("#gridCheck").is(":checked")傳進來是bool來判斷
         {
             //前端送進來的creditCardInfo，是沒有設定userId的，所以這邊要透過認證跟seeion拿Id，確定這個信用卡資訊是哪一個用戶得
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var session = Request.HttpContext.Session;
+            var userId =(int) session.GetInt32("UserId");
             creditCardInfo.UserId = userId;
             // 檢查是否已經存在相同的信用卡信息
             var existingCard = await context.CreditCardInfos
@@ -159,9 +170,10 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         public IActionResult Gotocheck()
         {
-            var UserId = Request.HttpContext.Session.GetString("UserId");
+            var session = Request.HttpContext.Session;
+            var userId = session.GetInt32("UserId");
             var query = from o in context.ShoppingCarts
-                        where o.UserId == Convert.ToInt32(UserId)
+                        where o.UserId == Convert.ToInt32(userId)
                         select new
                         {
                             Price=o.App.AppDetail.Price,
@@ -304,9 +316,10 @@ namespace DanGame.Controllers
         [HttpGet("getuserShoppingCart")]
         public ActionResult getuserShoppingCart()
         {
-            int UserID = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var session = Request.HttpContext.Session;
+            var userId = session.GetInt32("UserId");
             var query = from o in context.ShoppingCarts
-                        where o.UserId == UserID
+                        where o.UserId == userId
                         select o;
             var result = query.ToList();
 
@@ -341,8 +354,9 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         public IActionResult GetCreditCardInfo()
         {
-           
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+
+            var session = Request.HttpContext.Session;
+            var userId = session.GetInt32("UserId");
             string sessionKey = $"creditCardInfo-{userId}";
 
             // 從 Session 中取得資料
