@@ -350,13 +350,15 @@ h4 {
 .mikecanvas .mikecanvas_body .canvasgameitem .deleticon:hover {
   transform: scale(0.9);
 }
-.mikecanvas .canvasgotocheck {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  margin-right: 20px;
-  margin-bottom: 5px;
-}
+    .mikecanvas .canvasgotocheck {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        margin-right: 20px;
+        margin-bottom: 5px;
+        margin-top: 10px;
+       
+    }
 .mikecanvas .canvasgotocheck a {
   background-color: red;
   padding: 5px 20px;

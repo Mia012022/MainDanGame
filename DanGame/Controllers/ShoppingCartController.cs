@@ -71,6 +71,7 @@ namespace DanGame.Controllers
         }
 
 
+        //取得使用者購物車的資料
         [HttpGet("User/ShoppingCart")]
         [AuthorizeUser]
         async public Task<ShoppingCart[]> GetUserShoppingItem()
@@ -86,7 +87,19 @@ namespace DanGame.Controllers
         }
 
 
+        //刪除使用者購物車的資料
+      
+        [HttpDelete("delete/ShoppingCart/{id}")]
+        [AuthorizeUser]
+        public IActionResult DeletceShoppingCart( int id  )
+        {
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
+           var shoppingCartItem = context.ShoppingCarts.FirstOrDefault(c => c.AppId == id);
+            context.ShoppingCarts.Remove(shoppingCartItem);
+            context.SaveChanges();
 
+            return Ok();
+        }
 
 
 
@@ -166,6 +179,7 @@ namespace DanGame.Controllers
             return View();
         }
 
+        //當進入Gotocheck先把相關資料算好給前端
         [HttpGet("Gotocheck")]
         [AuthorizeUser]
         public IActionResult Gotocheck()
@@ -264,7 +278,7 @@ namespace DanGame.Controllers
 
 
 
-
+        //Ecplay是處理到綠界帳單回傳參數的api
         [HttpPost("Ecplay")]
         public IActionResult Ecplay()
         {

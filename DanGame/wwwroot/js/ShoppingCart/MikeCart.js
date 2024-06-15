@@ -35,6 +35,7 @@ $.get("User/ShoppingCart", function (data) {
             /*console.log(datasource.price);*/
             updataprice();
             render(datasource);
+            rendermyOffcanvasGameItems(datasource)
         }
     });
 
@@ -66,7 +67,7 @@ function updataprice() {
       
     $.each(apps, function (index, app) {
         const platformIconMap = { windows: `<i class="bi bi-windows"></i>`, mac: `<i class="bi bi-apple"></i>`, linux: `<i class="bi bi-ubuntu"></i>`} 
-        const gameitem = $(` <div class="gameitem">
+        const gameitem = $(` <div class="gameitem" data-appid="${app.appId}">
                               <div class="itempic">
                                   <a href=""
                                       ><img
@@ -109,11 +110,30 @@ function updataprice() {
         gameitem.find(".deletebutton").on("click", function (e) {
             e.preventDefault(); // 防止點擊鏈接時跳轉
             mymodalremoveone.show();
-            // console.log("a");
+            
+            //$(this)：在點擊事件處理函數中，$(this) 指向當前觸發點擊事件的 DOM 元素，也就是 .deletebutton。
+            //.closest('.gameitem')：使用 jQuery 的 closest 方法尋找最接近的包含 gameitem class 的祖先元素，這樣可以確保獲取到正確的遊戲項目元素。
+            //我這邊就是先在gameitem裡面設定一個id是，確保點到都是
+        /*    console.log($(this).closest('.gameitem').data('appid'));*/
+            const deleteapp = $(this).closest('.gameitem').data('appid')
+           
+        
             // $(".yesno").off("click");我這邊已經取消off了
             modalremoveone.find(".yesremoveone").on("click", function () {
                 // createDeleteHandler(gameitem, index);
                 gameitem.remove(); //這邊可以刪掉
+                console.log(deleteapp)
+                $.ajax({
+                    method: "DELETE",
+                    url: `delete/ShoppingCart/${deleteapp}`,
+                    success: function (data) {
+                        console.log("成功刪除");
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("刪除失敗", status, error);
+                    }
+                });
+            
                 checkAndShowEmptyMessage();
                 /*console.log(datasource[1].appId);*/
                 console.log(datasource);
@@ -138,6 +158,27 @@ function updataprice() {
         //結帳金額的部分
     });
 }
+
+    //刪除項目api，我想要把只要是刪除的全部都寫在一起，
+    //function deleteapi() {
+    //    $.ajax(){
+    //        type: "Delete"
+    //        url:''
+    //    }
+    //}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //moda給單獨取消用的
 var modalremoveone =
@@ -232,6 +273,9 @@ function checkAndShowEmptyMessage() {
     }
 });
 
+
+
+//購物車圖標model功能開始
 let myOffcanvas = $(`
               <div class="offcanvas offcanvas-bottom mikecanvas" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
                   <div class="offcanvas-header mikecanvas_header">
@@ -239,58 +283,6 @@ let myOffcanvas = $(`
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                   </div>
                   <div class="offcanvas-body small mikecanvas_body">
-
-
-
-  
-
-
-
-
-                  <div class="canvasgameitem">
-<p class="canvasitem-name">元素塔防2</p>
-<div class="itempic">
-    <a href=""><img
-            src="https://steamcdn-a.akamaihd.net/steam/apps/1018830/library_600x900.jpg"
-            alt=""
-    /></a>
-</div>
-<div class="itemprice">
-    <p class="rp">NT:800</p>
-</div>
-<i class="fa-solid fa-circle-minus deleticon"></i>
-</div>
-
-
-
-
-
-
-
-
-<div class="canvasgameitem">
-<p class="canvasitem-name">元素塔防2</p>
-<div class="itempic">
-    <a href=""><img
-            src="https://steamcdn-a.akamaihd.net/steam/apps/1018830/library_600x900.jpg"
-            alt=""
-    /></a>
-</div>
-<div class="itemprice">
-    <p class="rp">NT:800</p>
-</div>
-<i class="fa-solid fa-circle-minus deleticon"></i>
-</div>
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -312,15 +304,43 @@ let myOffcanvas = $(`
         height: "45vh",
         width: "90vw",
     });
-myOffcanvas.find(".deleticon").on("click", function () {
-    $(this).parent(".canvasgameitem").remove();
-    canvascalculate();
-});
+
+
+
+
+    function rendermyOffcanvasGameItems(apps) {
+        console.log("拿資料囉");
+        console.log(apps); // 正确的变量名是 apps，而不是 aaps
+
+        $.each(apps, function (index, app) {
+            const myOffcanvasGameItem = $(`
+            <div class="canvasgameitem">
+                <p class="canvasitem-name">${app.appName}</p>
+                <div class="itempic">
+                    <a href=""><img src="https://steamcdn-a.akamaihd.net/steam/apps/${app.appId}/library_600x900.jpg" alt=""></a>
+                </div>
+                <div class="itemprice">
+                    <p class="canvasGameItemrp">NT:${app.price}</p>
+                </div>
+                <i class="fa-solid fa-circle-minus deleticon"></i>
+            </div>
+        `);
+
+            // 将创建的 myOffcanvasGameItem 添加到 .mikecanvas_body 中
+            $(".mikecanvas_body").append(myOffcanvasGameItem);
+            canvascalculate()
+            myOffcanvasGameItem.find(".deleticon").on("click", function () {
+                $(this).parent(".canvasgameitem").remove();
+                canvascalculate();
+            });
+        });
+    }
+
 
 //canvas的計算功能開始
 function canvascalculate() {
     let canvastotal = 0;
-    myOffcanvas.find(".rp").each(function () {
+    myOffcanvas.find(".canvasGameItemrp").each(function () {
         let canvaspriceText = $(this).text().replace("NT:", "");
         let canvasprice = parseFloat(canvaspriceText);
         if (!isNaN(canvasprice)) {
@@ -329,15 +349,17 @@ function canvascalculate() {
     });
     myOffcanvas.find(".canvasgotocheck b").text(canvastotal);
     if (canvastotal == 0) {
-        myOffcanvas.find(".canvasgotocheck a").attr("href", "#");
+        myOffcanvasGameItem.find(".canvasgotocheck a").attr("href", "#");
         bsOffcanvas.hide();
     }
 }
-canvascalculate();
+
 //canvas的計算功能結束
 
+//建立model
 var bsOffcanvas = new bootstrap.Offcanvas(myOffcanvas);
 
+//點擊跳窗
 $(".bi-cart-plus").on("click", (event) => {
     event.preventDefault()
     // if (canvastotal == 0) {
@@ -346,6 +368,18 @@ $(".bi-cart-plus").on("click", (event) => {
     bsOffcanvas.toggle();
     console.log("嗨");
 });
+
+
+
+
+
+
+
+//購物車圖標model功能結束
+
+
+
+
 
 //跑馬燈
 function runhorse() {
