@@ -10,12 +10,12 @@
 }
 <head>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-	<link href="~/css/Forum.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/gh/yesiamrocks/cssanimation.io@1.0.3/cssanimation.min.css" rel="stylesheet">
+	<link href="~/css/ForumIndex.css" rel="stylesheet" />
 	<link rel="stylesheet" href="~/css/PagedList.css" />
 	<script src="~/js/jquery-dateformat.min.js"></script>
 	<script src="https://kit.fontawesome.com/b5dde33e16.js" crossorigin="anonymous"></script>
-	@* 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> *@
+
 </head>
 <style>
 
@@ -32,30 +32,70 @@
 	.sticky {
 		position: fixed;
 		top: 0;
-		border-radius: 10px;
-		background-color: lightpink;
 	}
 
-	.sticky {
-		padding-top: 60px;
-	}
+		.sticky .narbarCaA {
+			border-radius: 0 0 40px 40px;
+			background-image: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%);
+			padding-top: 80px;
+			padding-bottom: 20px;
+			margin-left: 0px;
+		}
+
 
 		.sticky a {
-			color: ghostwhite;
+			color: #1d3557;
 		}
 
 	.stickyOne {
 		position: fixed;
 		top: 0;
-		right: 16%;
-		padding-top:60px;
+		/* right: 16%; */
+		padding-top: 60px;
+	}
+
+	.bgBody {
+		background-image: linear-gradient(to right, #ec77ab 0%, #7873f5 100%);
+	}
+
+	.FRbgStyle {
+		position: relative; /* 確保文字可以相對於這個元素定位 */
+		height: 500px;
+		width: 100%;
+		background-image: linear-gradient(to right, #38041c 30%, rgba(255, 255, 255, 0)), url(/img/frRight.webp);
+		background-repeat: no-repeat;
+		background-position: right;
+		background-size: cover; /* 確保圖片覆蓋整個元素 */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white; /* 設置文字顏色，根據需要調整 */
+		font-size: 24px; /* 調整文字大小 */
+		/* font-weight: bold; */
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 增加文字陰影，讓文字更易讀 */
+		text-align: center;
+		margin-top:70px;
+	}
+
+	.FRbgText {
+		position: absolute; /* 絕對定位 */
+		top: 50%; /* 垂直居中 */
+		left: 20%; /* 水平居中 */
+		transform: translate(-50%, -50%); /* 調整中心點 */
+	}
+	.FRbgTextTitle{
+		font-size:60px;
+		padding:4px 10px;
+		border-bottom: 2px solid white;
+		margin-bottom:6px;
 	}
 
 </style>
 
-<body>
-	<div class="wrapper">
+<body class="bgBody">
 
+	@* 泡泡特效 *@
+	<div class="wrapper">
 		<div><span class="dot"></span></div>
 		<div><span class="dot"></span></div>
 		<div><span class="dot"></span></div>
@@ -72,35 +112,67 @@
 		<div><span class="dot"></span></div>
 		<div><span class="dot"></span></div>
 	</div>
+
+	<div class="FRbgStyle">
+		<div class="FRbgText">
+			<div class="FRbgTextTitle cssanimation lePeek sequence">論壇區</div>
+			<div>
+				<div>綜合討論</div>
+				<div>資訊快報</div>
+				<div>心得攻略</div>
+				<div>實況專區</div>
+
+			</div>
+			@* <p class="h3"> The Elder Scrolls</p>
+			<p style="font-size:10px">
+				
+				ONLINE
+				
+			</p>
+			
+
+			<p class="h2">GOLD ROAD</p>
+
+			<p>你的傳奇在此展開</p>
+			<p>在《ESO:Gold Road》自訂獨特技能，</p>
+			<p>並探索曾經在</p>
+
+			<p>《上古卷軸:遺忘之都》中出現的新區域。</p> *@
+
+
+		</div>
+	</div>
+
+
+
+
 	<div>
 
-
-		<div class="m-1 mt-5 pt-5 container m-auto ">
+		@* 文章類別 *@
+		<div class="m-1 mt-5  container m-auto ">
 			<div class="d-flex">
 				<div class="m-1 w-100 rounded">
 					<div class="p-1">
-						<div class="d-flex justify-content-around w-25 m-auto">
-							@Html.PagedListPager(Model.ArticleList, page => Url.Action("Index", new { page }))
+						<div class="mb-3 d-flex" id="navbarCa">
 
-						</div>
-						<div class="mb-3 " id="navbarCa">
-							<a href="@Url.Action("Index", new { category = "全部主題" })" class="btn clcategory">全部主題</a>
-							<a href="@Url.Action("Index", new { category = "綜合討論" })" class="btn ms-2 clcategory">綜合討論</a>
-							<a href="@Url.Action("Index", new { category = "資訊快報" })" class="btn ms-2 clcategory">資訊快報</a>
-							<a href="@Url.Action("Index", new { category = "心得攻略" })" class="btn ms-2 clcategory">心得攻略</a>
-							<a href="@Url.Action("Index", new { category = "實況專區" })" class="btn ms-2 clcategory">實況專區</a>
+							<div class="narbarCaA"><a href="@Url.Action("Index", new { category = "全部主題" })" class="btn clcategory">全部主題</a></div>
+							<div class="narbarCaA"><a href="@Url.Action("Index", new { category = "綜合討論" })" class="btn ms-2 clcategory">綜合討論</a></div>
+							<div class="narbarCaA"><a href="@Url.Action("Index", new { category = "資訊快報" })" class="btn ms-2 clcategory">資訊快報</a></div>
+							<div class="narbarCaA"><a href="@Url.Action("Index", new { category = "心得攻略" })" class="btn ms-2 clcategory">心得攻略</a></div>
+							<div class="narbarCaA"><a href="@Url.Action("Index", new { category = "實況專區" })" class="btn ms-2 clcategory">實況專區</a></div>
+
 						</div>
 						<hr />
 					</div>
 
 
-
+					@* 文章內容 *@
 					@foreach (var item in Model.ArticleList)
 					{
 
 						var concatenatedContent = parser.ConcatenateParagraphContents(item.ArticalContent);
-						<div class="bg-light bg-opacity-75 p-4 arbg">
-							<!-- 第一行 -->
+						<div class="bg-light p-4 arbg my-4">
+							<!-- 第一行  頭像&使用者名稱 -->
 							<div class="mb-3">
 								<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@item.User.UserId" class="text-decoration-none">
 									<img src="@item.User.UserProfile.ProfilePictureUrl" class="rounded-circle" style="width:20px;height:20px;object-fit:cover;">
@@ -115,7 +187,7 @@
 									<!-- 文章標題 -->
 									<div class="me-4 col">
 
-										<div class="h4 arTitle">@item.ArticalTitle</div>
+										<div class="h5 arTitle">@item.ArticalTitle</div>
 										<div class="text-secondary articalcontent two-lines">
 											<p>@Html.Raw(concatenatedContent)</p>
 										</div>
@@ -125,7 +197,7 @@
 											<div class="col-2"><span class="bg-primary bg-opacity-50 p-1 rounded text-white" style="font-size:small">@item.ArticleCategory</span> </div>
 											<div class="ArticalCreateDate col-2 text-secondary p-1" timestramp="@(((DateTimeOffset)item.ArticalCreateDate).ToUnixTimeSeconds()*1000)" style=" font-size:small;"></div>
 											<div class="col text-secondary p-1" style=" font-size:small;"><i class="fa-solid fa-eye me-1"></i><span>@item.ViewCount</span></div>
-											<div class="col text-secondary p-1" style=" font-size:small;"><i class="fa-solid fa-message me-1"></i><span>@(Model.TotalCounts.TryGetValue(item.ArticalId , out var totalCount)?totalCount:0)</span></div>
+											<div class="col text-secondary p-1" style=" font-size:small;"><i class="fa-solid fa-message me-1"></i><span>@(Model.TotalCounts.TryGetValue(item.ArticalId, out var totalCount) ? totalCount : 0)</span></div>
 											<div class="col text-secondary p-1" style=" font-size:small;"><i class="bi bi-heart-fill me-1"></i><span>@(Model.LikeCounts.TryGetValue(item.ArticalId, out var likeCount) ? likeCount : 0)</span></div>
 
 											<div class="col-5"></div>
@@ -143,7 +215,7 @@
 						</div>
 
 
-						<hr>
+
 					}
 
 
@@ -169,26 +241,45 @@
 							</form>
 
 						</div>
-						<div class="mt-1  p-3 rounded ">
+						<div class=" p-3 rounded ">
 							<div class="list-group">
-								<a href="/Forum/Post" class="btn btn-light">快來發文吧!<i class="bi bi-file-earmark-post text-secondary"></i></a>
+								<a href="/Forum/Post" class="btn blob-btn">
+									快來發文吧!<i class="bi bi-file-earmark-post text-secondary"></i>
+									<span class="blob-btn__inner">
+										<span class="blob-btn__blobs">
+											<span class="blob-btn__blob"></span>
+											<span class="blob-btn__blob"></span>
+											<span class="blob-btn__blob"></span>
+											<span class="blob-btn__blob"></span>
+										</span>
+									</span>
+								</a>
+							</div>
+							<div class="list-group">
+								<a href="/Forum/ForumUserPersonal" class="btn blob-btn">
+									個人主頁<i class="bi bi-house text-info"></i>
+									<span class="blob-btn__inner">
+										<span class="blob-btn__blobs">
+											<span class="blob-btn__blob"></span>
+											<span class="blob-btn__blob"></span>
+											<span class="blob-btn__blob"></span>
+											<span class="blob-btn__blob"></span>
+										</span>
+									</span>
+								</a>
 							</div>
 
 						</div>
+
 						<div class="mt-1  p-3 rounded ">
-							<div class="list-group">
-								<a href="/Forum/ForumUserPersonal" class="btn btn-light">個人主頁<i class="bi bi-house text-info"></i></a>
-							</div>
-						</div>
-						<div class="mt-1  p-3 rounded ">
-							<div class="card">
-								<div class="card-header">
+							<div class="card ">
+								<div class="card-header forumCardHeader">
 									<div style="font-weight:700;">近期活躍達人<i class="bi bi-award text-warning"></i></div>
 								</div>
-								<ul class="list-group list-group-flush">
+								<ul class="list-group list-group-flush ">
 									@foreach (var user in Model.TopUsers)
 									{
-										<li class="list-group-item d-flex">
+										<li class="list-group-item d-flex ">
 											<div>
 												<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@user.UserId" class="text-decoration-none">
 													<img src="@user.ProfilePictureUrl" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;">
@@ -217,14 +308,14 @@
 							</div>
 						</div>
 						<div class="mt-1  p-3 rounded ">
-							<div class="card">
-								<div class="card-header">
+							<div class="card ">
+								<div class="card-header forumCardHeader">
 									<div style="font-weight:700;">熱門推薦文章<i class="bi bi-fire text-danger"></i></div>
 								</div>
-								<ul class="list-group list-group-flush">
+								<ul class="list-group list-group-flush ">
 									@foreach (var popular in Model.PopularArticle)
 									{
-										<li class="list-group-item">
+										<li class="list-group-item ">
 											@{
 												string word = popular.ArticalTitle;
 												string result = word.Length > 15 ? (word.Substring(0, 15) + "..") : word;
@@ -248,7 +339,7 @@
 
 
 
-
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yesiamrocks/cssanimation.io@1.0.3/letteranimation.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script>
 		$(document).ready(function () {
@@ -274,13 +365,17 @@
 		var rightside = document.getElementById("rightside");
 		// Get the offset position of the navbar
 		var sticky = navbar.offsetTop;
-
+		var footer = document.getElementById("footer");
+		var footerOffset = footer.offsetTop + footer.offsetHeight;
 		// Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
 		function myFunction() {
 			if (window.pageYOffset >= sticky) {
 				navbar.classList.add("sticky");
 				rightside.classList.add("stickyOne");
-			} else {
+				
+			}
+		
+			else {
 				navbar.classList.remove("sticky");
 				rightside.classList.remove("stickyOne");
 
