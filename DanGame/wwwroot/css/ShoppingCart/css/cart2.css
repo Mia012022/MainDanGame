@@ -342,7 +342,12 @@ h4 {
 }
 .mikecanvas .mikecanvas_body .canvasgameitem .itemprice .rp {
   margin: 0;
+  margin-bottom:0px;
 }
+.mikecanvas .mikecanvas_body .canvasgameitem .itemprice .canvasGameItemrp {
+        margin: 0;
+        margin-bottom: 0px;
+    }
 .mikecanvas .mikecanvas_body .canvasgameitem .deleticon {
   font-size: 1.2rem;
   color: black;
@@ -356,7 +361,7 @@ h4 {
         align-items: center;
         margin-right: 20px;
         margin-bottom: 5px;
-        margin-top: 10px;
+  
        
     }
 .mikecanvas .canvasgotocheck a {

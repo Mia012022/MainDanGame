@@ -62,7 +62,6 @@ function updataprice() {
 //         updataprice();
 
 // }
-
     function render(apps) {
       
     $.each(apps, function (index, app) {
@@ -116,7 +115,22 @@ function updataprice() {
             //我這邊就是先在gameitem裡面設定一個id是，確保點到都是
         /*    console.log($(this).closest('.gameitem').data('appid'));*/
             const deleteapp = $(this).closest('.gameitem').data('appid')
-           
+            const itembox = $(this).closest('.gameitem').closest('.itembox')
+            const gameItems = itembox.find('.gameitem');
+            console.log(deleteapp)
+            console.log(itembox)
+            console.log(gameItems)
+            var allappids = [];
+            console.log(allappids)
+            gameItems.each(function () {
+                const appId = $(this).data('appid');
+                console.log(appId)
+                console.log($(this))
+                allappids.push(appId);
+            });
+            checkAndShowEmptyMessage();
+
+
         
             // $(".yesno").off("click");我這邊已經取消off了
             modalremoveone.find(".yesremoveone").on("click", function () {
@@ -169,17 +183,6 @@ function updataprice() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 //moda給單獨取消用的
 var modalremoveone =
     $(`<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -214,7 +217,8 @@ $(document).on("scroll", function () {
     });
 });
 
-//moda給全部取消用的
+    //moda給全部取消用的
+ var appIdsarray = [];
 var modalremoveall =
     $(`<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -238,6 +242,23 @@ modalremoveall.find(".yesremoveall").on("click", function () {
     console.log("c憨");
     $(".gameitem").remove();
     myModal.hide();
+
+    $.ajax({
+        url: "delete/allShoppingCart",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(appIdsarray),
+        success: function (data) {
+            console.log("成功刪除", data);
+        },
+       error: function (xhr, status, error) {
+            console.error('刪除失敗', status, error);
+            // 处理错误响应，例如显示错误信息
+        }
+    })
+    console.log(appIdsarray)
+
+
     checkAndShowEmptyMessage();
     datasource = [];
     updataprice();
@@ -245,7 +266,8 @@ modalremoveall.find(".yesremoveall").on("click", function () {
         color: "gary" /* 設置文字顏色為灰色 */,
     });
 });
-modalremoveall.find(".noremoveall").on("click", function () {
+    modalremoveall.find(".noremoveall").on("click", function () {
+        console.log(appIdsarray)
     myModal.hide();
 });
 
@@ -264,8 +286,15 @@ function checkAndShowEmptyMessage() {
             '<div class="empty-message"><img src="/image/ShoppingCart/螢幕擷取畫面 2024-05-23 141622.png" alt="Empty Image"><p class="empty-message-text">目前購物車已清空!</p></div>'
         );
     }
-}
-    $(".removebt").on("click",function () {
+    }
+
+    //這是全部清除
+    $(".removebt").on("click", function () {
+        
+        $(this).closest(".itembox").find(".gameitem").each(function () {
+           appIdsarray.push($(this).data("appid"))
+        })
+        console.log(appIdsarray)
     if ($(".gameitem").length == 0) {
         checkAndShowEmptyMessage();
     } else {
@@ -305,9 +334,6 @@ let myOffcanvas = $(`
         width: "90vw",
     });
 
-
-
-
     function rendermyOffcanvasGameItems(apps) {
         console.log("拿資料囉");
         console.log(apps); // 正确的变量名是 apps，而不是 aaps
@@ -336,7 +362,6 @@ let myOffcanvas = $(`
         });
     }
 
-
 //canvas的計算功能開始
 function canvascalculate() {
     let canvastotal = 0;
@@ -353,9 +378,6 @@ function canvascalculate() {
         bsOffcanvas.hide();
     }
 }
-
-//canvas的計算功能結束
-
 //建立model
 var bsOffcanvas = new bootstrap.Offcanvas(myOffcanvas);
 
@@ -368,12 +390,6 @@ $(".bi-cart-plus").on("click", (event) => {
     bsOffcanvas.toggle();
     console.log("嗨");
 });
-
-
-
-
-
-
 
 //購物車圖標model功能結束
 

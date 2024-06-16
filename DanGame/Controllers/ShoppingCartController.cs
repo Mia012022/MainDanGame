@@ -101,6 +101,23 @@ namespace DanGame.Controllers
             return Ok();
         }
 
+        //刪除購物車全部的資料
+
+        [HttpPost("delete/allShoppingCart")]
+        [AuthorizeUser]
+        public IActionResult DeletceAllShoppingCart([FromBody] List<int> appidsarry)
+        {
+            var userid = Request.HttpContext.Session.GetInt32("UserId");
+
+            var shoppingCartItems = context.ShoppingCarts
+                                          .Where(cart => cart.UserId == userid && appidsarry.Contains(cart.AppId))
+                                          .ToList();
+            context.ShoppingCarts.RemoveRange(shoppingCartItems);//removerange是一次刪除核對到的所有東西，remove是指針對的一個
+
+            context.SaveChanges();
+            return Ok();
+        }
+
 
 
 
