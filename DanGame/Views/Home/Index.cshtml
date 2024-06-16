@@ -34,7 +34,7 @@
 
 	.game-card-more{
 		position: absolute;
-		bottom: 12px;
+		bottom: 5px;
 	}
 	.carousel-control {
 		position: absolute;
@@ -66,6 +66,9 @@
 		background-color: indigo;
 	}
 
+	.my-footer {
+		background-color: rgb(202, 202, 202, 0.5);
+	}
 </style>
 
 <body class="area">
@@ -87,7 +90,7 @@
 				訂閱我們的遊戲平台，暢享超過100款精彩遊戲，體驗無限樂趣！
 			</div>
 			<div class="fs-5 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">無限遊玩：訂閱會員可無限次遊玩平台上的所有遊戲。</div>
-			<div class="fs-6 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">一個月方案：每月 $499，無限暢玩所有遊戲。</div>
+			<div class="fs-6 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">一個月方案：每月 $399，無限暢玩所有遊戲。</div>
 			<div class="fs-6 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">三個月方案：每季 $899，可以節省費用40%。</div>
 			<div class="fs-5 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">高品質的遊戲庫，包含多種類型的遊戲，應有盡有。</div>
 			<div class="fs-4 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">立即訂閱，開始你的遊戲之旅！</div>
@@ -259,12 +262,12 @@
 				@foreach (var app in Model.apps)
 				{
 					<swiper-slide>
-						<div class="card game-card">
+						<div class="card game-card" style="height:340px;">
 							<img class="card-img-top" alt="" src="@app.headerImage">
 							<div class="card-body">
 								<h5 class="card-title">@app.appName</h5>
-								<p style="padding:10px;">NT$ @app.price</p>
-								<button class="btn game-card-more btn-outline-primary" style="padding:10px;">詳細資料</button>
+								<p>NT$ @app.price</p>
+								<div class="d-flex justify-content-end w-100"><button class="btn game-card-more btn-outline-primary align-content-end" style="padding: 10px; margin-bottom: 10px; margin-right: 10px;">詳細資料</button></div>
 							</div>
 						</div>
 					</swiper-slide>
@@ -305,19 +308,20 @@
 					}
 
 
-					<div class="col-sm-3">
+					<div class="col-sm-3 choose-box">
 						<div class="btn-group d-block  border-start button-container" role="group" aria-label="Basic example"
 							 style="height: 300px; padding: 10px;">
 							<h4 class="mt-3 ps-2"> 請選擇 </h4>
 							<div class="btn-group-vertical d-block" role="group">
 
-								<label class="btn mt-3 ms-4 w-75" style="border-radius: 10px;">
-									<input type="radio" name="options" id="option1" class="button active" onclick="toggleButtons(1)"> 1個月方案
-								</label>
-								<label class="btn mt-3 ms-4 w-75" style="border-radius: 10px;">
-									<input type="radio" name="options" id="option2" class="button" onclick="toggleButtons(2)"> 3個月方案
-								</label>
-								<div class="slider" id="slider"></div>
+								@for (int i = 0; i < Model.subscriptionPlans.Count; i++)
+								{
+									var plan = Model.subscriptionPlans[i];
+									<label class="btn mt-3 ms-4 w-75" style="border-radius: 10px;">
+										<input type="radio" name="options" id="option@(i+1)" class="button"
+											   onclick="toggleButtons(@i)"> @(plan.PlanName) 方案
+									</label>
+								}
 
 							</div>
 							<div class="text-end" style="margin-top: 60px;">
@@ -472,27 +476,24 @@
 		$("#prevButton").on("click", () => moveCarousel(1))
 		$("#nextButton").on("click", () => moveCarousel(-1))
 
-		// 頁面加載時，默認選中第一個單選按鈕
-		$("#option1").prop("checked", true);
-		$("#option1").parent().addClass("checkbgc");
-		// 初始化顯示第一個 my-subscription，隱藏第二個 my-subscription
+		$("input[name='options']").eq(0).prop("checked", true).parent().addClass("checkbgc");
+
+		// 初始化顯示第一個 my-subscription，隱藏其他的 my-subscription
+		$(".my-subscription").hide();
 		$(".my-subscription").eq(0).show();
-		$(".my-subscription").eq(1).hide();
 
 		// 監聽單選按鈕的點擊
 		$("input[name='options']").change(function () {
-			// 判斷選中的單選按鈕
-			if ($("#option1").is(":checked")) {
-				$(".my-subscription").eq(0).show(); // 顯示第一個 my-subscription
-				$(".my-subscription").eq(1).hide(); // 隱藏第二個 my-subscription
-				$(".checkbgc").removeClass("checkbgc");
-				$(this).parent().addClass("checkbgc");
-			} else if ($("#option2").is(":checked")) {
-				$(".my-subscription").eq(0).hide(); // 隱藏第一個 my-subscription
-				$(".my-subscription").eq(1).show(); // 顯示第二個 my-subscription
-				$(".checkbgc").removeClass("checkbgc");
-				$(this).parent().addClass("checkbgc");
-			}
+			// 獲取當前選中的索引
+			var index = $("input[name='options']").index(this);
+
+			// 顯示對應的 my-subscription，隱藏其他的
+			$(".my-subscription").hide();
+			$(".my-subscription").eq(index).show();
+
+			// 更新選中效果
+			$(".checkbgc").removeClass("checkbgc");
+			$(this).parent().addClass("checkbgc");
 		});
 
 		// 訂閱內容

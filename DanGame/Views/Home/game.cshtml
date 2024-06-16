@@ -11,12 +11,8 @@
 		stroke-linecap: round;
 	}
 
-    .wrapper{
-        width:100%;
-        overflow: hidden;
-        position: relative;
-        --swiper-navigation-size: 0;
-        user-select: none;
+    .my-footer {
+        background-color: rgb(202, 202, 202, 0.5);
     }
 </style>
 
@@ -233,7 +229,7 @@
         </div>
 
         <div div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
-            <div class="badge text-bg-primary position-absolute"
+            <div class="badge text-bg-danger position-absolute"
                  style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
                 <span id="tagname2"></span>
             </div>
@@ -249,7 +245,7 @@
         </div>
 
         <div div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
-            <div class="badge text-bg-primary position-absolute"
+            <div class="badge text-bg-secondary position-absolute"
                  style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
                 <span id="tagnameAll"></span>
             </div>
@@ -289,16 +285,22 @@
             response.forEach(function (app) {
                 var slide = `
                             <swiper-slide>
-                                <div class="card">
+                                <div class="card" style="height: 315px;">
                                     <img src="${app.headerImage}" class="card-img-top" alt="${app.appName}">
                                     <div class="card-body">
                                         <h5 class="card-title">${app.appName}</h5>
-                                        <button class="btn btn-secondary">詳細資訊</button>
-                                        <button class="btn btn-secondary float-end">
-                                            <a href="" class="list-group-item-action">
-                                                <i class="bi bi-cart-plus"></i>
-                                            </a>
-                                        </button>
+                                        <div style="position:absolute; bottom: 10px; left: 15px;">
+                                            <button class="btn btn-secondary">
+                                                詳細資訊
+                                            </button>
+                                        </div>
+                                        <div style="position:absolute; bottom: 10px; right: 15px;">
+                                            <button class="btn btn-secondary float-end">
+                                                <a href="" class="list-group-item-action">
+                                                    <i class="bi bi-cart-plus"></i>
+                                                </a>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </swiper-slide>

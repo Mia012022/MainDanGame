@@ -23,7 +23,7 @@
         color: white;
     }
 
-a {
+.my-header a {
     height: 100%;
 }
 
@@ -73,6 +73,8 @@ body {
 .checkbgc {
     border-radius: 10px;
     border-bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 @import url('https://fonts.googleapis.com/css?family=Exo:400,700');
@@ -230,8 +232,8 @@ bottom: -150px;
     }
 
 .game-card:hover {
-    transform: translateY(-5px);
-    box-shadow: rgb(0, 0, 0, 0.4) 0.5em 0.5em 0.5em;
+    transform: translateY(-10px);
+    box-shadow: rgb(0, 0, 0, 0.4) 0.5em 0.3em 0.5em;
 }
 
 .myQAContent {
