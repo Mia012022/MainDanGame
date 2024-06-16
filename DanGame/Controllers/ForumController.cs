@@ -227,10 +227,19 @@ namespace DenGame.Controllers
 			var comment = await _context.ArticalComments.Where(x => x.UserId == userId).ToListAsync();
 			var like = await _context.ArticalLikes.Where(x => x.UserId == userId).ToListAsync();
 			var commentlike = await _context.ArticalCommentLikes.Where(x => x.UserId == userId).ToListAsync();
-			var likedArticles = await _context.ArticalLikes
-			.Where(like => like.UserId == userId)
-			.Select(like => like.Artical)
-			.ToListAsync();
+			var likedArticles = await (from a in _context.ArticleLists
+									   join l in _context.ArticalLikes
+									   on a.ArticalId equals l.ArticalId
+									   where l.UserId == userId
+									   select a)
+									.ToListAsync();
+			var totalLikesCount = await (from l in _context.ArticalLikes
+										 join article in _context.ArticleLists
+										 on l.ArticalId equals article.ArticalId
+										 where article.UserId == userId
+										 select l)
+										.CountAsync();
+
 			if (user == null)
 			{
 				return NotFound();
@@ -243,7 +252,8 @@ namespace DenGame.Controllers
 				Likes = like,
 				Comments = comment,
 				CommentLikes = commentlike,
-				LikedArticles = likedArticles
+				LikedArticles = likedArticles,
+				TotalLikesCounts = totalLikesCount,
 
 			};
 

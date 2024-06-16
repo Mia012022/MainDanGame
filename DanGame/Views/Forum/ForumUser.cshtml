@@ -9,7 +9,22 @@
 	.hhh {
 		height: 100px;
 	}
+
+	.bgStyle {
+		height: 600px;
+		width: 100%;
+		background-image: linear-gradient(to top, #ffffff 30%, rgba(222, 213, 213, 0)), url(/img/frNier.webp);
+		background-repeat: no-repeat;
+		background-position: top;
+		background-size: cover;
+		background-attachment: fixed;
+	}
+	.frForumUserText{
+		color:black;
+		text-shadow: 2px 2px 4px white;
+	}
 </style>
+<body class="bgStyle">
 <div class="hhh"></div>
 <div class="container">
 
@@ -20,28 +35,28 @@
 			 src="@Model.UserProfile.ProfilePictureUrl">
 		</img>
 	</div>
-	<div class="m-3">
-		<span class="text-primary">@Model.User.UserName</span>
+	<div class="m-3 frForumUserText">
+		<span >@Model.User.UserName</span>
 		<div>
-			<span class="text-secondary ">@Model.Articles.Count</span>
-			<span class="text-secondary ">文章</span>
-			<span class="text-secondary ms-2">@Model.Comments.Count</span>
-			<span class="text-secondary ">評論</span>
-			<span class="text-secondary ms-2">@Model.Likes.Count</span>
-			<span class="text-secondary ">收藏</span>
-			<span class="text-secondary ms-2">0</span>
-			<span class="text-secondary ">讚數</span>
-			<span class="text-secondary ms-2">0</span>
-			<span class="text-secondary ">追蹤</span>
-			<span class="text-secondary ms-2">0</span>
-			<span class="text-secondary ">粉絲</span>
+			<span >@Model.Articles.Count</span>
+			<span >文章</span>
+			<span class=" ms-2">@Model.Comments.Count</span>
+			<span >評論</span>
+			<span class=" ms-2">@Model.Likes.Count</span>
+			<span >收藏</span>
+			<span class=" ms-2">@Model.TotalLikesCounts</span>
+			<span >讚數</span>
+			<span class="ms-2">0</span>
+			<span >追蹤</span>
+			<span class="ms-2">0</span>
+			<span >粉絲</span>
 		</div>
 
 	</div>
 </div>
 
-<div class="d-flex  m-auto">
-	<div class="shadow border border-1 rounded w-100 m-auto mt-4 me-3">
+<div class="d-flex mb-4 m-auto ">
+	<div class="shadow border border-1 rounded w-100 m-auto mt-4 me-3 bg-white bg-opacity-75">
 		<div class="m-4 ">
 			<ul class="nav nav-tabs" id="myTab" role="tablist">
 				<li class="nav-item" role="presentation">
@@ -136,12 +151,7 @@
 	<!-- 右側 -->
 	<div class="m-1 p-1 w-25">
 
-		<div class="mt-1  p-3 rounded ">
-			<div class="list-group">
-				<a href="/Forum/Post" class="btn btn-outline-secondary">快來發文吧!</a>
-			</div>
-
-		</div>
+		
 		<div class="mt-1  p-3 rounded ">
 
 			<div class="card" style="width: 18rem;">
@@ -171,3 +181,4 @@
 	</div>
 </div>
 </div>
+</body>

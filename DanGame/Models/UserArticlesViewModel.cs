@@ -13,6 +13,8 @@ namespace DanGame.Models
 		public List<ArticalLike> Likes { get; set; }
 		public List<ArticalView> Views { get; set; }
 		public List<ArticalCommentLike> CommentLikes { get; set; }
+
+		public int TotalLikesCounts { get; set; }
 		
 	}
 }
