@@ -3,6 +3,7 @@
 *@
 @{
 }
+@model dynamic;
 <style>
 	.chart-line {
 		fill: none;
@@ -228,12 +229,52 @@
             </div>
         </div>
 
+        <div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
+            <div class="badge bg-warning text-white position-absolute"
+                 style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
+                <span id="tagnameFriend"></span>
+            </div>
+            <swiper-container class="mySwiperFriend" space-between="30" slides-per-view="3">
+                @{
+                    List<int> AppIds = new List<int>();
+                }
+                @foreach (AppDetail appDetail in Model)
+                {
+                    if (AppIds.Contains(appDetail.AppId))
+                    {
+                        continue;
+                    }
+                    AppIds.Add(appDetail.AppId);
+                    <swiper-slide>
+                        <div class="card" style="height: 315px;">
+                            <img src="@appDetail.HeaderImage)" class="card-img-top" alt="@appDetail.AppName">
+                            <div class="card-body">
+                                <h5 class="card-title">@appDetail.AppName</h5>
+                                <div style="position:absolute; bottom: 10px; left: 15px;">
+                                    <button class="btn btn-secondary" onclick="window.open('/Game/@appDetail.AppId')">
+                                        詳細資訊
+                                    </button>
+                                </div>
+                                <div style="position:absolute; bottom: 10px; right: 15px;">
+                                    <button class="btn btn-secondary float-end">
+                                        <a href="" class="list-group-item-action">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+                }
+            </swiper-container>
+        </div>
+
         <div div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
             <div class="badge text-bg-danger position-absolute"
                  style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
                 <span id="tagname2"></span>
             </div>
-            <swiper-container class="mySwiper2" class="mySwiper" space-between="30" slides-per-view="3"></swiper-container>
+            <swiper-container class="mySwiper2" space-between="30" slides-per-view="3"></swiper-container>
         </div>
 
         <div div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
@@ -241,7 +282,7 @@
                  style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
                 <span id="tagname3"></span>
             </div>
-            <swiper-container class="mySwiper3" class="mySwiper" space-between="30" slides-per-view="3"></swiper-container>
+            <swiper-container class="mySwiper3" space-between="30" slides-per-view="3"></swiper-container>
         </div>
 
         <div div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
@@ -249,7 +290,7 @@
                  style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
                 <span id="tagnameAll"></span>
             </div>
-            <swiper-container class="mySwiperAll" class="mySwiper" space-between="30" slides-per-view="3"></swiper-container>
+            <swiper-container class="mySwiperAll" space-between="30" slides-per-view="3"></swiper-container>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
@@ -275,12 +316,14 @@
             //         }
             //     }
             // }
+            var tagNameFriend = "好友"
+            var tagnameAll = "所有";
             var tagname2 = "策略";
             var tagname3 = "角色扮演";
-            var tagnameAll = "所有";
-            $('#tagnameAll').append(tagnameAll);
             $('#tagname2').append(tagname2);
             $('#tagname3').append(tagname3);
+            $('#tagnameFriend').append(tagNameFriend);
+            $('#tagnameAll').append(tagnameAll);
 
             response.forEach(function (app) {
                 var slide = `
@@ -290,7 +333,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title">${app.appName}</h5>
                                         <div style="position:absolute; bottom: 10px; left: 15px;">
-                                            <button class="btn btn-secondary">
+                                                <button class="btn btn-secondary" onclick="window.open('/Game/${app.appId}')">
                                                 詳細資訊
                                             </button>
                                         </div>
@@ -306,17 +349,17 @@
                             </swiper-slide>
                         `;
 
-                // 添加到所有游戏的容器中
+                // 添加到所有遊戲的容器
                 $('.mySwiperAll').append(slide);
 
-                // 检查 tagId 为 2 的标签
+                // 檢查 tagId = 2 的標籤
                 app.tags.forEach(function (tag) {
                     if (tag.tagId === 2) {
                         $('.mySwiper2').append(slide);
                     }
                 });
 
-                // 检查 tagId 为 3 的标签
+                // 檢查 tagId = 3 的標籤
                 app.tags.forEach(function (tag) {
                     if (tag.tagId === 3) {
                         $('.mySwiper3').append(slide);
@@ -324,7 +367,7 @@
                 });
             });
 
-            // 初始化 Swiper 实例
+            // 初始化 Swiper 
             new Swiper('.mySwiper2', {
                 pagination: {
                     el: '.swiper-pagination',

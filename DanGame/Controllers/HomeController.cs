@@ -20,16 +20,16 @@ namespace DanGame.Controllers
 
 		public IActionResult Index()
 		{
-			//// �ˬd�O�_���w�n�J��session
-			//if (HttpContext.Session.GetString("UserId") != null)
-			//{
-			//    // �p�G�w�n�J�A�ɦVUserController��UserIndex����
-			//    return RedirectToAction("UserIndex", "User");
-			//}
+            //// 檢查是否有已登入的session
+            //if (HttpContext.Session.GetString("UserId") != null)
+            //{
+            //    // 如果已登入，導向UserController的UserIndex頁面
+            //    return RedirectToAction("UserIndex", "User");
+            //}
 
-			//// �_�h���Index����
-			///
-			var query = from app in _context.Apps
+            //// 否則顯示Index頁面
+            ///
+            var query = from app in _context.Apps
 						where app.AppDetail.AppType == "game"
 						select new
 						{
@@ -75,9 +75,18 @@ namespace DanGame.Controllers
             return View();
         }
 
-		public async Task<IActionResult> gameindex()
+            public IActionResult gameindex()
 		{
-            return View();
+			var userId = Request.HttpContext.Session.GetInt32("UserId");
+			var friends = from friendShip in _context.Friendships
+						  where friendShip.FriendUserId == userId.Value || friendShip.UserId == userId.Value
+						  select (friendShip.FriendUserId == userId.Value ? friendShip.UserId : friendShip.FriendUserId);
+
+			var orderItems = from order in _context.Orders
+						 where friends.Contains(order.UserId)
+						 select order.OrderItems;
+
+			return View(orderItems.Select(items => items.Select(item => item.App.AppDetail)).SelectMany(i => i));
         }
 
 		public IActionResult category()
