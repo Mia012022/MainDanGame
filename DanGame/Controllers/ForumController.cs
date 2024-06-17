@@ -115,6 +115,7 @@ namespace DenGame.Controllers
 			{
 				return RedirectToAction("Login", "User");
 			}
+			
 			//var userIds = (HttpContext.Session.GetString("UserId"));
 			//if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
 			//{
