@@ -130,7 +130,6 @@ namespace DanGame.Controllers
                 UserName = model.UserName ?? string.Empty,
                 Email = model.Email ?? string.Empty,
                 PasswordHash = model.PasswordHash ?? string.Empty,
-                Status = "Offline",
                 CreatedAt = DateTime.Now,
                 UpdateAt = DateTime.Now
             };
