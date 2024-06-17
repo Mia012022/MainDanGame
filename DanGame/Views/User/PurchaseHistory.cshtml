@@ -1,0 +1,68 @@
+﻿@model DanGame.Models.UserOrderViewModel
+
+@{
+    ViewBag.Title = "PurchaseHistory";
+}
+
+<!-- 麵包屑 breadcrumb start ordered list 有序列表-->
+<div class="container-fluid overflow-x-auto" style="padding-top: 4rem;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mt-5 mx-5">
+            <li class="breadcrumb-item"><a class="text-decoration-none" asp-controller="Home" asp-action="Index">首頁</a></li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" asp-controller="User" asp-action="UserIndex">帳戶</a></li>
+            <li class="breadcrumb-item active" aria-current="page">購買紀錄</li>
+        </ol>
+    </nav>
+</div>
+<!-- 麵包屑 breadcrumb end -->
+<div class="container-fluid overflow-x-auto">
+    <div class="row mx-5">
+        <div class="col d-flex justify-content-between align-items-center mb-2">
+            <h1>@Model.User?.UserName 的購買紀錄</h1>
+            <button class="btn btn-outline-secondary text-end" id="logoutButton">登出</button>
+        </div>
+        <hr>
+    </div>
+    <div class="row justify-content-center mx-5 mt-1">
+        <div class="col-md-9">
+            <div class="mb-3">
+                <div class="row align-self-center">
+                    <div class="col-md-3">日期</div>
+                    <div class="col-md-6">遊戲或訂閱紀錄</div>
+                    <div class="col-md-3">總計</div>
+                </div>
+                <hr class="mt-1">
+                @foreach (var orderDetail in Model.Orders ?? Enumerable.Empty<OrderDetail>())
+                {
+                    <div class="row align-self-center">
+                        <div class="col-md-3">@orderDetail.Order?.OrderDate.ToString("yyyy/MM/dd")</div>
+                        <div class="col-md-6">
+                            @if (orderDetail.AppDetails?.Count > 0)
+                            {
+                                @foreach (var app in orderDetail.AppDetails)
+                                {
+                                    <p>@app.AppName</p>
+                                }
+                            }
+                            else if (orderDetail.Subscriptions?.Count > 0)
+                            {
+                                @foreach (var subscriptionDetail in orderDetail.Subscriptions)
+                                {
+                                    <p>@subscriptionDetail.SubscriptionPlan?.PlanName</p>
+                                }
+                            }
+                            else
+                            {
+                                <p>無遊戲資料</p>
+                            }
+                        </div>
+                        <div class="col-md-3">TWD @orderDetail.TotalPrice.ToString("N0")</div>
+                    </div>
+                    <br>
+                }
+                <br>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>

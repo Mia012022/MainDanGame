@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace DanGame.Models;
 
-public partial class User
+public partial class User 
 {
     public int UserId { get; set; }
 
     public string UserName { get; set; } = null!;
 
     public string PasswordHash { get; set; } = null!;
-
-    public string Status { get; set; } = null!;
 
     public string Email { get; set; } = null!;
 

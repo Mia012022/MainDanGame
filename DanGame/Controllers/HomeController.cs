@@ -3,32 +3,31 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Net.Http;
+using System.Text;
 
 namespace DanGame.Controllers
 {
-	public class HomeController : Controller
-	{
-		private readonly ILogger<HomeController> _logger;
-		private DanGameContext _context;
-		private static readonly HttpClient _httpClient = new HttpClient();
-		private readonly IHttpClientFactory _httpClientFactory;
+    public class HomeController : Controller
+    {
+        private readonly ILogger<HomeController> _logger;
+        private readonly DanGameContext _context;
 
-		public HomeController(DanGameContext dbContext)
-		{
-			_context = dbContext;
-		}
+        public HomeController(ILogger<HomeController> logger, DanGameContext dbContext)
+        {
+            _logger = logger;
+            _context = dbContext;
+        }
 
 		public IActionResult Index()
 		{
-			//// 檢查是否有已登入的session
+			//// �ˬd�O�_���w�n�J��session
 			//if (HttpContext.Session.GetString("UserId") != null)
 			//{
-			//    // 如果已登入，導向UserController的UserIndex頁面
+			//    // �p�G�w�n�J�A�ɦVUserController��UserIndex����
 			//    return RedirectToAction("UserIndex", "User");
 			//}
 
-			//// 否則顯示Index頁面
+			//// �_�h���Index����
 			///
 			var query = from app in _context.Apps
 						where app.AppDetail.AppType == "game"
@@ -56,12 +55,27 @@ namespace DanGame.Controllers
 			return View();
 		}
 
-		public IActionResult Privacy()
-		{
-			return View();
-		}
+        [HttpGet("/Game/{id}")]
+        public IActionResult Game(int id)
+        {
+            var query = from appDetail in _context.AppDetails
+                        where appDetail.AppId == id
+                        select new { detail = appDetail, media = appDetail.App.AppMedia, DLCs = appDetail.App.Dlcapps.Select((d) => d.AppDetail)};
+            return View(query.FirstOrDefault());
+        }
 
-		public async Task<IActionResult> game()
+        [HttpGet("/test")]
+        public IActionResult test()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+		public async Task<IActionResult> gameindex()
 		{
             return View();
         }

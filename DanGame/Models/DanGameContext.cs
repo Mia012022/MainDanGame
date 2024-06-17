@@ -61,9 +61,9 @@ public partial class DanGameContext : DbContext
 
     public virtual DbSet<UserProfile> UserProfiles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=26.80.144.54;Database=DanGame;User Id=sa;Password=P@ssw0rd;Encrypt=False;");
+//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+//        => optionsBuilder.UseSqlServer("Server=26.80.144.54;Database=DanGame;User Id=sa;Password=P@ssw0rd;Encrypt=False;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -290,7 +290,7 @@ public partial class DanGameContext : DbContext
 
         modelBuilder.Entity<ChatMessage>(entity =>
         {
-            entity.HasKey(e => new { e.MessageId, e.ChatRoomId });
+            entity.HasKey(e => e.MessageId).HasName("PK_ChatMessage_1");
 
             entity.ToTable("ChatMessage");
 
@@ -563,15 +563,10 @@ public partial class DanGameContext : DbContext
 
             entity.HasIndex(e => e.UserId, "username_User").IsUnique();
 
-            entity.Property(e => e.UserId)
-                .ValueGeneratedNever()
-                .HasColumnName("UserID");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(255);
             entity.Property(e => e.PasswordHash).HasMaxLength(75);
-            entity.Property(e => e.Status)
-                .HasMaxLength(10)
-                .IsFixedLength();
             entity.Property(e => e.UpdateAt).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(75);
         });

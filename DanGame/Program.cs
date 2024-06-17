@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using OpenAI.Extensions;
 using DanGame.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +20,18 @@ builder.Services.AddDbContext<DanGameContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 
+
 // Add services to the container.
 builder.Services.AddControllers();
 
 // 加入 IHttpContextAccessor 服務
 builder.Services.AddHttpContextAccessor();
+
+// 加入Open AI 服務
+builder.Services.AddOpenAIService();
+
+// Configure HttpClient
+builder.Services.AddHttpClient();
 
 // 加入session服務
 builder.Services.AddSession(options =>
@@ -54,10 +64,9 @@ app.UseAuthorization();
 // 加入session中介軟體
 app.UseSession();
 
+//app.MapControllers(); 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-//app.MapControllers(); 
 
 app.Run();

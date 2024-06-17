@@ -1,0 +1,25 @@
+﻿﻿.reply-button {
+    background: white;
+    color: gray;
+    border: none;
+}
+
+.reply-button:hover {
+    color: dodgerblue;
+}
+
+#emoji-picker, .emoji-picker {
+    display: none;
+    position: absolute;
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 10px;
+    z-index: 1000;
+    margin-top: -20px;
+}
+
+.emoji {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 5px;
+}

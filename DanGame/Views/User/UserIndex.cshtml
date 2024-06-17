@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "User UserIndex";
 }
+
 <!-- 麵包屑 breadcrumb start ordered list 有序列表-->
 <div class="container-fluid overflow-x-auto" style="padding-top: 4rem;">
     <nav aria-label="breadcrumb">
@@ -16,7 +17,7 @@
 <div class="container-fluid overflow-x-auto">
     <div class="row mx-5">
         <div class="col d-flex justify-content-between align-items-center mb-2">
-            <h1>@Model.User.UserName 的帳戶</h1>
+            <h1>@Model.User?.UserName 的帳戶</h1>
             <button class="btn btn-outline-secondary text-end" id="logoutButton">登出</button>
         </div>
         <hr>
@@ -28,12 +29,12 @@
                     <div class="mb-3">
                         <a asp-controller="User" asp-action="UserIndex" class="text-decoration-none">帳戶詳細資料</a>
                     </div>
-                    <div class="mb-3">
+                    @* <div class="mb-3">
                         <a asp-controller="User" asp-action="Preferences" class="text-decoration-none">偏好設定</a>
                     </div>
                     <div class="mb-3">
                         <a asp-controller="User" asp-action="Notification" class="text-decoration-none">通知設定</a>
-                    </div>
+                    </div> *@
                 </div>
             </div>
         </div>
@@ -45,16 +46,17 @@
                     <div class="d-flex row">
                         <div class="flex-column col-md-6">
                             <div class="user-profilepic-container">
-                                <img class="user-profilepic" src="@Url.Content(Model.UserProfile.ProfilePictureUrl)" alt="User Profile Picture">
+                                <img class="user-profilepic" src="@Url.Content(Model.UserProfile?.ProfilePictureUrl)" alt="User Profile Picture">
                             </div>
-                            <button class="btn btn-auto text-start mt-2 mb-1 btn-primary">變更頭像</button>
+                            <button class="btn btn-auto text-end mt-2 mb-1 btn-primary" data-bs-toggle="modal" data-bs-target="#profilePicModal">變更頭像</button>
                         </div>
                         <div class="flex-column col-md-6">
                             <div>
-                                <label for="" class="mb-1">變更使用者名稱：</label>
-                                <input type="text" class="me-3">
-                                <button class="btn btn-auto text-end btn-primary">確認變更</button>
+                                <label for="userName" class="mb-1">變更使用者名稱：</label>
+                                <input type="text" class="me-3" id="userName">
+                                <span id="userNameValidation"></span>
                             </div>
+                            <button id="confirmChange" class="btn btn-auto text-end btn-primary" disabled>確認變更</button>
                         </div>
                     </div>
                 </div>
@@ -65,22 +67,49 @@
                     <div class="d-flex row">
                         <div class="col-md-6 flex-column">
                             <div class="justify-content-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-front" viewBox="0 0 16 16">
-                                    <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" />
-                                    <path d="M2 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
-                                </svg>
-                                <label for="">以8964結尾的visa</label>
-                                <button class="btn btn-outline-secondary btn-sm text-end">編輯</button>
-                                <button class="btn btn-outline-secondary btn-sm text-end">移除</button>
+                                @if (Model.CreditCardInfos != null)
+                                {
+                                    foreach (var card in Model.CreditCardInfos)
+                                    {
+                                        <div class="justify-content-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-2-front" viewBox="0 0 16 16">
+                                                <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" />
+                                                <path d="M2 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5zm0 3a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
+                                            </svg>
+                                            <label for="">以 @card.CardNumber.Substring(card.CardNumber.Length - 4) 結尾的 @card.PaymentMethod</label>
+                                            <button class="btn btn-outline-secondary btn-sm text-end" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-card-id="@card.CardNumber">移除</button>
+                                        </div>
+                                        <br>
+                                    }
+                                }
                             </div>
-                            <br>
+                            <form asp-controller="ShoppingCart" asp-action="CreditCCardInfo" method="get">
                             <button class="btn btn-auto text-start mb-1 btn-primary">新增付款方式</button>
+                            </form>
                         </div>
                         <div class="d-flex flex-column col-md-6">
                             <!-- 如果未訂閱，顯示購買訂閱的按鈕;如果已訂閱，顯示自YYYY/MM/DD開始訂閱 -->
-                            <a href=""><button class="btn btn-auto text-start mb-1 btn-primary">購買訂閱</button></a>
-                            <a href="./purchase_history.html"><button class="btn btn-auto text-start mb-1 btn-primary">檢視購買紀錄</button></a>
-                            <a href="./preferences.html"><button class="btn btn-auto mb-1 btn-primary">更新商店偏好設定</button></a>
+                            @if (Model.UserSubscription == null || !Model.UserSubscription.SubscriptionStatus.HasValue || !Model.UserSubscription.SubscriptionStatus.Value)
+                            {
+                                <form asp-controller="Home" asp-action="Index" method="get">
+                                    <button class="btn btn-auto text-start mb-1 btn-primary">購買訂閱</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <div>
+                                    已訂閱<br>
+                                    訂閱開始日期:@Model.UserSubscription.StartDate.ToString("")<br>
+                                    訂閱結束日期:@Model.UserSubscription.EndDate.ToString("")<br>
+                                    <br>
+                                </div>
+                            }
+                            <form asp-controller="User" asp-action="PurchaseHistory" method="get">
+                                <button class="btn btn-auto text-start mb-1 btn-primary">檢視購買紀錄</button>
+                            </form>
+                            @* <form asp-controller="User" asp-action="Preferences" method="get">
+                                <button class="btn btn-auto mb-1 btn-primary">更新商店偏好設定</button>
+                            </form> *@
                         </div>
                     </div>
                 </div>
@@ -88,7 +117,7 @@
                 <div class="mb-3">
                     <label class="fs-4" for="">聯絡資訊</label>
                     <hr class="mt-1">
-                    <label for="" class="mb-1">電子郵件地址：@Model.User.Email</label>
+                    <label for="" class="mb-1">電子郵件地址：@Model.User?.Email</label>
                     <br>
                     <form asp-controller="User" asp-action="ChangeEmail" method="get">
                         <button type="submit" class="btn btn-auto text-start mb-1 btn-primary">變更電子郵件地址</button>
@@ -111,6 +140,249 @@
         </div>
     </div>
 </div>
+
+<!-- Profile Picture Modal -->
+<div class="modal fade" id="profilePicModal" tabindex="-1" aria-labelledby="profilePicModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="width:90vw; height:90vh; max-width:1000px; max-height: 800px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profilePicModalLabel">變更頭像</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="file" id="inputImage" class="form-control-file" accept="image/*">
+                </div>
+                <div class="img-container">
+                    <img id="image" src="#" alt="Picture" style="max-width: 100%;">
+                </div>
+                <div class="form-group mt-3">
+                    <label for="zoom">縮放：</label>
+                    <input type="range" id="zoom" class="form-control-range" min="0.1" max="3" step="0.1" value="1">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" id="saveProfilePic" class="btn btn-primary">儲存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 删除確認 Model -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">確認刪除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                你確定要刪除這張卡片紀錄嗎？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">確認刪除</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var cropper;
+        var image = document.getElementById('image');
+        var inputImage = document.getElementById('inputImage');
+        var zoom = document.getElementById('zoom');
+
+        inputImage.addEventListener('change', function (e) {
+            var files = e.target.files;
+            var done = function (url) {
+                inputImage.value = '';
+                image.src = url;
+                $('#profilePicModal').modal('show');
+            };
+            var reader;
+            var file;
+
+            if (files && files.length > 0) {
+                file = files[0];
+
+                if (URL) {
+                    done(URL.createObjectURL(file));
+                } else if (FileReader) {
+                    reader = new FileReader();
+                    reader.onload = function () {
+                        done(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        $('#profilePicModal').on('shown.bs.modal', function () {
+            cropper = new Cropper(image, {
+                aspectRatio: 1,
+                viewMode: 2,
+                autoCropArea: 1,
+                responsive: true,
+                minContainerWidth: 300,
+                minContainerHeight: 300,
+            });
+
+            cropper.on('zoom', function (event) {
+                zoom.value = event.detail.ratio.toFixed(2);
+            });
+
+            zoom.addEventListener('input', function () {
+                cropper.zoomTo(parseFloat(this.value));
+            });
+        }).on('hidden.bs.modal', function () {
+            cropper.destroy();
+            cropper = null;
+        });
+
+        document.getElementById('saveProfilePic').addEventListener('click', function () {
+            var canvas;
+            if (cropper) {
+                canvas = cropper.getCroppedCanvas({
+                    width: 200,
+                    height: 200,
+                });
+
+                canvas.toBlob(function (blob) {
+                    var formData = new FormData();
+                    formData.append('profilePicture', blob);
+
+                    fetch('@Url.Action("UploadImg", "Image")', {
+                        method: 'POST',
+                        headers: {
+                            // 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                            'Authorization': 'Bearer 44cb35756025d1c6ad694c0f61b63dd2d2239450'
+                        },
+                        body: formData
+                    }).then(function (response) {
+                        return response.json();
+                    }).then(function (data) {
+                        if (data.success) {
+                            document.querySelector('.user-profilepic').src = data.url;
+                            $('#profilePicModal').modal('hide');
+                        } else {
+                            alert('Failed to update profile picture.');
+                        }
+                    }).catch(function (error) {
+                        console.error('Error:', error);
+                        alert('Error updating profile picture.');
+                    });
+                });
+            }
+        });
+
+        // 更改暱稱
+        $(document).ready(function () {
+            $('#userName').on('input', function () {
+                var userName = $(this).val();
+
+                // 重置驗證消息
+                $('#userNameValidation').text('');
+
+                // 如果輸入框為空，則隱藏驗證消息
+                if (userName === '') {
+                    $('#userNameValidation').hide();
+                    $('#confirmChange').prop('disabled', true);
+                    return;
+                } else {
+                    $('#userNameValidation').show();
+                }
+
+                $.ajax({
+                    url: '@Url.Action("CheckUserName", "User")',
+                    data: { userName: userName },
+                    success: function (data) {
+                        if (data.available) {
+                            $('#userNameValidation').text('✓').css('color', 'green');
+                            $('#confirmChange').prop('disabled', false);
+                        } else {
+                            $('#userNameValidation').text('已使用').css('color', 'red');
+                            $('#confirmChange').prop('disabled', true);
+                        }
+                    }
+                });
+            });
+
+            $('#confirmChange').on('click', function () {
+                var userName = $('#userName').val();
+                $.ajax({
+                    url: '@Url.Action("UpdateUserName", "User")',
+                    type: 'POST',
+                    data: {
+                        userId: '@Model.User?.UserId',
+                        userName: userName
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            alert('用戶名已更新');
+                            location.reload();
+                        } else {
+                            alert('更新失敗');
+                        }
+                    }
+                });
+            });
+        });
+
+        // 刪除卡片
+        $(document).ready(function () {
+            var cardNumToDelete;
+
+            $('#confirmDeleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                cardNumToDelete = button.data('card-id'); // Extract info from data-* attributes
+            });
+
+            $('#confirmDeleteButton').on('click', function () {
+                $.ajax({
+                    url: '@Url.Action("DeleteCreditCard", "User")',
+                    type: 'POST',
+                    data: { cardNumber: cardNumToDelete },
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function () {
+                        alert('刪除失敗，請重試。');
+                    }
+                });
+            });
+        });
+
+        // 登出
+        document.getElementById("logoutButton").addEventListener("click", function (event) {
+            event.preventDefault();
+            if (confirm("確定要登出嗎？")) {
+                // 獲取防偽令牌
+                var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                fetch('@Url.Action("Logout", "User")', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': token,
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: "__RequestVerificationToken=" + encodeURIComponent(token)
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = '@Url.Action("Index", "Home")';
+                    } else {
+                        alert("登出失敗，請稍後再試。");
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert("登出過程中發生錯誤。");
+                });
+            }
+        });
+    </script>
+}
 
 @* <table class="table">
     <thead>
