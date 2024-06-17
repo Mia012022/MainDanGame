@@ -447,12 +447,6 @@ namespace DanGame.Controllers
         }
 
 
-
-
-
-
-
-
         public ShoppingCartController(DanGameContext dbContext)
         {
             context = dbContext;
