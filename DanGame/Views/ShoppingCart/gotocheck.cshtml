@@ -103,12 +103,16 @@
                                name="MerchantTradeDate"
                            value="@Model["MerchantTradeDate"]" />
                     <input type="hidden" name="PaymentType" value="@Model["PaymentType"]" />
+                  @*   <input type="hidden" name="IgnorePayment" value="@Model["IgnorePayment"]" /> *@
                     <input type="hidden" name="TotalAmount" value="@Model["TotalAmount"]" />
                     <input type="hidden" name="TradeDesc" value="@Model["TradeDesc"]" />
                     <input type="hidden" name="ItemName" value="@Model["ItemName"]" />
                         <input type="hidden"
                                name="ReturnURL"
                            value="@Model["ReturnURL"]" />
+                    <input type="hidden"
+                           name="ClientBackURL"
+                           value="@Model["ClientBackURL"]" />
                     <input type="hidden" name="ChoosePayment" value="@Model["ChoosePayment"]" />
                     <input type="hidden" name="CheckMacValue" value="@Model["CheckMacValue"]" />
                     <input type="hidden" name="EncryptType" value="@Model["EncryptType"]" />

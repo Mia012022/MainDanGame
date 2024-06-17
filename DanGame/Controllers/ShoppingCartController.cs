@@ -187,7 +187,21 @@ namespace DanGame.Controllers
         [HttpGet("index")]
         public IActionResult ShoppingCartIndex()
         {
-            return View();
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
+            var friends = from friendShip in context.Friendships
+                          where friendShip.FriendUserId == userId || friendShip.UserId == userId
+                          select (friendShip.FriendUserId == userId ? friendShip.UserId : friendShip.FriendUserId);
+
+            var orderItems = from order in context.Orders
+                             where friends.Contains(order.UserId)
+                             select order.OrderItems;
+
+            var appDetails = from orderItem in orderItems
+                             from item in orderItem
+                             select item.App.AppDetail;
+
+            return View(appDetails.ToList());
+           
         }
 
         [HttpGet("CreditCardInfo")]
@@ -219,7 +233,9 @@ namespace DanGame.Controllers
             Dictionary<string, string> parameters = new Dictionary<string, string>
             {
                 { "ChoosePayment", "ALL" },
-                { "EncryptType", "1" },
+                { "ClientBackURL","http://localhost:5000/ShoppingCart/successbuy" },
+                 { "EncryptType", "1" },
+                //{"IgnorePayment ","Credit" },
                 { "ItemName", AppName },
                 { "MerchantID", "3002607" },
                 { "MerchantTradeDate", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") },
@@ -415,16 +431,20 @@ namespace DanGame.Controllers
 
 
 
+        //前往結帳成功頁面
+        [HttpGet("successbuy")]
+        public IActionResult successbuy()
+        {
+            return View();
+        }
 
 
 
-
-
-
-
-
-
-
+        [HttpGet("gotocheckmethod")]
+        public IActionResult gotocheckmethod()
+        {
+            return View();  
+        }
 
 
 

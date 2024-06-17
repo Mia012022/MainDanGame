@@ -3,6 +3,7 @@
 *@
 @{
 }
+@model dynamic //List<AppDetail> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,76 +32,8 @@
     <title>---------</title>
 </head>
 <body>
-    <!-- 頁首  start -->
-   @*  <div style="position: relative; z-index: 10">
-        <nav class="row navbar-brand border-opacity-10 my-header"
-             style="
-                    background: linear-gradient(
-                        to top,
-                        #fec7ff,
-                        #cc7edd,
-                        #8c56c5
-                    );
-                ">
-            <a href="#" class="col-sm-2">
-                <img src="~/pic/logo-hw.png"
-                     class="my-logo"
-                     alt=""
-                     style="margin-left: 3rem" />
-            </a>
-            <ul class="col-sm-8 d-flex list-group-numbered align-self-center text-center fs-5"
-                style="margin: 0; color: #fff">
-                <li class="flex-fill">
-                    <a href=""
-                       class="list-group-item-action list-group-item">訂閱</a>
-                </li>
-                <li class="flex-fill">
-                    <a href=""
-                       class="list-group-item-action list-group-item">類別</a>
-                </li>
-                <li class="flex-fill">
-                    <a href=""
-                       class="list-group-item-action list-group-item">排行榜</a>
-                </li>
-                <li class="flex-fill">
-                    <a href=""
-                       class="list-group-item-action list-group-item">論壇</a>
-                </li>
-                <li class="flex-fill">
-                    <a href=""
-                       class="list-group-item-action list-group-item">客服</a>
-                </li>
-                <li class="flex-fill">
-                    <a href=""
-                       class="list-group-item-action list-group-item"></a>
-                </li>
-                <li class="flex-fill">
-                    <a href=""
-                       class="list-group-item-action list-group-item"></a>
-                </li>
-            </ul>
-            <ul class="col-sm-2 d-flex list-group-numbered align-self-center text-center fs-4"
-                style="margin: 0; color: #fff">
-                <li class="flex-fill">
-                    <a href=""
-                       class="justify-content-center align-items-center list-group-item-action">
-                        <i class="bi bi-search"></i>
-                    </a>
-                </li>
-                <li class="flex-fill">
-                    <a href="" class="list-group-item-action">
-                        <i class="bi bi-person-circle"></i>
-                    </a>
-                </li>
-                <li class="flex-fill">
-                    <a href="#" class="list-group-item-action">
-                        <i class="bi bi-cart-plus"></i>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div> *@
-    <!-- 頁首 end -->
+  
+ 
     <!-- ---------------------------------------------------------------------------------------------------------------->
     <!-- 中間內容 start -->
 
@@ -166,38 +99,41 @@
 
         <hr / style="color: aqua;">
         <h4>好友加購</h4>
-
-        <div class="firendhotgame">
-            <div class="card mycard" style="width: 15rem">
-                <img src="/scss/pic/header.jpg"
-                     class="card-img-top"
-                     alt="..." />
-                <div class="card-body" style="width: 15rem">
-                    <h5 class="card-title" style="font-size: 15px">
-                        Card title
-                    </h5>
-                    <p class="card-text" style="font-size: 12px">
-                        Some quick example text to build on the card title
-                        and make up the bulk of the card's content.
-                    </p>
-                    <div class="gowhere">
-                        <a href="#">去逛逛</a>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-
-        <!-- <hr / style="color: aqua;">
-        <h4>我的測試跑馬</h4>
-        <div class="swiperbody">
-          <div class="mikeswiper">
-            <div class="content red"></div>
-            <div class="content yellow"></div>
-            <div class="content blue"></div>
-            <div class="content purple"></div>
-          </div>
-        </div> -->
+            <swiper-container class="mySwiperFriend" space-between="30" slides-per-view="3">
+            @{
+                List<int> AppIds = new List<int>();
+            }
+            @foreach (AppDetail appDetail in Model)
+            {
+                if (AppIds.Contains(appDetail.AppId))
+                {
+                    continue;
+                }
+                AppIds.Add(appDetail.AppId);
+                    <swiper-slide>
+                        <div class="card" style="height: 315px;">
+                            <img src="@appDetail.HeaderImage)" class="card-img-top" alt="@appDetail.AppName">
+                            <div class="card-body">
+                                
+                                <div style="position:absolute; bottom: 10px; left: 15px;">
+                                    <button class="btn btn-secondary" onclick="window.open('/Game/@appDetail.AppId')">
+                                        詳細資訊
+                                    </button>
+                                    <span class="card-title">@appDetail.AppName</span>
+                                </div>
+                                <div style="position:absolute; bottom: 10px; right: 15px;">
+                                    <button class="btn btn-secondary float-end">
+                                        <a href="" class="list-group-item-action">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+            }
+            </swiper-container>
+        
     </div>
 
     <!-- 中間內容 end -->
@@ -258,8 +194,8 @@
         <div class="fs-6">© 2024 Dan Gaming. All rights reserved.</div>
     </div> *@
     <!-- 頁尾 end -->
-    
-   
+
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
     <script src="~/js/ShoppingCart/MikeCart.js">
         
     </script>

@@ -340,7 +340,7 @@ let myOffcanvas = $(`
 
         $.each(apps, function (index, app) {
             const myOffcanvasGameItem = $(`
-            <div class="canvasgameitem">
+            <div class="canvasgameitem" data-appid="${app.appId}">
                 <p class="canvasitem-name">${app.appName}</p>
                 <div class="itempic">
                     <a href=""><img src="https://steamcdn-a.akamaihd.net/steam/apps/${app.appId}/library_600x900.jpg" alt=""></a>
@@ -357,6 +357,19 @@ let myOffcanvas = $(`
             canvascalculate()
             myOffcanvasGameItem.find(".deleticon").on("click", function () {
                 $(this).parent(".canvasgameitem").remove();
+                console.log($(this).closest(".canvasgameitem").data("appid"))
+                var canvanappid = $(this).closest(".canvasgameitem").data("appid")
+                $.ajax({
+                    method: "DELETE",
+                    url: `delete/ShoppingCart/${canvanappid}`,
+                    success: function (data) {
+                        console.log("成功刪除");
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("刪除失敗", status, error);
+                    }
+                });
+
                 canvascalculate();
             });
         });
