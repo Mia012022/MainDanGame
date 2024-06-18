@@ -95,6 +95,11 @@ namespace DanGame.Controllers
                 return  await _context.Users
                 .SingleOrDefaultAsync(u => u.Email == useremail && u.PasswordHash == password);
         }
+        // 好友介面
+        public IActionResult Friend()
+        {
+            return View();
+        }
 
         //----------------------------------------------------------------------------------------------
 
@@ -270,5 +275,6 @@ namespace DanGame.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login", "User");
         }
+
     }
 }
