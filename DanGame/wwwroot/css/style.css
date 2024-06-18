@@ -1,4 +1,4 @@
-.header{
+.header {
     margin: 0;
 }
 
@@ -8,34 +8,45 @@
     height: 80px;
     margin: 0px;
     background-color: rgb(52, 58, 64, 0);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.375);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.5s, color 0.5s, height 0.5s;
     backdrop-filter: blur(0px);
     border-width: 0px;
+    transition: all 0.3s ease-in-out;
 }
 
-body{
-    margin: 0;
-}
+    .my-header.fixed {
+        display: flex;
+        backdrop-filter: blur(5px);
+        background-color: rgba(52, 58, 64, 0.8);
+        height: 60px;
+        color: white;
+    }
 
-a{
+.my-header a{
     height: 100%;
 }
 
-.my-logo{
+body {
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.my-logo {
     width: 100%;
     object-fit: contain;
     height: 100%;
 }
 
 .my-footer-logo {
-    max-width: 100%; 
-    height: auto; 
-    width: 150px;  
+    max-width: 100%;
+    height: auto;
+    width: 150px;
+    margin-right: 80px;
 }
 
-.footer{
-    padding: 20px 0 0 5px;
+.footer {
+    padding: 30px 0 0 10px;
     margin: 0;
 }
 
@@ -53,6 +64,271 @@ a{
 
 .my-tw:hover {
     color: rgb(134, 34, 248);
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    filter: invert(100%);
+}
+
+.checkbgc {
+    border-radius: 10px;
+    border-bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+
+.area {
+    background: #8c56c5;
+    background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);
+    width: 100%;
+}
+
+.circles {
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.circles li {
+position: absolute;
+display: block;
+list-style: none;
+width: 20px;
+height: 20px;
+background: rgba(255, 255, 255, 0.2);
+animation: animate 25s linear infinite;
+bottom: -150px;
+}
+
+.circles li:nth-child(1) {
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+
+
+.circles li:nth-child(2) {
+    left: 10%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+}
+
+.circles li:nth-child(3) {
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+}
+
+.circles li:nth-child(4) {
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+
+.circles li:nth-child(5) {
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+}
+
+.circles li:nth-child(6) {
+    left: 75%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 3s;
+}
+
+.circles li:nth-child(7) {
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+}
+
+.circles li:nth-child(8) {
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+}
+
+.circles li:nth-child(9) {
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+}
+
+.circles li:nth-child(10) {
+    left: 85%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+}
+
+
+
+@keyframes animate {
+
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+
+    100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+    }
+}
+
+.append-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+    .append-buttons a {
+        display: inline-block;
+        border: 1px solid #007aff;
+        color: #007aff;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 4px;
+        margin: 0 10px;
+        font-size: 13px;
+    }
+
+.game-card:hover {
+    transform: translateY(-10px);
+    box-shadow: rgb(0, 0, 0, 0.4) 0.5em 0.3em 0.5em;
+}
+
+.myQAContent {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.symbol {
+    margin-left: auto;
+    padding-right: 10px;
+}
+
+.answerContent {
+    display: none;
+}
+
+@keyframes arrowAnimation {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(25px);
+    }
+}
+
+.snow-container {
+    position: absolute;
+    height: 1072px;
+    width: 100%;
+    max-width: 100%;
+    top: 0;
+    overflow: hidden;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.snow {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+    -webkit-animation: snow linear infinite;
+    animation: snow linear infinite;
+}
+
+    .snow.foreground {
+        background-image: url("https://dl6rt3mwcjzxg.cloudfront.net/assets/snow/snow-large-075d267ecbc42e3564c8ed43516dd557.png");
+        -webkit-animation-duration: 15s;
+        animation-duration: 15s;
+    }
+
+        .snow.foreground.layered {
+            -webkit-animation-delay: 7.5s;
+            animation-delay: 7.5s;
+        }
+
+    .snow.middleground {
+        background-image: url(https://dl6rt3mwcjzxg.cloudfront.net/assets/snow/snow-medium-0b8a5e0732315b68e1f54185be7a1ad9.png);
+        -webkit-animation-duration: 20s;
+        animation-duration: 20s;
+    }
+
+        .snow.middleground.layered {
+            -webkit-animation-delay: 10s;
+            animation-delay: 10s;
+        }
+
+    .snow.background {
+        background-image: url(https://dl6rt3mwcjzxg.cloudfront.net/assets/snow/snow-small-1ecd03b1fce08c24e064ff8c0a72c519.png);
+        -webkit-animation-duration: 30s;
+        animation-duration: 30s;
+    }
+
+        .snow.background.layered {
+            -webkit-animation-delay: 15s;
+            animation-delay: 15s;
+        }
+
+@-webkit-keyframes snow {
+    0% {
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        -webkit-transform: translate3d(15%, 100%, 0);
+        transform: translate3d(15%, 100%, 0);
+    }
+}
+
+@keyframes snow {
+    0% {
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    100% {
+        -webkit-transform: translate3d(15%, 100%, 0);
+        transform: translate3d(15%, 100%, 0);
+    }
 }
 
 .user-profilepic-container {

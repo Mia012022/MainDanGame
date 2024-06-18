@@ -1,0 +1,142 @@
+﻿@model DanGame.Models.User
+
+@{
+    ViewBag.Title = "Register";
+}
+<form method="post" asp-controller="User" asp-action="Register">
+    <div class="d-flex justify-content-center align-items-center mb-3">
+        <div class="container d-flex flex-column row mx-5 mt-5">
+            <div class="border col mt-5">
+                <h1 class="mt-3 mb-3 p-1">建立您的帳戶</h1>
+                <div class="mb-3 p-1">
+                    <label class="form-label fs-6" for="useremail">電子信箱</label>
+                    <div class="d-flex align-items-center">
+                        <input class="form-control w-50" type="email" id="useremail" name="Email" pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="請輸入有效的電子郵件地址，如 example@example.com" required>
+                        <span id="emailValidation" class="ms-2"></span>
+                    </div>
+                </div>
+                <div class="mb-3 p-1">
+                    <label class="form-label fs-6" for="confirmemail">再次確認您的電子信箱</label>
+                    <div class="d-flex align-items-center">
+                        <input class="form-control w-50" type="email" id="confirmemail" name="confirmemail" pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="請輸入有效的電子郵件地址，如 example@example.com" required oninput="checkEmailMatch()">
+                        <span id="confirmEmailValidation" class="ms-2"></span>
+                    </div>
+                </div>
+                <div class="mb-3 p-1">
+                    <label class="form-label fs-6" for="userName">使用者名稱</label>
+                    <div class="d-flex align-items-center">
+                        <input class="form-control w-50" type="text" name="UserName" id="userName" required>
+                        <span id="userNameValidation" class="ms-2"></span>
+                    </div>
+                </div>
+                <div class="mb-3 p-1">
+                    <label class="form-label fs-6" for="password">選擇密碼</label>
+                    <input class="form-control w-50" type="password" id="password" name="PasswordHash" required oninput="checkPasswordMatch()">
+                </div>
+                <div class="mb-3 p-1">
+                    <label class="form-label fs-6" for="confirmpassword">確認密碼</label>
+                    <div class="d-flex align-items-center">
+                        <input class="form-control w-50" type="password" id="confirmpassword" name="confirmpassword" required oninput="checkPasswordMatch()">
+                        <span id="confirmPasswordValidation" class="ms-2"></span>
+                    </div>
+                </div>
+                <!--
+                <div class="mb-3">
+                    // reCAPTCHA
+                    // 要把YOUR_SITE_KEY改成我們自己的 Google reCAPTCHA 網站金鑰
+                    <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+                </div>
+                -->
+                <div class="mb-3 p-1">
+                    <input class="form-check-input" type="checkbox" id="privacyPolicy" required onchange="toggleSubmitButton()">
+                    <label class="form-check-label" for="privacyPolicy">同意隱私權政策</label>
+                </div>
+                <div class="mb-3 p-1">
+                    <button type="submit" class="btn btn-primary" id="submitButton" disabled>完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#useremail').on('input', function () {
+                var email = $(this).val();
+                if (email) {
+                    $.get('@Url.Action("CheckEmail", "User")', { email: email }, function (data) {
+                        if (data.available) {
+                            $('#emailValidation').text('✔').css('color', 'green');
+                            checkEmailMatch();
+                        } else {
+                            $('#emailValidation').text('已使用').css('color', 'red');
+                            $('#confirmEmailValidation').text('');
+                        }
+                    });
+                } else {
+                    $('#emailValidation').text('');
+                    $('#confirmEmailValidation').text('');
+                }
+            });
+
+            $('#confirmemail').on('input', checkEmailMatch);
+
+            $('#userName').on('input', function () {
+                var userName = $(this).val();
+                if (userName) {
+                    $.get('@Url.Action("CheckUserName", "User")', { userName: userName }, function (data) {
+                        if (data.available) {
+                            $('#userNameValidation').text('✔').css('color', 'green');
+                        } else {
+                            $('#userNameValidation').text('已使用').css('color', 'red');
+                        }
+                    });
+                } else {
+                    $('#userNameValidation').text('');
+                }
+            });
+
+            $('#password, #confirmpassword').on('input', checkPasswordMatch);
+
+            // 確保勾選隱私權政策
+            $('#privacyPolicy').change(function () {
+                toggleSubmitButton();
+            });
+        });
+
+        function checkEmailMatch() {
+            var userEmail = $('#useremail').val();
+            var confirmEmail = $('#confirmemail').val();
+
+            if (userEmail === confirmEmail && userEmail.length > 0) {
+                $('#confirmEmailValidation').text('✔').css('color', 'green');
+            } else {
+                $('#confirmEmailValidation').text('✖').css('color', 'red');
+            }
+            toggleSubmitButton();
+        }
+
+        function checkPasswordMatch() {
+            var password = $('#password').val();
+            var confirmPassword = $('#confirmpassword').val();
+
+            if (password === confirmPassword && password.length > 0) {
+                $('#confirmPasswordValidation').text('✔').css('color', 'green');
+            } else {
+                $('#confirmPasswordValidation').text('✖').css('color', 'red');
+            }
+            toggleSubmitButton();
+        }
+
+        function toggleSubmitButton() {
+            var isEmailValid = $('#emailValidation').text() === '✔';
+            var isConfirmEmailValid = $('#confirmEmailValidation').text() === '✔';
+            var isUserNameValid = $('#userNameValidation').text() === '✔';
+            var isPasswordValid = $('#confirmPasswordValidation').text() === '✔';
+            var isPrivacyPolicyChecked = $('#privacyPolicy').is(':checked');
+
+            $('#submitButton').prop('disabled', !(isEmailValid && isConfirmEmailValid && isUserNameValid && isPasswordValid && isPrivacyPolicyChecked));
+        }
+    </script>
+}

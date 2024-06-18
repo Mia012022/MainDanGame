@@ -12,9 +12,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - DanGame</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
     <link rel="stylesheet" href="~/css/style.css">
+    @RenderSection("Styles",required: false)
 </head>
 <body>
     <header>
@@ -30,48 +34,12 @@
     @* 防偽令牌 *@
     @Html.AntiForgeryToken()
 
+    @RenderSection("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script src="~/js/site.js"></script>
-    <script>
-        $(document).ready(function () {
-            $(".bi-person-circle").click(function (e) {
-                e.preventDefault(); // 阻止默認的鏈接行為
-
-                // 如果 session 存在，執行默認的導航
-                if (@(sessionExists ? "true" : "false")) {
-                    window.location.href = '@Url.Action("UserIndex", "User")';
-                } else {
-                    // 如果 session 不存在，將頁面重新導向到登入頁面
-                    window.location.href = '@Url.Action("Login", "User")';
-                }
-            });
-        });
-
-        document.getElementById("logoutButton").addEventListener("click", function (event) {
-            event.preventDefault();
-            if (confirm("確定要登出嗎？")) {
-                // 獲取防偽令牌
-                var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-
-                fetch('@Url.Action("Logout", "User")', {
-                    method: 'POST',
-                    headers: {
-                        'RequestVerificationToken': token,
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: "__RequestVerificationToken=" + encodeURIComponent(token)
-                }).then(response => {
-                    if (response.ok) {
-                        window.location.href = '@Url.Action("Index", "Home")';
-                    } else {
-                        alert("登出失敗，請稍後再試。");
-                    }
-                }).catch(error => {
-                    console.error('Error:', error);
-                    alert("登出過程中發生錯誤。");
-                });
-            }
-        });
-    </script>
+    <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
+    
 </body>
 </html>
