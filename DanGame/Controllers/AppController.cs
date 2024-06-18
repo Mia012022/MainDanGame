@@ -38,11 +38,13 @@ namespace DanGame.Controllers
         }
 
         [HttpPost("AppsDetail")]
-        public async Task<List<AppDetail>> AppsDetail([FromBody] int[] appIds)
+        public async Task<List<AppDetail>> AppsDetail([FromBody] int[] tagIds)
         {
-            var query = from app in _context.AppDetails
-                        where appIds.Contains(app.AppId)
-                        select app;
+            var query = from appDetail in _context.AppDetails
+                        join genreTag in _context.GenreTags on appDetail.AppId equals genreTag.AppId
+                        where tagIds.Contains(genreTag.TagId)
+                        select appDetail;
+
             return await query.ToListAsync();
         }
 

@@ -42,33 +42,22 @@
                     aria-label="Slide 2"></button>
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
                     aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3"
+                    aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4"
+                    aria-label="Slide 5"></button>
         </div>
         <div class="carousel-inner">
-            <div class="carousel-item active mh-100">
-                <img src="https:\/\/cdn.akamai.steamstatic.com\/steam\/apps\/1329410\/header.jpg?t=1715415038"
-                     class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>雀魂麻將(MahjongSoul)</h5>
-                    <p>隨時隨地，輕鬆麻將！ 精美和風立直麻將遊戲———— 《雀魂麻將》國際中文服Steam版現已正式上線！</p>
+            @foreach (AppDetail app in Model.apps.Where(app => app.tagID == 70))
+            {
+                <div class="carousel-item mh-100">
+                    <img src="@app.HeaderImage" class="d-block w-100" alt="...">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>@app.AppName</h5>
+                        <p>@app.ShortDescription</p>
+                    </div>
                 </div>
-            </div>
-            <div class="carousel-item mh-100">
-                <img src="image/test2.jpg" class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>《Apex 英雄》</h5>
-                    <p>
-                        《Apex 英雄》是一款由 Respawn Entertainment
-                        打造的獲獎免費英雄射擊遊戲。掌握一系列不斷增加且擁有強大技能的傳說級角色，並體驗戰略性小隊玩法和新一代英雄射擊與大逃殺遊戲中的創新玩法。
-                    </p>
-                </div>
-            </div>
-            <div class="carousel-item mh-100">
-                <img src="image/test3.jpg" class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>《鬥陣特攻® 2》</h5>
-                    <p>《鬥陣特攻 2》是一款廣受好評的團隊取向射擊遊戲，故事背景設定在樂觀的未來時代，並且有持續成長的英雄陣容。立即與好友組隊，體驗刺激的戰鬥。</p>
-                </div>
-            </div>
+            }
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
                 data-bs-slide="prev">
@@ -92,7 +81,7 @@
                         <div class="carousel-item active">
                             <div class="container">
                                 <div class="row">
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none; ">
+                                    <a href="/Home/category/1" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/action.png" class="card-img-top object-fit-sm-contain"
                                                  alt="...">
@@ -101,21 +90,21 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/2" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/strategy.png" class="card-img-top object-fit-sm-contain"
                                                  alt="...">
                                             <div class="card-body">
-                                                <div class="text-center">策略</div>
+                                                <div  class="text-center">策略</div>
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/3" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/rpg.png" class="card-img-top object-fit-sm-contain"
                                                  alt="...">
                                             <div class="card-body">
-                                                <div class="text-center">角色扮演</div>
+                                                <div  class="text-center">角色扮演</div>
                                             </div>
                                         </div>
                                     </a>
@@ -125,37 +114,38 @@
                         <div class="carousel-item">
                             <div class="container">
                                 <div class="row">
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/4" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/casual.png" class="card-img-top" alt="...">
                                             <div class="card-body">
-                                                <div class="text-center list-group-item-action">休閒</div>
+                                                <div class="text-center">休閒</div>
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/25" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/adventure.png" class="card-img-top" alt="...">
                                             <div class="card-body">
-                                                <div class="text-center list-group-item-action">冒險</div>
+                                                <div class="text-center">冒險</div>
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/28" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/simulation.png" class="card-img-top" alt="...">
                                             <div class="card-body">
-                                                <div class="text-center list-group-item-action">模擬</div>
+                                                <div class="text-center">模擬</div>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                             </div>
                         </div>
+
                         <div class="carousel-item">
                             <div class="container">
                                 <div class="row">
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/23" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/rogue_like_rogue_lite.png" class="card-img-top" alt="...">
                                             <div class="card-body">
@@ -163,7 +153,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/18" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/sports.png" class="card-img-top" alt="...">
                                             <div class="card-body">
@@ -171,7 +161,7 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/9" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/strategy_cities_settlements.png" class="card-img-top" alt="...">
                                             <div class="card-body">
@@ -185,7 +175,7 @@
                         <div class="carousel-item">
                             <div class="container">
                                 <div class="row">
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/29" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/multiplayer_coop.png" class="card-img-top" alt="...">
                                             <div class="card-body">
@@ -193,15 +183,15 @@
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/37" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/freetoplay.png" class="card-img-top" alt="...">
                                             <div class="card-body">
-                                                <div class="text-center">免費遊玩</div>
+                                                <div class="text-center text-decoration-none">免費遊玩</div>
                                             </div>
                                         </div>
                                     </a>
-                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                    <a href="/Home/category/70" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <img src="~/image/vr.png" class="card-img-top" alt="...">
                                             <div class="card-body">

@@ -68,47 +68,44 @@
             background-size: cover;
             background-repeat: no-repeat;
             font-weight: 300;
-            .content-grid
+            
+            .content-grid{
+                width: 90%;
+                margin: auto;
+                padding-top: 150px;
+            
+                .game-title{
+                    font-size: 75px;
+                    font-style: normal;
+                    color: white;
+                    margin-bottom: 20px;
+                }
 
-        {
-            width: 90%;
-            margin: auto;
-            padding-top: 150px;
-            .game-title
+                .publisher {
+                    color: white;
+                    text-indent: 6px;
+                    font-size: 20px;
+                    margin-bottom: 40px;
+                }
 
-        {
-            font-size: 75px;
-            font-style: normal;
-            color: white;
-            margin-bottom: 20px;
-        }
+                .platform {
+                    color: white;
+                    text-indent: 6px;
+                    font-size: 14px;
+                    margin-bottom: 40px;
+                }
 
-        .publisher {
-            color: white;
-            text-indent: 6px;
-            font-size: 20px;
-            margin-bottom: 40px;
-        }
+                .downloads {
+                    color: white;
+                    text-indent: 6px;
+                    margin-bottom: 40px;
+                }
 
-        .platform {
-            color: white;
-            text-indent: 6px;
-            font-size: 14px;
-            margin-bottom: 40px;
-        }
-
-        .downloads {
-            color: white;
-            text-indent: 6px;
-            margin-bottom: 40px;
-        }
-
-        .re {
-            color: white;
-            text-indent: 6px;
-        }
-
-        }
+                .re {
+                    color: white;
+                    text-indent: 6px;
+                }
+            }
         }
 
         .scroll-down-bar {
@@ -118,35 +115,28 @@
             bottom: 0px;
             text-align: center;
             cursor: pointer;
-            .scroll-down-title
+         
+            .scroll-down-title{
+                position: relative;
+                color: white;
+                animation: scroll-down 1.5s infinite;
+            
+                p{
+                    margin-bottom: 0px;
+                    opacity: 0;
+                    transition: opacity 0.5s;
+                }
 
-        {
-            position: relative;
-            color: white;
-            animation: scroll-down 1.5s infinite;
-            p
-
-        {
-            margin-bottom: 0px;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        .bi-chevron-down {
-            font-size: 30px;
-            color: white;
-        }
-
-        }
-
-        :hover {
-            p
-
-        {
-            opacity: 1;
-        }
-
-        }
+                .bi-chevron-down {
+                    font-size: 30px;
+                    color: white;
+                }
+            }
+            :hover {
+                    p{
+                        opacity: 1;
+                    }
+            }
         }
 
 
@@ -156,15 +146,14 @@
             height: 100vh;
             background-color: rgb(18, 19, 20);
             background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1));
-            .swiper-button-next, .swiper-button-prev
+            
+            .swiper-button-next, .swiper-button-prev{
+                color: white;
+            }
 
-        {
-            color: white;
-        }
-
-        .swiper-pagination-progressbar-fill {
-            background: white;
-        }
+            .swiper-pagination-progressbar-fill {
+                background: white;
+            }
 
         .game-media-full {
             position: relative;
@@ -172,30 +161,27 @@
             /* background-image: url(https://cdn.akamai.steamstatic.com/steam/apps/294100/ss_371726c10a1b640dbf748fa62a500d911ac62427.1920x1080.jpg); */
             background-size: cover;
             overflow: hidden;
-            .swiper-slide
+            
+            .swiper-slide{
+                background-color: rgba(0, 0, 0, 0.55);
+                backdrop-filter: blur(10px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 0;
+                padding-top: 60px;
+                padding-bottom: 60px;
+                transition: background-color 0.5s;
 
-        {
-            background-color: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 0;
-            padding-top: 60px;
-            padding-bottom: 60px;
-            transition: background-color 0.5s;
-            img
+                img {
+                    height: 50vh;
+                    aspect-ratio: 16 / 9;
+                }
 
-        {
-            height: 50vh;
-            aspect-ratio: 16 / 9;
-        }
-
-        video {
-            height: 50vh;
-        }
-
-        }
+                video {
+                    height: 50vh;
+                }
+            }
         }
 
         .game-media-thumbnail {
@@ -205,28 +191,25 @@
             margin: auto;
             justify-content: space-between;
             overflow: hidden;
-            .swiper-slide
 
-        {
-            opacity: 0.4;
-            img
+                .swiper-slide{
+                    opacity: 0.4;
 
-        {
-            height: 20vh;
-        }
+                    img{
+                    height: 20vh;
+                    }
 
-        }
+                }
 
-        .swiper-slide-thumb-active {
-            opacity: 1;
-            img
+                .swiper-slide-thumb-active {
+                  opacity: 1;
+            
+                    img{
+                        border: 3px solid white;
+                    }
 
-        {
-            border: 3px solid white;
-        }
-
-        }
-        }
+                }
+            }
         }
 
         .game-desc {
@@ -237,41 +220,36 @@
             object-fit: cover;
             background-size: cover;
             background-repeat: no-repeat;
-            .game-desc-title
+            
+            .game-desc-title{
+                color: white;
+                font-size: 45px;
+                text-align: center;
+                margin-bottom: 50px;
+                
+                .game-logo{
+                    width: 20%;
+                    min-width: 300px;
+                    transition: transform 0.5s;
+                }
 
-        {
-            color: white;
-            font-size: 45px;
-            text-align: center;
-            margin-bottom: 50px;
-            .game-logo
+                .game-logo:hover {
+                    transform: scale(1.05);
+                }
+            }
 
-        {
-            width: 20%;
-            min-width: 300px;
-            transition: transform 0.5s;
-        }
-
-        .game-logo:hover {
-            transform: scale(1.05);
-        }
-
-        }
-
-        .desc {
-            width: 80%;
-            max-width: 1200px;
-            margin: auto;
-            padding: 50px;
-            color: white;
-            text-align: center;
-            a
-
-        {
-            text-decoration: none;
-        }
-
-        }
+            .desc {
+                width: 80%;
+                max-width: 1200px;
+                margin: auto;
+                padding: 50px;
+                color: white;
+                text-align: center;
+            
+                a {
+                    text-decoration: none;
+                }
+            }
         }
 
         .game-action {
@@ -279,188 +257,171 @@
             width: 100%;
             height: clamp(450px, 75vh, 450px);
             display: flex;
-            hr
-
-        {
-            height: 80%;
-            width: 2px;
-            background-color: rgb(70, 70, 70);
-            margin: auto;
-        }
-
-        .background-wrapper-image {
-            position: absolute;
-            height: clamp(450px, 75vh, 450px);
-            width: 100%;
-            background-image: url(https://cdn.cloudflare.steamstatic.com/steam/apps/@Model.detail.AppId/library_hero.jpg);
-            object-fit: cover;
-            background-size: cover;
-            background-repeat: no-repeat;
-            filter: blur(4px);
-        }
-
-        .game-action-content {
-            position: relative;
-            display: flex;
-            background-color: rgb(18, 19, 20);
-            height: 80%;
-            width: clamp(765px, 80%, 1536px);
-            margin: auto;
-            .left-side-content
-
-        {
-            width: 20%;
-            height: 100%;
-            .game-capsule-image
-
-        {
-            position: absolute;
-            height: 95%;
-            top: -5vh;
-            left: 6vw;
-            transition: transform 0.5s;
-        }
-
-        :hover {
-            transform: scale(1.1);
-        }
-
-        }
-
-        .center-content {
-            width: 60%;
-            height: 100%;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            #detail-tab
-
-        {
-            font-size: 20px;
-            button
-
-        {
-            color: lightgrey;
-        }
-
-        .active {
-            color: white;
-        }
-
-        }
-
-        .row {
-            height: 100%;
-            .tab-content
-
-        {
-            height: 100%;
-            color: white;
-        }
-
-        }
-
-        #DLCs {
-            display: flex;
-            height: 100%;
-            align-items: center;
-            justify-content: center;
-            img
-
-        {
-            width: auto;
-            height: 200px;
-        }
-
-        .swiper-container {
-            width: 400px;
-            height: 300px;
-        }
-
-        .swiper-slide {
-            background-position: center;
-            background-size: cover;
-        }
-
-            .swiper-slide img {
-                display: block;
-                width: 100%;
+            
+            hr{
+                height: 80%;
+                width: 2px;
+                background-color: rgb(70, 70, 70);
+                margin: auto;
             }
 
-        .swiper-pagination-bullet-active {
-            background-color: #ffffff !important;
-        }
+            .background-wrapper-image {
+                position: absolute;
+                height: clamp(450px, 75vh, 450px);
+                width: 100%;
+                background-image: url(https://cdn.cloudflare.steamstatic.com/steam/apps/@Model.detail.AppId/library_hero.jpg);
+                object-fit: cover;
+                background-size: cover;
+                background-repeat: no-repeat;
+                filter: blur(4px);
+            }
 
-        .swiper-pagination-bullet {
-            background-color: gray !important;
-        }
+            .game-action-content {
+                position: relative;
+                display: flex;
+                background-color: rgb(18, 19, 20);
+                height: 80%;
+                width: clamp(765px, 80%, 1536px);
+                margin: auto;
+            
+                .left-side-content{
+                    width: 20%;
+                    height: 100%;
+           
+                    .game-capsule-image{
+                        position: absolute;
+                        height: 95%;
+                        top: -5vh;
+                        left: 6vw;
+                        transition: transform 0.5s;
+                    }
 
-        }
-        }
+                    :hover {
+                        transform: scale(1.1);
+                    }
+                }
 
-        .right-side-content {
-            display: flex;
-            width: 20%;
-            height: 100%;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            .form-check
+                .center-content {
+                    width: 60%;
+                    height: 100%;
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+            
+                    #detail-tab{
+                        font-size: 20px;
+                        
+                        button{
+                            color: lightgrey;
+                        }
 
-        {
-            width: 90%;
-            color: white;
-            padding-top: 20px;
-            flex: 1;
-            .check
+                        .active {
+                            color: white;
+                        }
+                    }
 
-        {
-            height: 70px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            padding: 5px 10px 5px 30px;
-            margin-top: 40px;
-            background-color: transparent;
-            transition: background-color 0.5s;
-            border-radius: 10px;
-            input
+                    .row {
+                        height: 100%;
+           
+                        .tab-content{
+                            height: 100%;
+                            color: white;
+                        }
+                    }
 
-        {
-            width: 16px;
-            height: 16px;
-            margin-right: 20px;
-        }
+                    #DLCs {
+                        display: flex;
+                        height: 100%;
+                        align-items: center;
+                        justify-content: center;
+            
+                        img{
+                            width: auto;
+                            height: 200px;
+                        }
 
-        p {
-            font-size: 12px;
-            color: goldenrod;
-            margin: 0;
-        }
+                        .swiper-container {
+                            width: 400px;
+                            height: 300px;
+                        }
 
-        }
+                        .swiper-slide {
+                            background-position: center;
+                            background-size: cover;
+                        }
 
-        .check:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
+                        .swiper-slide img {
+                            display: block;
+                            width: 100%;
+                        }
 
-        }
+                        .swiper-pagination-bullet-active {
+                            background-color: #ffffff !important;
+                        }
 
-        .check-button {
-            height: 50px;
-            width: 70%;
-            background-color: orange;
-            color: white;
-            text-align: center;
-            border: 1px solid orange;
-            font-weight: 900;
-            border-radius: 10px;
-            line-height: 3;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
+                        .swiper-pagination-bullet {
+                            background-color: gray !important;
+                        }
+                    }
+                }
 
-        }
-        }
+                .right-side-content {
+                    display: flex;
+                    width: 20%;
+                    height: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+            
+                    .form-check{
+                        width: 90%;
+                        color: white;
+                        padding-top: 20px;
+                        flex: 1;
+            
+                        .check{
+                            height: 70px;
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            padding: 5px 10px 5px 30px;
+                            margin-top: 40px;
+                            background-color: transparent;
+                            transition: background-color 0.5s;
+                            border-radius: 10px;
+            
+                            input{
+                                width: 16px;
+                                height: 16px;
+                                margin-right: 20px;
+                            }
+
+                            p {
+                                font-size: 12px;
+                                color: goldenrod;
+                                margin: 0;
+                            }
+                        }
+
+                        .check:hover {
+                            background-color: rgba(255, 255, 255, 0.1);
+                        }
+                    }
+
+                    .check-button {
+                        height: 50px;
+                        width: 70%;
+                        background-color: orange;
+                        color: white;
+                        text-align: center;
+                        border: 1px solid orange;
+                        font-weight: 900;
+                        border-radius: 10px;
+                        line-height: 3;
+                        margin-bottom: 20px;
+                        cursor: pointer;
+                    }
+                }
+            }
         }
 
 

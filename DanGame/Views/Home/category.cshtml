@@ -30,9 +30,32 @@
         <li></li>
     </ul>
     <div class="container">
-
-        <h2 class="text-center"></h2>
+        <h2 class="text-center" style="width: 200px; margin: 20px; background: linear-gradient(to right, #e9b6e9, #d885ec, #bf91f0); border-radius: 10px; padding: 4px; color: white;">@Model.tag.TagName</h2>
         <div id="text-category">
+            @foreach (AppDetail app in Model.apps)
+            {
+                <div class="card mb-3 z-0 mx-3 mt-4 mb-4">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="@app.HeaderImage" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body" style="padding: 10px 10px 0 10px;">
+                                <h4 class="card-title mx-2">@app.AppName</h4>
+                                <div style="position: absolute; top: 15px; right: 50px; font-size: 15px;"> 下載次數 : @app.Downloaded </div>
+                                <div class="mb-3 mx-2">
+                                    <p class="card-text border rounded">@app.ShortDescription</p>
+                                </div>
+                                
+                                <div class="mt-3" style="position: absolute; bottom: 2%; left: 35%; font-size: 12px;"> 上架日期 : @app.ReleaseDate </div>
+                                <div class="text-end">
+                                    <button class="btn btn-outline-primary" style="margin: 0 20px; position: absolute; bottom: 9%; right: 2%;" onclick="window.open('/Game/@app.AppId')">詳細資訊</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </body>
@@ -40,48 +63,48 @@
 
 <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
 <script>
-    $.ajax({
-        url: 'http://localhost:5000/app',
-        type: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            data.forEach(function (app) {
-                const tagsHTML = app.tags.map(tag =>
-                    `<small class="text-body-secondary border rounded-pill mx-1" style="padding: 5px 15px; background-color: rgb(226, 226, 226);">${tag.tagName}</small>`
-                ).join('');
-                var cardbox = `
-                              <div class="card mb-3 z-0 mx-3 mt-4 mb-4">
-                                 <div class="row g-0">
-                                    <div class="col-md-4">
-                                        <img src="${app.headerImage}" class="img-fluid rounded-start" alt="...">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body" style="padding: 10px 10px 0 10px;">
-                                          <h4 class="card-title mx-2">${app.appName}</h4>
-                                          <div style="position: absolute; top: 15px; right: 50px; font-size: 15px;"> 下載次數 : ${app.downloaded} </div>
-                                          <div class="mb-3 mx-2">
-                                             <p class="card-text border rounded">${app.appDesc}</p>
-                                          </div>
-                                          <div class="d-flex">
-                                             <div class="mx-2">
-                                                 <p class="card-text">
-                                                     ${tagsHTML}
-                                                 </p>
-                                             </div>
-                                          </div>
-                                          <div class="mt-3" style="position: absolute; bottom: 2%; left: 35%; font-size: 12px;"> 上架日期 : ${app.releaseDate} </div>
-                                          <div class="text-end">
-                                                <button class="btn btn-outline-primary" style="margin: 0 20px; position: absolute; bottom: 9%; right: 2%;">詳細資訊</button>
-                                          </div>
-                                        </div>
-                                    </div>
-                                 </div>
-                              </div>
+    // $.ajax({
+    //     url: 'http://localhost:5000/app',
+    //     type: 'GET',
+    //     dataType: 'json',
+    //     success: function (data) {
+    //         data.forEach(function (app) {
+    //             const tagsHTML = app.tags.map(tag =>
+    //                 `<small class="text-center" style="width: 150px; margin: 20px; background: linear-gradient(to right, #e9b6e9, #d885ec, #bf91f0); border-radius: 10px; padding: 4px; color: white;">${tag.tagName}</small>`
+    //             ).join('');
+    //             var cardbox = `
+    //                           <div class="card mb-3 z-0 mx-3 mt-4 mb-4">
+    //                              <div class="row g-0">
+    //                                 <div class="col-md-4">
+    //                                     <img src="${app.headerImage}" class="img-fluid rounded-start" alt="...">
+    //                                 </div>
+    //                                 <div class="col-md-8">
+    //                                     <div class="card-body" style="padding: 10px 10px 0 10px;">
+    //                                       <h4 class="card-title mx-2">${app.appName}</h4>
+    //                                       <div style="position: absolute; top: 15px; right: 50px; font-size: 15px;"> 下載次數 : ${app.downloaded} </div>
+    //                                       <div class="mb-3 mx-2">
+    //                                          <p class="card-text border rounded">${app.appDesc}</p>
+    //                                       </div>
+    //                                       <div class="d-flex">
+    //                                          <div class="mx-2">
+    //                                              <p class="card-text">
+    //                                                  ${tagsHTML}
+    //                                              </p>
+    //                                          </div>
+    //                                       </div>
+    //                                       <div class="mt-3" style="position: absolute; bottom: 2%; left: 35%; font-size: 12px;"> 上架日期 : ${app.releaseDate} </div>
+    //                                       <div class="text-end">
+    //                                             <button class="btn btn-outline-primary" style="margin: 0 20px; position: absolute; bottom: 9%; right: 2%;">詳細資訊</button>
+    //                                       </div>
+    //                                     </div>
+    //                                 </div>
+    //                              </div>
+    //                           </div>
 
-                              `;
-                $("#text-category").append(cardbox);
-            })
+    //                           `;
+    //             $("#text-category").append(cardbox);
+    //         })
 
-        }
-    })
+    //     }
+    // })
 </script>
