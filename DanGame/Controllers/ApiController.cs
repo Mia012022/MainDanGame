@@ -220,5 +220,16 @@ namespace DanGame.Controllers
             return await query.ToArrayAsync();
         }
 
+		// 其他API动作方法...
+		[HttpGet("SubscriptionPlan")]
+		public async Task<ActionResult<IEnumerable<SubscriptionPlan>>> GetSubscriptionPlans()
+		{
+			var subscriptionPlans = await _context.SubscriptionPlans.ToListAsync();
+			if (subscriptionPlans == null || subscriptionPlans.Count == 0)
+			{
+				return NotFound();
+			}
+			return subscriptionPlans;
+		}
     }
 }
