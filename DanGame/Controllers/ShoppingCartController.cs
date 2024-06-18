@@ -200,8 +200,31 @@ namespace DanGame.Controllers
                              from item in orderItem
                              select item.App.AppDetail;
 
-            return View(appDetails.ToList());
-           
+
+            var AppRank = from app in context.AppDetails
+                        where app.AppType == "game"
+                        orderby app.Downloaded
+                        select new
+                        {
+                            appId = app.AppId,
+                            appName = app.AppName,
+                            headerImage = app.HeaderImage,
+                            appDesc = app.ShortDescription,
+                            releaseDate = app.ReleaseDate,
+                            downloaded = app.Downloaded,
+                            price = app.Price,
+                        };
+
+            //我可以透過上面link傳表進去，下面可以new一個，然後把要傳的表以key=value傳進去
+
+
+            return View(new
+            {
+                AppDetails = appDetails.ToList(),
+                AppRank = AppRank.Take(10).ToList(),
+               
+            });
+
         }
 
         [HttpGet("CreditCardInfo")]

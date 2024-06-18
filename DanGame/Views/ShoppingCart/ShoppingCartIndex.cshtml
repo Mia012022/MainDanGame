@@ -73,9 +73,12 @@
         <h4>本周熱門</h4>
         <div class="swiperbox">
             <div class="swiperlist">
+
+                @foreach (var apprank in Model.AppRank)
+                {
                 <div class="photo">
                     <div class="card mycard" style="width: 15rem">
-                        <img src="/scss/pic/header.jpg"
+                                <img src="@apprank.headerImage"
                              class="card-img-top"
                              alt="..." />
                         <div class="card-body" style="width: 15rem">
@@ -93,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-                
+                }
             </div>
         </div>
 
@@ -103,7 +106,7 @@
             @{
                 List<int> AppIds = new List<int>();
             }
-            @foreach (AppDetail appDetail in Model)
+            @foreach (var appDetail in Model.AppDetails)
             {
                 if (AppIds.Contains(appDetail.AppId))
                 {
