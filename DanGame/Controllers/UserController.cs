@@ -521,5 +521,12 @@ namespace DanGame.Controllers
 
             return View(viewModel);
         }
-	}
+
+        // GET: /User/ForgetPwd
+        [HttpGet]
+        public IActionResult ForgetPwd()
+        {
+            return View();
+        }
+    }
 }
