@@ -1,4 +1,4 @@
-﻿@model DanGame.Models.User
+﻿@model DanGame.Models.UserProfileViewModel
 
 @{
     ViewBag.Title = "Register";
@@ -11,7 +11,7 @@
                 <div class="mb-3 p-1">
                     <label class="form-label fs-6" for="useremail">電子信箱</label>
                     <div class="d-flex align-items-center">
-                        <input class="form-control w-50" type="email" id="useremail" name="Email" pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="請輸入有效的電子郵件地址，如 example@example.com" required>
+                        <input class="form-control w-50" type="email" id="useremail" name="User.Email" pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="請輸入有效的電子郵件地址，如 example@example.com" required>
                         <span id="emailValidation" class="ms-2"></span>
                     </div>
                 </div>
@@ -25,13 +25,21 @@
                 <div class="mb-3 p-1">
                     <label class="form-label fs-6" for="userName">使用者名稱</label>
                     <div class="d-flex align-items-center">
-                        <input class="form-control w-50" type="text" name="UserName" id="userName" required>
+                        <input class="form-control w-50" type="text" name="User.UserName" id="userName" required>
                         <span id="userNameValidation" class="ms-2"></span>
+                    </div>
+                </div>
+                <div class="row p-1">
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" name="UserProfile.FirstName" placeholder="First name">
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" name="UserProfile.LastName" placeholder="Last name">
                     </div>
                 </div>
                 <div class="mb-3 p-1">
                     <label class="form-label fs-6" for="password">選擇密碼</label>
-                    <input class="form-control w-50" type="password" id="password" name="PasswordHash" required oninput="checkPasswordMatch()">
+                    <input class="form-control w-50" type="password" id="password" name="User.PasswordHash" required oninput="checkPasswordMatch()">
                 </div>
                 <div class="mb-3 p-1">
                     <label class="form-label fs-6" for="confirmpassword">確認密碼</label>

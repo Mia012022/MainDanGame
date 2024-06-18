@@ -123,20 +123,34 @@ namespace DanGame.Controllers
 
         // POST: User/Register
         [HttpPost]
-        public async Task<IActionResult> Register(User model)
+        public async Task<IActionResult> Register(UserProfileViewModel model)
         {
+            var encryptedPassword = GetSHA256(model.User?.PasswordHash ?? string.Empty);
+
             var user = new User
             {
-                UserName = model.UserName ?? string.Empty,
-                Email = model.Email ?? string.Empty,
-                PasswordHash = model.PasswordHash ?? string.Empty,
-                Status = "Offline",
+                UserName = model.User?.UserName ?? string.Empty,
+                Email = model.User?.Email ?? string.Empty,
+                PasswordHash = encryptedPassword,
                 CreatedAt = DateTime.Now,
                 UpdateAt = DateTime.Now
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            var userProfile = new UserProfile
+            {
+                UserId = user.UserId,
+                FirstName = model.UserProfile?.FirstName ?? string.Empty,
+                LastName = model.UserProfile?.LastName ?? string.Empty,
+                CreatedAt = DateTime.Now,
+                UpdateAt = DateTime.Now
+            };
+
+            _context.UserProfiles.Add(userProfile);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("Index", "Home");
             //return Ok(model);
         }
