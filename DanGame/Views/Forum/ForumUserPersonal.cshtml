@@ -5,6 +5,7 @@
 @{
 	ViewData["Title"] = "ForumUser";
 }
+<link href="~/css/ForumIndex.css" rel="stylesheet" />
 <style>
 	.frbghhh {
 		position: relative; /* 確保文字可以相對於這個元素定位 */
@@ -209,10 +210,10 @@
 
 
 
-<div class=" mt-5" style="background-color:#f5f6fb;">
+<div class=" mt-5 pb-5" style="background-color:#EEDFF3;">
 	<div class="container">
 		<div class="d-flex  m-auto">
-			<div class="shadow border border-1 rounded w-100 m-auto mt-4 me-3">
+			<div class="shadow border border-1 w-100 m-auto mt-4 me-3 bg-white" style="border-radius:20px;">
 				<div class="m-4 ">
 					<ul class="nav nav-tabs" id="myTab" role="tablist">
 						<li class="nav-item" role="presentation">
@@ -334,9 +335,19 @@
 			<!-- 右側 -->
 			<div class="m-1 p-1 w-25">
 
-				<div class="mt-1  p-3 rounded ">
+				<div class="  p-3 rounded ">
 					<div class="list-group">
-						<a href="/Forum/Post" class="btn btn-outline-secondary">快來發文吧!</a>
+						<a href="/Forum/Post" class="btn blob-btn">
+							快來發文吧!<i class="bi bi-file-earmark-post text-secondary"></i>
+							<span class="blob-btn__inner">
+								<span class="blob-btn__blobs">
+									<span class="blob-btn__blob"></span>
+									<span class="blob-btn__blob"></span>
+									<span class="blob-btn__blob"></span>
+									<span class="blob-btn__blob"></span>
+								</span>
+							</span>
+						</a>
 					</div>
 
 				</div>

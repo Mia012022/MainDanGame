@@ -23,23 +23,32 @@
 	}
 
 	/* . {
-		box-sizing: border-box;
-	} */
-	body{
-		width:auto;
+			box-sizing: border-box;
+		} */
+	body {
+		width: auto;
 	}
 
 	.row {
 		margin-left: 0;
 	}
+
+	.reply-button{
+		background-color:none;
+		padding:0px;
+	}
+
+	.bgBody {
+		background-image: linear-gradient(to bottom, #EEDFF3 0%, #EEDFF3 100%);
+	}
 </style>
 
-<body>
-	<div class="d-flex container mt-5 pt-5 mb-4">
-		<div class="shadow border border-1 rounded w-100 mt-4">
+<body class="bgBody">
+	<div class="d-flex w-50 mt-5 pt-5 mb-4 m-auto">
+		<div class="shadow border border-1  w-100 mt-4 bg-white" style="border-radius:20px">
 			<div class="m-4">
 				<h3>@Model.Article.ArticalTitle</h3>
-				<div> <span class="bg-primary bg-opacity-50 m-2 p-1 rounded text-white">@Model.Article.ArticleCategory</span></div>
+				<div> <span class="bg-primary bg-opacity-50 m-2 p-1 text-white"style="border-radius:20px">@Model.Article.ArticleCategory</span></div>
 				<hr>
 				<!-- user -->
 				<div class="d-flex mb-3">
@@ -51,7 +60,7 @@
 						</a>
 					</div>
 					<div class="ms-2">
-						<span class="text-primary "><a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@Model.User.UserId">@Model.User.UserName</a> </span>
+						<span><a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@Model.User.UserId" style="color:#33386F;">@Model.User.UserName</a> </span>
 						<p class="text-secondary " style="font-size: x-small;">@Model.Article.ArticalCreateDate</p>
 					</div>
 				</div>
@@ -101,31 +110,34 @@
 							</a>
 						</div>
 						<!--  -->
-						<div class="userComment ms-2">
-							<span class="text-primary"><a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@comment.User.UserId">@comment.User.UserName</a></span>
-							<span>@comment.CommentContent</span>
-							<div class="text-secondary" style="font-size: x-small;">
-								<span class="ms-1 CommentCreateDate" timestramp="@(((DateTimeOffset)comment.CommentCreateDate).ToUnixTimeSeconds()*1000)"></span>
-								<span class="ms-3"><button class="reply-button btn btn-light" style="font-size:x-small" data-comment-id="@comment.CommentId">回覆</button></span>
+						<div class="userComment ms-2 w-100">
+							<div style="background-color: lavender;border-radius: 10px;padding: 3px;">
+								<span class="text-primary"><a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@comment.User.UserId">@comment.User.UserName</a></span>
+								<div class="ms-2">@comment.CommentContent</div>
 
-								<div class="btn-group btn-group-sm ">
-									<button class="btn "><i class="bi bi-heart" style="font-size: x-small;"></i><span class=" ms-1" style="font-size: x-small;">@comment.ArticalCommentLikes.Count</span></button>
+								<div class="text-secondary" style="font-size: x-small;">
+									<span class="ms-1 CommentCreateDate" timestramp="@(((DateTimeOffset)comment.CommentCreateDate).ToUnixTimeSeconds()*1000)"></span>
+									<span class="ms-3"><button class="reply-button btn btn-light" style="font-size:x-small" data-comment-id="@comment.CommentId">回覆</button></span>
+
+									<div class="btn-group btn-group-sm ">
+										<button class="btn "><i class="bi bi-heart" style="font-size: x-small;"></i><span class=" ms-1" style="font-size: x-small;">@comment.ArticalCommentLikes.Count</span></button>
+									</div>
+
 								</div>
-
 							</div>
 							@foreach (var reply in comment.ArticalCommentReplies)
 							{
 								<div class="d-flex mb-2">
-									<div>
+									<div style="margin-top: 10px;">
 										<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@comment.User.UserId">
 											<img class="rounded-circle" style="width: 40px;height:40px;object-fit:cover;"
 												 src="@reply.User.UserProfile.ProfilePictureUrl">
 											</img>
 										</a>
 									</div>
-									<div class="ms-2">
+									<div class="ms-2 w-100" style="margin-top: 10px; background-color: lavenderblush;border-radius:10px;padding: 3px;">
 										<span class="text-primary">@reply.User.UserName</span>
-										<span>@reply.ReplyContent</span>
+										<div class="ms-2">@reply.ReplyContent</div>
 										<div class="text-secondary" style="font-size: x-small;">
 											<span class="ms-1 CreatedAt" timestramp="@(((DateTimeOffset)reply.CreatedAt).ToUnixTimeSeconds()*1000)"></span>
 											<span class="ms-3"><button class="reply-button btn btn-light" style="font-size:x-small" data-comment-id="@comment.CommentId" data-reply-id="@reply.ReplyId" data-username="@reply.User.UserName">回覆</button></span>
@@ -134,7 +146,7 @@
 
 											</div>
 										</div>
-										<div class="input-group mb-4 reply-form" id="reply-form-reply-@reply.ReplyId" style="display: none;">
+										<div class="input-group mb-4 reply-form w-100" id="reply-form-reply-@reply.ReplyId" style="display: none;">
 											<form asp-action="AddReply" method="post">
 												<input type="hidden" name="CommentId" value="@comment.CommentId" />
 												<input type="hidden" name="ReplyToUserId" value="@reply.User.UserId" class="reply-to-user-id" />
@@ -181,33 +193,12 @@
 
 
 		</div>
-		<!-- 右側 -->
-		<div class="m-1 p-1">
-			<div class="p-3 rounded">
-				<div class="input-group">
-					<input type="search" class="w-75 form-control" placeholder="搜尋文章">
-					<button class="btn btn-outline-secondary"><i class="fa-solid fa-magnifying-glass"></i></button>
-				</div>
-
-			</div>
-			<div class="mt-1  p-3 rounded ">
-				<div class="list-group">
-					<a href="/Forum/Post" class="btn btn-outline-secondary">快來發文吧!</a>
-				</div>
-
-			</div>
-			<div class="mt-1  p-3 rounded ">
-				<div class="list-group">
-					<a href="/Forum/ForumUser" class="btn btn-outline-secondary">個人主頁</a>
-				</div>
-
-			</div>
-
-		</div>
+		
+		
 	</div>
 </body>
 <script src="~/js/artical.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function () {
 		$("oembed").each(function () {
@@ -225,7 +216,7 @@
 			var username = $(this).data('username');
 			$('.reply-form').hide(); // 隐藏所有回复表单
 	@* $('#reply-form-' + commentId).show(); // 显示当前评论的回复表单 *@
-			if (replyId) {
+				if (replyId) {
 				// 显示当前回复的回复表单
 				$('#reply-form-reply-' + replyId).show();
 				$('#reply-form-reply-' + replyId + ' .reply-to-user-id').val($(this).data('user-id'));
@@ -235,7 +226,7 @@
 				$('#reply-form-' + commentId).show();
 				$('#reply-form-' + commentId + ' .reply-to-user-id').val($(this).data('user-id'));
 	@* $('#reply-form-' + commentId + ' .reply-content').val('@' + username + ' '); *@
-				}
+					}
 		});
 
 		var num = 0;

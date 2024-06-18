@@ -56,16 +56,17 @@
 	}
 
 	.bgBody {
-		background-image: linear-gradient(to right, #ec77ab 0%, #7873f5 100%);
+		background-image: linear-gradient(to bottom, #EEDFF3 0%, #EEDFF3 100%);
 	}
 
 	.FRbgStyle {
-		position: relative; /* 確保文字可以相對於這個元素定位 */
+		/* position: relative; */ /* 確保文字可以相對於這個元素定位 */
 		height: 500px;
 		width: 100%;
-		background-image: linear-gradient(to right, #38041c 30%, rgba(255, 255, 255, 0)), url(/img/frRight.webp);
+		margin-top:80px;
+		background-image: linear-gradient(to top, #EEDFF3, rgba(255, 255, 255, 0)), url(/img/frRight.webp);
 		background-repeat: no-repeat;
-		background-position: right;
+		background-position: top;
 		background-size: cover; /* 確保圖片覆蓋整個元素 */
 		display: flex;
 		align-items: center;
@@ -92,7 +93,7 @@
 	}
 
 	.fixed-top > nav {
-		background: none !important;
+		/* background: none !important; */
 	}
 
 </style>
@@ -120,14 +121,7 @@
 
 	<div class="FRbgStyle">
 		<div class="FRbgText">
-			<div class="FRbgTextTitle cssanimation lePeek sequence">論壇區</div>
-			<div>
-				<div>綜合討論</div>
-				<div>資訊快報</div>
-				<div>心得攻略</div>
-				<div>實況專區</div>
-
-			</div>
+			
 			@* <p class="h3"> The Elder Scrolls</p>
 			<p style="font-size:10px">
 				
@@ -298,7 +292,7 @@
 
 													</span>
 												</a>
-												<p style="font-size:x-small;color:darkmagenta">最近發表@(user.ArticleCount)篇文章</p>
+												<p style="font-size:small;color:#003566;">最近發表@(user.ArticleCount)篇文章</p>
 											</div>
 
 
@@ -320,12 +314,12 @@
 								<ul class="list-group list-group-flush ">
 									@foreach (var popular in Model.PopularArticle)
 									{
-										<li class="list-group-item ">
+										<li class="list-group-item  " >
 											@{
 												string word = popular.ArticalTitle;
 												string result = word.Length > 15 ? (word.Substring(0, 15) + "..") : word;
 											}
-											<a asp-action="Artical" asp-controller="Forum" asp-route-id="@popular.ArticalID" class="text-decoration-none" style="font-size:small;color:crimson;">
+											<a asp-action="Artical" asp-controller="Forum" asp-route-id="@popular.ArticalID" class="text-decoration-none" style=" color:#003566;">
 												@result
 											</a>
 
