@@ -83,15 +83,13 @@
                              alt="..." />
                         <div class="card-body" style="width: 15rem">
                             <h5 class="card-title" style="font-size: 15px">
-                                Card title
+                                    @apprank.appName
                             </h5>
-                            <p class="card-text" style="font-size: 12px">
-                                Some quick example text to build on the card
-                                title and make up the bulk of the card's
-                                content.
+                            <p class="card-text text-truncate marquee" style="font-size: 12px;">
+                                        <span>@apprank.appDesc</span>
                             </p>
                             <div class="gowhere">
-                                <a href="#">去逛逛</a>
+                                        <a href="/Game/@apprank.appId">去逛逛</a>
                             </div>
                         </div>
                     </div>

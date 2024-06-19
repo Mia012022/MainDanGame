@@ -203,7 +203,7 @@ namespace DanGame.Controllers
 
             var AppRank = from app in context.AppDetails
                         where app.AppType == "game"
-                        orderby app.Downloaded
+                        orderby app.Downloaded descending
                         select new
                         {
                             appId = app.AppId,
@@ -273,6 +273,51 @@ namespace DanGame.Controllers
 
             return View(parameters);
         }
+
+
+        //當進入Gotocheckmethod先把相關資料算好給前端
+        [HttpGet("Gotocheckmethod")]
+        [AuthorizeUser]
+        public IActionResult Gotocheckmethod()
+        {
+            var session = Request.HttpContext.Session;
+            var userId = session.GetInt32("UserId");
+            var query = from o in context.ShoppingCarts
+                        where o.UserId == Convert.ToInt32(userId)
+                        select new
+                        {
+                            Price = o.App.AppDetail.Price,
+                            AppName = o.App.AppName
+
+                        };
+            //var total = query.Sum()
+            var total = query.Select((o) => o.Price).Sum();
+            total =(int)(total * 1.1);
+            var AppName = string.Join("#", query.Select((o) => o.AppName).ToArray());
+
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "ChoosePayment", "ALL" },
+                { "ClientBackURL","http://localhost:5000/ShoppingCart/successbuy" },
+                 { "EncryptType", "1" },
+                //{"IgnorePayment ","Credit" },
+                { "ItemName", AppName },
+                { "MerchantID", "3002607" },
+                { "MerchantTradeDate", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") },
+                { "MerchantTradeNo", $"Mike{DateTime.Now.ToString("yyyyMMddHHmmss")}" },
+                { "PaymentType", "aio" },
+                { "ReturnURL", "http://localhost:5000/ShoppingCart/Ecplay"},/*http://example.com/ShoppingCart/Ecplay*/
+                { "TotalAmount", $"{total}" },
+                { "TradeDesc", "遊戲" },
+            };
+
+            parameters.Add("CheckMacValue", BuildCheckMacValue(parameters));
+
+            return View(parameters);
+        }
+
+
 
 
         private string BuildCheckMacValue(Dictionary<string, string> parameters)
@@ -456,18 +501,28 @@ namespace DanGame.Controllers
 
         //前往結帳成功頁面
         [HttpGet("successbuy")]
+        [AuthorizeUser]
         public IActionResult successbuy()
         {
+            var userId=Request.HttpContext.Session.GetInt32("UserId");
+
+            var shoppingCartItems = from o in context.ShoppingCarts
+                                   where o.UserId == userId
+                                   select o;
+ 
+            context.ShoppingCarts.RemoveRange(shoppingCartItems);
+            context.SaveChanges();
+
             return View();
         }
 
 
 
-        [HttpGet("gotocheckmethod")]
-        public IActionResult gotocheckmethod()
-        {
-            return View();  
-        }
+        //[HttpGet("gotocheckmethod")]
+        //public IActionResult gotocheckmethod()
+        //{
+        //    return View();  
+        //}
 
 
         public ShoppingCartController(DanGameContext dbContext)

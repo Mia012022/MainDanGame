@@ -1,6 +1,6 @@
 
 $(function () {
-
+ 
   
 
     $(".gotocheckbtn").on("click",function (event) {
@@ -9,7 +9,7 @@ $(function () {
     if ($(".gameitem").length == 0) {
         alert("目前購物車是空的");
     } else {
-        window.location.href = "/ShoppingCart/CreditCardInfo";
+        window.location.href = "/ShoppingCart/gotocheckmethod";
     }
 });
 
@@ -168,7 +168,8 @@ function updataprice() {
             });
         });
         itembox.append(gameitem);
-
+        console.log($(".gameitem").length);
+      
         //結帳金額的部分
     });
 }
@@ -280,7 +281,8 @@ function checkAndShowEmptyalert() {
 }
 
 //這是itembox如果空了就補的畫面
-function checkAndShowEmptyMessage() {
+    function checkAndShowEmptyMessage() { 
+      
     if ($(".gameitem").length == 0 && $(".empty-message").length == 0) {
         $(".itembox").append(
             '<div class="empty-message"><img src="/image/ShoppingCart/螢幕擷取畫面 2024-05-23 141622.png" alt="Empty Image"><p class="empty-message-text">目前購物車已清空!</p></div>'

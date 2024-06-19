@@ -65,23 +65,55 @@
             </div>
             <hr / style="color: aliceblue;">
 
+
+
+            <form id="ecpayForm" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"
+                  method="post">
+                <input type="checkbox" required /><label for="" style="color: aliceblue;">
+                    我同意<a href="https://store.steampowered.com/subscriber_agreement/">Steam訂戶協議</a>中的條款(最後修改日期:2023年4月26日)
+                </label>
+                <input type="hidden" name="MerchantID" value="@Model["MerchantID"]" />
+                <input type="hidden"
+                       name="MerchantTradeNo"
+                       value="@Model["MerchantTradeNo"]" />
+                <input type="hidden"
+                       name="MerchantTradeDate"
+                       value="@Model["MerchantTradeDate"]" />
+                <input type="hidden" name="PaymentType" value="@Model["PaymentType"]" />
+
+                <input type="hidden" name="TotalAmount" value="@Model["TotalAmount"]" />
+                <input type="hidden" name="TradeDesc" value="@Model["TradeDesc"]" />
+                <input type="hidden" name="ItemName" value="@Model["ItemName"]" />
+                <input type="hidden"
+                       name="ReturnURL"
+                       value="@Model["ReturnURL"]" />
+                <input type="hidden"
+                       name="ClientBackURL"
+                       value="@Model["ClientBackURL"]" />
+                <input type="hidden" name="ChoosePayment" value="@Model["ChoosePayment"]" />
+                <input type="hidden" name="CheckMacValue" value="@Model["CheckMacValue"]" />
+                <input type="hidden" name="EncryptType" value="@Model["EncryptType"]" />
+            </form>
+
+
+
             <div class="d-flex justify-content-around">
                 <button class="button-85 gotoCreditCardInfo" role="button">信用卡支付</button>
-                <button class="button-85 gotogreen" role="button">綠界支付</button>
+                <button class="button-85 gotogreen" role="button" id="submitEcpayForm">綠界支付<br>(需額外手續費)</button>
             </div>
-          
 
-                <hr / style="color: aliceblue;">
+
+            <hr / style="color: aliceblue;">
 
 
         </div>
-      @*   <div class="checkmedthod bg-light">
-            <p>在STEAM上購物</p>
-            <hr / style="color: aliceblue;">
-            <span>
-                完成本次交易後，將會從您的付款方式扣除交易<br />
-                金額，且您會收到一封確定您已購買的電子郵件<br />訊息。
-            </span>
+        @*   <div class="checkmedthod bg-light">
+        <p>在STEAM上購物</p>
+        <hr / style="color: aliceblue;">
+        <span>
+        完成本次交易後，將會從您的付款方式扣除交易<br />
+        金額，且您會收到一封確定您已購買的電子郵件<br />訊息。
+        </span>
         </div> *@
     </div>
     <!-- 中間內容 end -->
@@ -92,14 +124,38 @@
     <script>
         $(function () {
 
+            function isCheckboxChecked(){
+                return $('input[type="checkbox"]').is(":checked");
+            }
+            function showAlert(){
+                alert("請先同意 Steam 訂戶協議中的條款。");
+            }
+
+
+
             $(".gotoCreditCardInfo").on("click", function () {
-                window.location.href = "/ShoppingCart/CreditCardInfo"
+                if (isCheckboxChecked()) {
+                    window.location.href = "/ShoppingCart/CreditCardInfo"
+                }else{
+                    event.preventDefault();
+                    showAlert();
+                }
+                
             })
-            $(".gotogreen").on("click", function () {
-                window.location.href = "/ShoppingCart/Gotocheck"
-            })
+            // $(".gotogreen").on("click", function () {
+            //     window.location.href = "/ShoppingCart/Gotocheck"
+            // })
 
 
+            $('#submitEcpayForm').click(function (event) {
+                if (isCheckboxChecked()) {
+                    $('#ecpayForm').submit();
+                } else {
+                    event.preventDefault();
+                    showAlert();
+                }
+                
+            });
 
 
             $(document).on("scroll", function () {
@@ -148,44 +204,44 @@
                     console.log(apps);
                     console.log(app.appId);
                     const item = $(`<div class="item">
-                                    <div class="itempic">
-                                        <a href="">
-                                                    <img src="${app.headerImage}"
-                                                 alt="" />
-                                        </a>
-                                    </div>
-                                    <div class="itemtext">
-                                                <p class="item-name">${app.appName} </p>
-                                        <p class="item-version">
-                                                    平台: ${app.platform.split(",").map((p) => platformIconMap[p]).join(" ")}
-                                        </p>
-                                                <p class="relese-date">推出日期:${app.releaseDate}</p>
-                                                <p class="developer">發行商:${app.devloperName}</p>
-                                        <div class="price">
-                                            <div>
-                                                        <p class="rp">NT:${app.price}</p>
+                                            <div class="itempic">
+                                                <a href="">
+                                                            <img src="${app.headerImage}"
+                                                         alt="" />
+                                                </a>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="delete">
-                                      <a href=""
-                                        ><svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          width="16"
-                                          height="16"
-                                          fill="currentColor"
-                                          class="bi bi-trash"
-                                          viewBox="0 0 16 16"
-                                        >
-                                          <path
-                                            d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
-                                          />
-                                          <path
-                                            d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
-                                          /></svg
-                                      ></a>
-                                    </div> -->
-                                </div>`);
+                                            <div class="itemtext">
+                                                        <p class="item-name">${app.appName} </p>
+                                                <p class="item-version">
+                                                            平台: ${app.platform.split(",").map((p) => platformIconMap[p]).join(" ")}
+                                                </p>
+                                                        <p class="relese-date">推出日期:${app.releaseDate}</p>
+                                                        <p class="developer">發行商:${app.devloperName}</p>
+                                                <div class="price">
+                                                    <div>
+                                                                <p class="rp">NT:${app.price}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="delete">
+                                              <a href=""
+                                                ><svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  width="16"
+                                                  height="16"
+                                                  fill="currentColor"
+                                                  class="bi bi-trash"
+                                                  viewBox="0 0 16 16"
+                                                >
+                                                  <path
+                                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
+                                                  />
+                                                  <path
+                                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+                                                  /></svg
+                                              ></a>
+                                            </div> -->
+                                        </div>`);
                     itembox.append(item);
                 })
             }
