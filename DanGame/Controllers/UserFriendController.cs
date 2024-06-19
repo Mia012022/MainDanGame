@@ -16,11 +16,10 @@ namespace DanGame.Controllers
             _context = dbContext;
         }
 
-        [HttpGet]
-        
+        [HttpGet] 
         async public Task<dynamic> GetUserFriends()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var userFriend = from friend in _context.Friendships
                              where (friend.UserId == userId || friend.FriendUserId == userId)
@@ -77,11 +76,11 @@ namespace DanGame.Controllers
         [HttpPost]
         public async Task<IActionResult> Sendinvite([FromQuery] int id)
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = HttpContext.Session.GetInt32("UserId");
             var invite = new Friendship
             {
                 Status = "Pending",
-                UserId = userId,
+                UserId = (int)userId,
                 FriendUserId = id
             };
             _context.Friendships.Add(invite);
@@ -96,10 +95,10 @@ namespace DanGame.Controllers
         [HttpPut("{friendId}")]
         public IActionResult AcceptFriend(int friendId)
         {
-            var userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var userId = HttpContext.Session.GetInt32("UserId");
 
             var friendRequest = (from friendShip in _context.Friendships
-                                 where friendShip.UserId == friendId || friendShip.FriendUserId == userId
+                                 where friendShip.UserId == friendId && friendShip.FriendUserId == userId
                                  where friendShip.Status == "Pending"
                                  select friendShip).FirstOrDefault();
             if (friendRequest == null)
@@ -134,7 +133,7 @@ namespace DanGame.Controllers
         [HttpDelete("{friendId}")]
         public IActionResult DeleteFriend(int friendId)
         {
-            var userId =  Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var userId = HttpContext.Session.GetInt32("UserId");
 
             var friendRequest = (from friendShip in _context.Friendships
                                  where (friendShip.UserId == friendId && friendShip.FriendUserId == userId) ||

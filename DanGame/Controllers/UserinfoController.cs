@@ -18,7 +18,7 @@ namespace DanGame.Controllers
         [HttpGet]
         public IActionResult GetuserUrl()
         {
-            int id = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var id = HttpContext.Session.GetInt32("UserId");
             var q = from user in _context.Users
                     join profile in _context.UserProfiles on user.UserId equals profile.UserId
                     where user.UserId == id

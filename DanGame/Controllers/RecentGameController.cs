@@ -21,10 +21,7 @@ namespace DanGame.Controllers
         public async Task<IActionResult> GetFriendDynamic()
         {
             // 確認Session中有UserId
-            if (!int.TryParse(Request.HttpContext.Session.GetString("UserId"), out int userId))
-            {
-                return Unauthorized("用戶未登錄");
-            }
+            var userId = HttpContext.Session.GetInt32("UserId");
 
             // 獲取好友的ID列表
             var friendIds = await _context.Friendships
@@ -66,7 +63,7 @@ namespace DanGame.Controllers
         [HttpGet]
         public ActionResult GetrecentGame()
         {
-            var randomGames = _context.AppDetails.OrderBy(u => Guid.NewGuid()).Take(3).ToList();
+            var randomGames = _context.AppDetails.Where(app => app.AppType == "game").OrderBy(u => Guid.NewGuid()).Take(3).ToList();
 
             return Ok(randomGames);
         }
@@ -75,6 +72,22 @@ namespace DanGame.Controllers
         {
             var gameRoom = _context.AppDetails.OrderBy(u => Guid.NewGuid()).Take(3).ToList();
             return Ok(gameRoom);
+        }
+        [HttpGet("hotgame")]
+        public async Task<ActionResult<IEnumerable<AppDetail>>> GetAppDetails()
+        {
+            var appDetails = await _context.AppDetails
+                                           .Where(app => app.AppType == "game")
+                                           .OrderByDescending(app => app.Downloaded)
+                                           .Select(app => new
+                                           {
+                                               app.AppName,
+                                               app.HeaderImage,
+                                               app.Downloaded
+                                           })
+                                           .Take(5).ToListAsync();
+
+            return Ok(appDetails);
         }
     }
 }
