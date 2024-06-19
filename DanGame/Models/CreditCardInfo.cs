@@ -29,5 +29,5 @@ public partial class CreditCardInfo
 
     public string PhoneNumber { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+    public virtual User ? User { get; set; } = null!;
 }

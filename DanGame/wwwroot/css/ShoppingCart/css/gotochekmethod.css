@@ -1,0 +1,329 @@
+h3 {
+    color: gainsboro;
+    margin: 30px 0px;
+}
+
+.buy_container {
+    height: 2000px;
+    background-image: linear-gradient(to right, #eea2a2 0%, #bbc1bf 19%, #57c6e1 42%, #b49fda 79%, #7ac5d8 100%);
+    margin: auto;
+    width: 100%;
+    min-width: 1500px;
+    padding-top: 200px;
+    display: flex;
+    align-items: first flex-start;
+    justify-content: center;
+}
+
+    .buy_container .main {
+        background-color: rgba(0, 0, 0, 0.75);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px black;
+        min-height: 900px;
+        padding: 20px;
+        max-width: 1000px;
+        width: 800px;
+        margin: auto;
+        border-radius: 3px;
+        margin: 0;
+        margin-right: 50px;
+    }
+
+        .buy_container .main .itembox {
+            flex: 70%;
+            margin-bottom: 150px;
+        }
+
+            .buy_container .main .itembox .item {
+                border: 1px solid black;
+                display: flex;
+                border-radius: 20px;
+                padding: 10px;
+                height: 150px;
+                margin-bottom: 20px;
+                background-color: rgba(255, 255, 255, 0.8);
+                margin: 20px;
+            }
+
+                .buy_container .main .itembox .item:hover {
+                    transform: translateY(-8px);
+                    transition: transform 0.2s ease-in-out;
+                }
+
+                .buy_container .main .itembox .item .itempic {
+                    flex: 40%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                    .buy_container .main .itembox .item .itempic img {
+                        width: 200px;
+                    }
+
+                    .buy_container .main .itembox .item .itempic:hover {
+                        opacity: 0.85;
+                    }
+
+                .buy_container .main .itembox .item .itemtext {
+                    flex: 60%;
+                    margin-left: 20px;
+                }
+
+                    .buy_container .main .itembox .item .itemtext p {
+                        margin: 0;
+                    }
+
+                    .buy_container .main .itembox .item .itemtext .item-name {
+                        text-indent: 80px;
+                        font-size: 20px;
+                    }
+
+                    .buy_container .main .itembox .item .itemtext .price {
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                    }
+
+                        .buy_container .main .itembox .item .itemtext .price .discount {
+                            background-color: greenyellow;
+                            border-radius: 5px;
+                            margin-right: 10px;
+                        }
+
+                        .buy_container .main .itembox .item .itemtext .price .op {
+                            text-decoration: line-through;
+                        }
+
+                .buy_container .main .itembox .item .delete {
+                    padding-top: 50px;
+                }
+
+                    .buy_container .main .itembox .item .delete a :hover {
+                        color: red;
+                    }
+
+            .buy_container .main .itembox .itembt {
+                display: flex;
+                justify-content: space-around;
+                margin-top: 200px;
+            }
+
+                .buy_container .main .itembox .itembt .btn,
+                .buy_container .main .itembox .itembt .btn:focus {
+                    position: relative;
+                    min-width: 100px;
+                    background: none;
+                    border: none;
+                    color: #58afd1;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-align: center;
+                    text-decoration: none;
+                    box-shadow: inset 0 0 0 4px #58afd1;
+                    transition: color 0.25s 0.0833333333s;
+                    padding: 10px 20px;
+                    border-radius: 5;
+                }
+
+                    .buy_container .main .itembox .itembt .btn:before,
+                    .buy_container .main .itembox .itembt .btn:after {
+                        content: "";
+                        position: absolute;
+                        width: 0;
+                        height: 0;
+                        bottom: 0;
+                        right: 0;
+                        border: 0 solid transparent;
+                        box-sizing: border-box;
+                    }
+
+                    .buy_container .main .itembox .itembt .btn:before {
+                        border-bottom-width: 4px;
+                        border-left-width: 4px;
+                    }
+
+                    .buy_container .main .itembox .itembt .btn:after {
+                        border-top-width: 4px;
+                        border-right-width: 4px;
+                    }
+
+                    .buy_container .main .itembox .itembt .btn:hover {
+                        color: whitesmoke;
+                    }
+
+                        .buy_container .main .itembox .itembt .btn:hover:before,
+                        .buy_container .main .itembox .itembt .btn:hover:after {
+                            border-color: #ffe593;
+                            transition: border-color 0s, width 0.25s, height 0.25s;
+                            width: 100%;
+                            height: 100%;
+                        }
+
+                        .buy_container .main .itembox .itembt .btn:hover:before {
+                            transition-delay: 0s, 0s, 0.25s;
+                        }
+
+                        .buy_container .main .itembox .itembt .btn:hover:after {
+                            transition-delay: 0s, 0.25s, 0s;
+                        }
+
+        .buy_container .main .moneybox .smallbox {
+            justify-content: space-between;
+            padding: 0px 50px;
+        }
+
+        .buy_container .main .checkinfo {
+            padding-top: 50px;
+        }
+
+            .buy_container .main .checkinfo .creditnumberlast {
+                margin-left: 15%;
+            }
+
+            .buy_container .main .checkinfo .creditaccount {
+                margin-left: 12%;
+            }
+
+            .buy_container .main .checkinfo .creditname {
+                margin-left: 15%;
+            }
+
+            .buy_container .main .checkinfo .creditnumber, .buy_container .main .checkinfo .creditdowntown, .buy_container .main .checkinfo .creditcity, .buy_container .main .checkinfo .creditcountry {
+                margin-left: 23.5%;
+            }
+
+    .buy_container .checkmedthod {
+        min-width: 300px;
+        margin: auto;
+        padding: 20px;
+        margin: 0;
+        background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+        border-radius: 10px;
+    }
+/*# sourceMappingURL=buy.css.map */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.button-85 {
+    padding: 2em 4em;
+    border: none;
+    outline: none;
+    color: rgb(255, 255, 255);
+    background: #111;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    margin: 40px;
+}
+
+    .button-85:before {
+        content: "";
+        background: linear-gradient( 45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000 );
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        background-size: 400%;
+        z-index: -1;
+        filter: blur(5px);
+        -webkit-filter: blur(5px);
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        animation: glowing-button-85 20s linear infinite;
+        transition: opacity 0.3s ease-in-out;
+        border-radius: 10px;
+      
+    }
+
+@keyframes glowing-button-85 {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 400% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.button-85:after {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #222;
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
