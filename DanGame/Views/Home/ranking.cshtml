@@ -60,7 +60,7 @@
 		</div>
 
 		<div class="text-center" style="margin-bottom: 50px;">
-			<button class="btn btn-outline-light"
+			<button class="btn btn-outline-light" id="load-more"
 					style="font-size: 20px;">
 				查看更多
 			</button>
@@ -74,13 +74,20 @@
 		var apps = [];
 		var tags = [];
 		const maxSelection = 5;
+		const itemsPerPage = 10;
 		let selectedItems = [];
+		let filteredApps = [];
+		let currentPage = 0;
 
 
 		$(document).ready(function () { 
 			$.get("http://localhost:5000/api/app/tags", (data) => {
 				tags = data;
 			}).done(() => {
+
+				tags.push({ tagId: 'hot', tagName: '熱門' });
+				tags.sort((a, b) => (a.tagId === 'hot') ? -1 : (b.tagId === 'hot') ? 1 : 0);
+
 				for (let tag of tags) {
 					$("#categories").append(
 						$(`<dd style="margin: 10px;" tagid=${tag.tagId} ><a href="#"  class="list-group-item">${tag.tagName}</a></dd>`)
@@ -97,17 +104,22 @@
 										alert("最多只能選擇5個類別");
 									}
 								}
+								currentPage = 0;
 								ReloadAppDetail();
 							})
 					).css({
 						display: "flex"
 					})
 				}
+				selectedItems.push('熱門');
+				$(".selected-item").text('熱門');
+				ReloadAppDetail();
 			})
 
 
 			$.get("http://localhost:5000/api/app", (data) => {
 				apps = data;
+				ReloadAppDetail();
 			})
 
 			$(".reset").click(function (e) {
@@ -116,203 +128,83 @@
 				$(".selected-item").text("");
 				ReloadAppDetail()
 			});
-			
+
+			$("#load-more").click(function () {
+				currentPage++;
+				AppendAppDetail();
+			});
 		})
 
-		function ReloadAppDetail() { 
-			let result = apps.filter( (app) => {
-				let include = []
-				for (let tag of app.tags) {
-					include.push( selectedItems.includes(`${tag.tagName}`))
-				}
-				return include.some( (b) => b)
-			})
+		function ReloadAppDetail() {
+			let result;
+			if (selectedItems.includes('熱門')) {
+				result = apps.slice().sort((a, b) => b.downloaded - a.downloaded);
+			} else {
+				result = apps.filter((app) => {
+					let include = []
+					for (let tag of app.tags) {
+						include.push(selectedItems.includes(`${tag.tagName}`));
+					}
+					return include.some((b) => b);
+				});
+			}
+			filteredApps = result;
+			currentPage = 0;
 			$("#app-detail").html("");
-			for (let app of result) {
+			AppendAppDetail();
+		}
 
+		function AppendAppDetail() {
+			let start = currentPage * itemsPerPage;
+			let end = start + itemsPerPage;
+			let result = filteredApps.slice(start, end);
+
+			for (let app of result) {
 				let appDetail = $(`
-					<div class="card mb-3 z-0 mx-3 mt-4 mb-4">
-						<div class="row g-0">
-							<div class="col-md-4">
-								<img id="app-image" src="${app.headerImage}" class="img-fluid rounded-start" alt="${app.appName}">
-							</div>
-							<div class="col-md-8">
-								<div class="card-body" style="padding: 10px 10px 0 10px;">
-									<h4 class="card-title mx-2" id="app-name">${app.appName}</h4>
-									<div style="position: absolute; top: 15px; right: 50px; font-size: 15px;" id="app-downloads"> 下載次數 : ${app.downloaded}</div>
-									<div class="mb-2 mx-2">
+							<div class="card mb-3 z-0 mx-3 mt-4 mb-4">
+								<div class="row g-0">
+									<div class="col-md-4">
+										<img id="app-image" src="${app.headerImage}" class="img-fluid rounded-start" alt="${app.appName}">
+									</div>
+									<div class="col-md-8">
+										<div class="card-body" style="padding: 10px 10px 0 10px;">
+											<h4 class="card-title mx-2" id="app-name">${app.appName}</h4>
+											<div style="position: absolute; top: 15px; right: 50px; font-size: 15px;" id="app-downloads"> 下載次數 : ${app.downloaded}</div>
+											<div class="mb-2 mx-2">
 												<p class="card-text border rounded" id="app-description">${app.appDesc}</p>
-									</div>
-									<div class="d-flex">
-										<div>
-											<p class="card-text app-genres">
-											</p>
+											</div>
+											<div class="d-flex">
+												<div>
+													<p class="card-text app-genres">
+													</p>
+												</div>
+											</div>
+											<div class="mt-1" style="position: absolute; bottom: 3%; left: 35%; font-size: 12px;" id="app-release-date"> 上架日期 : ${app.releaseDate}</div>
+											<div class="text-end readmore">
+											</div>
 										</div>
-									</div>
-									<div class="mt-1" style="position: absolute; bottom: 9%; left: 35%; font-size: 12px;" id="app-release-date"> 上架日期 : ${app.releaseDate}</div>
-									<div class="text-end readmore">
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-						`).appendTo("#app-detail")
+						`).appendTo("#app-detail");
 
 				for (let tag of app.tags) {
 					appDetail.find(".app-genres").append(
 						`<small class="text-body-secondary border rounded-pill"
-								style="padding: 5px 15px; background-color: rgb(226, 226, 226);" id="app-genre">${tag.tagName}</small>
-						`
-					)
+									style="padding: 5px 15px; background-color: rgb(226, 226, 226); margin: 5px;" id="app-genre">${tag.tagName}</small>`
+					);
 					appDetail.find(".readmore").append(
 						`<button class="btn btn-outline-primary" style="margin: 0 20px; position: absolute; bottom: 9%; right: 2%;">詳細資訊</button>`
-					)
+					);
 				}
+			}
 
+			if (end >= filteredApps.length) {
+				$("#load-more").hide();
+			} else {
+				$("#load-more").show();
 			}
 		}
-
-		// $(document).ready(function () {
-		// 	let selectedItems = [];
-		// 	let selectedTagIds = [];
-		// 	let apps = [];
-		// 	const maxSelection = 5;
-
-		// 	$.get("http://localhost:5000/api/app", (data) => {
-		// 		apps = data;
-		// 	})
-
-		// 	$(".list-group-item").click(function (e) {
-		// 		e.preventDefault();
-		// 		let selectedText = $(this).text();
-
-		// 		if (!selectedItems.includes(selectedText)) {
-		// 			if (selectedItems.length < maxSelection) {
-		// 				selectedItems.push(selectedText);
-		// 				$(".selected-item").text(selectedItems.join(", "));
-		// 			} else {
-		// 				alert("最多只能選擇5個類別");
-		// 			}
-		// 		}
-
-		// 		selectedTagIds = [];
-		// 		$(".selected-item").each((tagElm) => { 
-		// 			selectedTagIds.push($(tagElm).attr("tagid")) 
-		// 		})
-		// 	});
-
-		// 	$(".reset").click(function (e) {
-		// 		e.preventDefault();
-		// 		selectedItems = [];
-		// 		$(".selected-item").text("");
-		// 	});
-		// });
-
-		// 獲取 tags Get "tagId","tagName"
-		// 顯示 tagName 在畫面上
-		// "GetAppByTags"  Post  "tagName"對應的 "apps" 裡面的 "appId"
-		// 取得 "appId"後 "AppsDetail" Post "app.appName"、"app.headerImage"、"app.shortDescription"、"tagName"、"app.downloaded"、"app.releaseDate"
-
-		// const categoriesContainer = document.getElementById('categories');
-		// const appDetailContainer = document.getElementById('app-detail');
-
-		// 获取所有 tags
-		// fetch('http://localhost:5000/api/app/tags', {
-		// 	method: 'GET',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	}
-		// })
-		// 	.then(response => response.json())
-		// 	.then(tagData => {
-		// 		console.log('Tag data fetched:', tagData);
-
-		// 		categoriesContainer.innerHTML = ''; // 清空内容
-		// 		$("#categories").css({
-		// 			display: "flex"
-		// 		});
-		// 		appDetailContainer.innerHTML = ''; // 清空内容
-		// 		tagData.forEach(tag => {
-		// 			const tagElm = $(`<dd style="margin: 10px;"><a href="#" tagID="${tag.tagId}" class="list-group-item">${tag.tagName}</a></dd>`);
-		// 			tagElm.click(() => fetchAppDetails(tag.tagId, tag.tagName));
-		// 			tagElm.appendTo(categoriesContainer);
-		// 		});
-		// 	})
-		// 	.catch(error => {
-		// 		console.error('There was a problem with the fetch operation:', error);
-		// 	});
-
-		// function fetchAppDetails(tagId, tagName) {
-
-		// 	// 首先根据 tagId 获取相关的 apps
-		// 	fetch('http://localhost:5000/api/app/GetAppByTags', {
-		// 		method: 'POST',
-		// 		headers: {
-		// 			'Content-Type': 'application/json'
-		// 		},
-		// 		body: JSON.stringify([tagId]) // 发送选定的 tagId 数组
-		// 	})
-		// 		.then(response => response.json())
-		// 		.then(tagData => {
-		// 			console.log('Apps for tag fetched:', tagData);
-
-		// 			// 获取所有与该 tag 相关的 appId
-		// 			const appIds = tagData.flatMap(tag => tag.apps.map(app => app.appId));
-
-		// 			// 根据 appId 获取 app 详情
-		// 			return fetch('http://localhost:5000/api/app/AppsDetail', {
-		// 				method: 'POST',
-		// 				headers: {
-		// 					'Content-Type': 'application/json'
-		// 				},
-		// 				body: JSON.stringify(appIds) // 发送选定的 appId 数组
-		// 			});
-		// 		})
-		// 		.then(response => response.json())
-		// 		.then(appDetails => {
-		// 			console.log('App details fetched:', appDetails);
-
-					
-
-		// 			appDetails.forEach(app => {
-		// 				const appDetail = document.createElement('div');
-		// 				appDetail.className = 'card mb-3 z-0 mx-3 mt-4 mb-4';
-		// 				appDetail.innerHTML = `
-		// 				<div class="row g-0">
-		// 					<div class="col-md-4">
-		// 						<img id="app-image" src="${app.headerImage}" class="img-fluid rounded-start" alt="${app.appName}">
-		// 					</div>
-		// 					<div class="col-md-8">
-		// 						<div class="card-body" style="padding: 10px 10px 0 10px;">
-		// 							<h4 class="card-title mx-2" id="app-name">${app.appName}</h4>
-		// 							<div style="position: absolute; top: 15px; right: 50px; font-size: 15px;" id="app-downloads"> 下載次數 : ${app.downloaded}</div>
-		// 							<div class="mb-2 mx-2">
-		// 								<p class="card-text border rounded" id="app-description">${app.shortDescription}</p>
-		// 							</div>
-		// 							<div class="d-flex">
-		// 								<div>
-		// 									<p class="card-text">
-		// 										<small class="text-body-secondary border rounded-pill"
-		// 											   style="padding: 5px 15px; background-color: rgb(226, 226, 226);" id="app-genre">${tagName}</small>
-		// 									</p>
-		// 								</div>
-		// 							</div>
-		// 							<div class="mt-1" style="position: absolute; bottom: 9%; left: 35%; font-size: 12px;" id="app-release-date"> 上架日期 : ${app.releaseDate}</div>
-		// 							<div class="text-end">
-		// 								<button class="btn btn-outline-primary" style="margin: 0 20px; position: absolute; bottom: 9%; right: 2%;">詳細資訊</button>
-		// 							</div>
-		// 						</div>
-		// 					</div>
-		// 				</div>
-		// 			`;
-		// 				appDetailContainer.appendChild(appDetail);
-		// 			});
-		// 		})
-		// 		.catch(error => {
-		// 			console.error('Error fetching app details:', error);
-		// 		});
-		// }
-
 
 	</script>
 </body>

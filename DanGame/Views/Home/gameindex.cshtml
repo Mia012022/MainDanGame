@@ -2,6 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    List<AppDetail> ownGames = Model.ownGames;
 }
 @model dynamic;
 <style>
@@ -17,7 +18,6 @@
     }
 </style>
 
-<br />
 <br />
 <br />
 
@@ -48,10 +48,10 @@
                     aria-label="Slide 5"></button>
         </div>
         <div class="carousel-inner">
-            @foreach (AppDetail app in Model.apps.Where(app => app.tagID == 70))
+            @foreach (AppDetail app in Model.tagApps)
             {
-                <div class="carousel-item mh-100">
-                    <img src="@app.HeaderImage" class="d-block w-100" alt="...">
+                <div class="carousel-item @(Array.IndexOf(Model.tagApps, app) == 0 ? "active":"")" style="height:905px; background-size: cover;background-repeat: no-repeat; background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1)), url(https://cdn.cloudflare.steamstatic.com/steam/apps/@(app.AppId)/library_hero.jpg)">
+                    @* <img src="@app.HeaderImage" class="d-block w-100" alt="..."> *@
                     <div class="carousel-caption d-none d-md-block">
                         <h5>@app.AppName</h5>
                         <p>@app.ShortDescription</p>
@@ -218,46 +218,49 @@
                 </button>
             </div>
         </div>
-
-        <div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
-            <div class="badge bg-warning text-white position-absolute"
-                 style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
-                <span id="tagnameFriend"></span>
-            </div>
-            <swiper-container class="mySwiperFriend" space-between="30" slides-per-view="3">
-                @{
-                    List<int> AppIds = new List<int>();
-                }
-                @foreach (AppDetail appDetail in Model)
-                {
-                    if (AppIds.Contains(appDetail.AppId))
-                    {
-                        continue;
+        
+        @if (ownGames.Count > 0)
+        {
+            <div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
+                <div class="badge bg-warning text-white position-absolute"
+                     style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
+                    <span id="tagnameFriend"></span>
+                </div>
+                <swiper-container class="mySwiperFriend" space-between="30" slides-per-view="3">
+                    @{
+                        List<int> AppIds = new List<int>();
                     }
-                    AppIds.Add(appDetail.AppId);
-                    <swiper-slide>
-                        <div class="card" style="height: 315px;">
-                            <img src="@appDetail.HeaderImage)" class="card-img-top" alt="@appDetail.AppName">
-                            <div class="card-body">
-                                <h5 class="card-title">@appDetail.AppName</h5>
-                                <div style="position:absolute; bottom: 10px; left: 15px;">
-                                    <button class="btn btn-secondary" onclick="window.open('/Game/@appDetail.AppId')">
-                                        詳細資訊
-                                    </button>
-                                </div>
-                                <div style="position:absolute; bottom: 10px; right: 15px;">
-                                    <button class="btn btn-secondary float-end">
-                                        <a href="" class="list-group-item-action">
-                                            <i class="bi bi-cart-plus"></i>
-                                        </a>
-                                    </button>
+                    @foreach (AppDetail appDetail in ownGames)
+                    {
+                        if (AppIds.Contains(appDetail.AppId))
+                        {
+                            continue;
+                        }
+                        AppIds.Add(appDetail.AppId);
+                        <swiper-slide>
+                            <div class="card" style="height: 315px;">
+                                <img src="@appDetail.HeaderImage)" class="card-img-top" alt="@appDetail.AppName">
+                                <div class="card-body">
+                                    <h5 class="card-title">@appDetail.AppName</h5>
+                                    <div style="position:absolute; bottom: 10px; left: 15px;">
+                                        <button class="btn btn-secondary" onclick="window.open('/Game/@appDetail.AppId')">
+                                            詳細資訊
+                                        </button>
+                                    </div>
+                                    <div style="position:absolute; bottom: 10px; right: 15px;">
+                                        <button class="btn btn-secondary float-end">
+                                            <a href="" class="list-group-item-action">
+                                                <i class="bi bi-cart-plus"></i>
+                                            </a>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </swiper-slide>
-                }
-            </swiper-container>
-        </div>
+                        </swiper-slide>
+                    }
+                </swiper-container>
+            </div>
+        }
 
         <div div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
             <div class="badge text-bg-danger position-absolute"
@@ -283,13 +286,13 @@
             <swiper-container class="mySwiperAll" space-between="30" slides-per-view="3"></swiper-container>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 
     </div>
 
 	</div>
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
 <script>
     
@@ -298,15 +301,8 @@
         type: 'GET',
         dataType: 'json',
         success: function (response) {
-            // for (var i = 0; i < response.length; i++) {
-            //     for (var j = 0; j < response[i].tags.length; j++) {
-            //         if (response[i].tags[j].tagId === 1) {
-            //             console.log(response[i].appName);
-            //             break;
-            //         }
-            //     }
-            // }
-            var tagNameFriend = "好友"
+
+            var tagNameFriend = "遊戲庫"
             var tagnameAll = "所有";
             var tagname2 = "策略";
             var tagname3 = "角色扮演";
@@ -357,33 +353,6 @@
                 });
             });
 
-            // 初始化 Swiper 
-            new Swiper('.mySwiper2', {
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                spaceBetween: 30,
-                slidesPerView: 3,
-            });
-
-            new Swiper('.mySwiper3', {
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                spaceBetween: 30,
-                slidesPerView: 3,
-            });
-
-            new Swiper('.mySwiperAll', {
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                spaceBetween: 30,
-                slidesPerView: 3,
-            });
         },
         error: function (error) {
             console.log('Error:', error);

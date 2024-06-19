@@ -1,4 +1,5 @@
-﻿using DanGame.Models;
+﻿using Azure;
+using DanGame.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -88,15 +89,15 @@ namespace DanGame.Controllers
         public IActionResult gameindex()
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
-            var friends = from friendShip in _context.Friendships
-                          where friendShip.FriendUserId == userId.Value || friendShip.UserId == userId.Value
-                          select (friendShip.FriendUserId == userId.Value ? friendShip.UserId : friendShip.FriendUserId);
-
             var orderItems = from order in _context.Orders
-                             where friends.Contains(order.UserId)
+                             where order.UserId == userId
                              select order.OrderItems;
 
-            return View(orderItems.Select(items => items.Select(item => item.App.AppDetail)).SelectMany(i => i));
+            var tagApps = (from tag in _context.GenreTags
+                          where tag.TagId == 70
+                          select tag.Apps.Select(a => a.AppDetail)).FirstOrDefault();
+
+            return View(new { ownGames = orderItems.Select(items => items.Select(item => item.App.AppDetail)).SelectMany(i => i).ToList(), tagApps = tagApps.ToArray() });
         }
 
         public IActionResult RedirectToUserIndex()

@@ -214,8 +214,8 @@ namespace DanGame.Controllers
         public async Task<dynamic> GetAppsByTags([FromBody] int[] tagIds)
         {
             var query = from tag in _context.GenreTags
-                         where tagIds.Contains(tag.TagId)
-                         select new { tagId = tag.TagId, tagName = tag.TagName, apps = tag.Apps };
+                        where tag.TagId == 70
+                        select new { tagId = tag.TagId, tagName = tag.TagName, apps = tag.Apps.Select(a => a.AppDetail) };
 
             return await query.ToArrayAsync();
         }
