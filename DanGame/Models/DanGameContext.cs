@@ -567,7 +567,6 @@ public partial class DanGameContext : DbContext
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(255);
             entity.Property(e => e.PasswordHash).HasMaxLength(75);
-           
             entity.Property(e => e.UpdateAt).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(75);
         });
