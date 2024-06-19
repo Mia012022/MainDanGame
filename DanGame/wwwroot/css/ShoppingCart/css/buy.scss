@@ -1,0 +1,196 @@
+h3{
+    color:gainsboro;
+    margin: 30px 0px;
+}
+.buy_container{
+    // scale: 1.2;
+    height: 2000px;
+    // border: 3px solid red;
+    background-image: linear-gradient(to right, #eea2a2 0%, #bbc1bf 19%, #57c6e1 42%, #b49fda 79%, #7ac5d8 100%);
+    margin: auto;
+    width: 100%;
+    min-width: 1500px;
+    padding-top: 200px;
+    display: flex;
+    align-items: first flex-start;
+    justify-content: center;
+    .main{
+        background-color: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 0 20px black;
+        min-height: 900px;
+        padding: 20px;
+        max-width: 1000px;
+        width: 800px;
+        margin: auto;
+        border-radius: 3px;
+        margin: 0;
+        margin-right: 50px;
+        .itembox{
+            flex: 70%;
+            margin-bottom: 150px;
+            .item{
+                border: 1px solid black;
+                display: flex;
+                border-radius: 20px;
+                padding: 10px;
+                height: 150px;
+                margin-bottom: 20px;
+                background-color: rgba(255, 255, 255, 0.8);
+                margin: 20px;
+                &:hover {
+                //   background-color: rgba(240, 0, 240, 0.63);
+                transform: translateY(-8px);
+                transition: transform 0.2s ease-in-out;
+                }
+                .itempic{
+                    flex: 40%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    img{
+                        width: 200px;
+                    }&:hover{
+                        opacity: 0.85;
+                    }
+                }
+                .itemtext{
+                    flex: 60%;
+                    margin-left: 20px;
+                    // .relese-date{
+                    //     margin-bottom: 15px;
+                    // }
+                 
+                    p{
+                        margin: 0;
+                    }
+                    .item-name{
+                        text-indent: 80px; //這個是用空，padding用推的
+                        font-size: 20px;
+                    }
+                   .price{
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        .discount{
+                            background-color: greenyellow;
+                            border-radius: 5px;
+                            margin-right: 10px;
+                        }
+                        .op{
+                            text-decoration: line-through;
+    
+                        }
+                        
+                   }
+                }
+                .delete{
+                    padding-top: 50px;
+                   a{
+                    :hover{
+                        color: red;
+                    }
+                   }
+                    
+                }
+            }
+            .itembt{
+                display: flex;
+                justify-content: space-around;
+                margin-top: 200px;
+                .btn,
+                .btn:focus {
+                    position: relative;
+                    min-width: 100px;
+                    background: none;
+                    border: none;
+                    color: #58afd1;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-align: center;
+                    text-decoration: none;
+                    box-shadow: inset 0 0 0 4px #58afd1;
+                    transition: color 0.25s 0.0833333333s;
+                    padding: 10px 20px;
+                    border-radius: 5;
+                }
+                .btn:before,
+                .btn:after {
+                    content: "";
+                    position: absolute;
+                    width: 0;
+                    height: 0;
+                    bottom: 0;
+                    right: 0;
+                    border: 0 solid transparent;
+                    box-sizing: border-box;
+                    
+                }
+                .btn:before {
+                    border-bottom-width: 4px;
+                    border-left-width: 4px;
+                }
+                .btn:after {
+                    border-top-width: 4px;
+                    border-right-width: 4px;
+                }
+                .btn:hover {
+                    color: whitesmoke;
+                }
+                .btn:hover:before,
+                .btn:hover:after {
+                    border-color: #ffe593;
+                    transition: border-color 0s, width 0.25s, height 0.25s;
+                    width: 100%;
+                    height: 100%;
+                }
+                .btn:hover:before {
+                    transition-delay: 0s, 0s, 0.25s;
+                }
+                .btn:hover:after {
+                    transition-delay: 0s, 0.25s, 0s;
+                }
+    
+            }
+        }
+        .moneybox{
+            
+            .smallbox{
+                justify-content: space-between;
+               
+                padding: 0px 50px;
+                
+            }
+        }
+        .checkinfo{
+            padding-top: 50px;
+            .creditnumberlast{
+                margin-left: 15%;
+            }
+            .creditaccount{
+                margin-left: 12%;
+            }
+            .creditname{
+                margin-left: 15%;
+            }
+            .creditnumber,.creditdowntown,.creditcity,.creditcountry{
+                margin-left: 23.5%;
+            }
+        }
+    }
+   
+
+    .checkmedthod{
+        min-width: 300px;
+        margin: auto;
+        padding: 20px;
+        margin: 0;
+        background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+        border-radius: 10px;
+        
+    }
+
+
+
+
+}
