@@ -12,6 +12,12 @@
 
 
 <style>
+	.frliked {
+		color: red;
+	}
+	.frliked:hover{
+		color:red
+	}
 	img {
 		max-width: 100%;
 		max-height: 500px;
@@ -23,8 +29,8 @@
 	}
 
 	/* . {
-			box-sizing: border-box;
-		} */
+				box-sizing: border-box;
+			} */
 	body {
 		width: auto;
 	}
@@ -33,9 +39,9 @@
 		margin-left: 0;
 	}
 
-	.reply-button{
-		background-color:none;
-		padding:0px;
+	.reply-button {
+		background-color: none;
+		padding: 0px;
 	}
 
 	.bgBody {
@@ -48,7 +54,7 @@
 		<div class="shadow border border-1  w-100 mt-4 bg-white" style="border-radius:20px">
 			<div class="m-4">
 				<h3>@Model.Article.ArticalTitle</h3>
-				<div> <span class="bg-primary bg-opacity-50 m-2 p-1 text-white"style="border-radius:20px">@Model.Article.ArticleCategory</span></div>
+				<div> <span class="bg-primary bg-opacity-50 m-2 p-1 text-white" style="border-radius:20px">@Model.Article.ArticleCategory</span></div>
 				<hr>
 				<!-- user -->
 				<div class="d-flex mb-3">
@@ -56,7 +62,7 @@
 						<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@Model.User.UserId">
 							<img class="rounded-circle" style="width:50px;height:50px;object-fit:cover;"
 								 src="@Model.UserProfile.ProfilePictureUrl">
-							</img>
+							
 						</a>
 					</div>
 					<div class="ms-2">
@@ -70,8 +76,9 @@
 				</div>
 				<!-- 按讚 -->
 				<div class="mb-2">
+					<i class="fa-solid fa-eye me-1"></i><span id="viewCount">@Model.Article.ViewCount</span>
 					<button class="btn "><i class="bi bi-chat-dots h4"></i></button><span>@(@Model.Comments.Count + @Model.Replies.Count)</span>
-					<button id="btnArticalLike" class="btn "><i class="bi bi-hand-thumbs-up h4 "></i></button><span id="likeNumber">@Model.Likes.Count</span>
+					<button id="btnArticalLike" class="btn @(Model.UserHasLiked ? "frliked" : "")" data-liked="@Model.UserHasLiked"><i class="bi bi-heart-fill me-1"></i></button><span id="likeCount">@Model.Likes.Count</span>
 				</div>
 				<!-- 留言 -->
 
@@ -193,89 +200,104 @@
 
 
 		</div>
-		
-		
+
+
 	</div>
-</body>
-<script src="~/js/artical.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-	$(document).ready(function () {
-		$("oembed").each(function () {
-			var url = $(this).attr("url");
-			if (url.includes("youtube.com")) {
-				var videoId = url.split("v=")[1];
-				var embedUrl = "https://www.youtube.com/embed/" + videoId;
-				$(this).replaceWith('<iframe width="560" height="315" src="' + embedUrl + '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>');
-			}
-		});
 
-		$('.reply-button').on('click', function () {
-			var commentId = $(this).data('comment-id');
-			var replyId = $(this).data('reply-id');
-			var username = $(this).data('username');
-			$('.reply-form').hide(); // 隐藏所有回复表单
-	@* $('#reply-form-' + commentId).show(); // 显示当前评论的回复表单 *@
-				if (replyId) {
-				// 显示当前回复的回复表单
-				$('#reply-form-reply-' + replyId).show();
-				$('#reply-form-reply-' + replyId + ' .reply-to-user-id').val($(this).data('user-id'));
-				$('#reply-form-reply-' + replyId + ' .reply-content').val("#" + username + '# ');
-			} else {
-				// 显示当前评论的回复表单
-				$('#reply-form-' + commentId).show();
-				$('#reply-form-' + commentId + ' .reply-to-user-id').val($(this).data('user-id'));
-	@* $('#reply-form-' + commentId + ' .reply-content').val('@' + username + ' '); *@
+	<script src="~/js/artical.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("oembed").each(function () {
+				var url = $(this).attr("url");
+				if (url.includes("youtube.com")) {
+					var videoId = url.split("v=")[1];
+					var embedUrl = "https://www.youtube.com/embed/" + videoId;
+					$(this).replaceWith('<iframe width="560" height="315" src="' + embedUrl + '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>');
+				}
+			});
+
+			$('.reply-button').on('click', function () {
+				var commentId = $(this).data('comment-id');
+				var replyId = $(this).data('reply-id');
+				var username = $(this).data('username');
+				$('.reply-form').hide(); // 隐藏所有回复表单
+		@* $('#reply-form-' + commentId).show(); // 显示当前评论的回复表单 *@
+						if (replyId) {
+					// 显示当前回复的回复表单
+					$('#reply-form-reply-' + replyId).show();
+					$('#reply-form-reply-' + replyId + ' .reply-to-user-id').val($(this).data('user-id'));
+					$('#reply-form-reply-' + replyId + ' .reply-content').val("#" + username + '# ');
+				} else {
+					// 显示当前评论的回复表单
+					$('#reply-form-' + commentId).show();
+					$('#reply-form-' + commentId + ' .reply-to-user-id').val($(this).data('user-id'));
+		@* $('#reply-form-' + commentId + ' .reply-content').val('@' + username + ' '); *@
+							}
+			});
+
+			
+			$(".CommentCreateDate").each(function () {
+				let time = new Date(Number($(this).attr("timestramp")));
+				$(this).html(DateFormat.format.prettyDate(time));
+			})
+			$(".CreatedAt").each(function () {
+				let time = new Date(Number($(this).attr("timestramp")));
+				$(this).html(DateFormat.format.prettyDate(time));
+			})
+			$.ajax({
+				type: "POST",
+				url: '@Url.Action("IncrementViewCount", "Article")',
+				data: { id: '@Model.Article.ArticalId' },
+				success: function (response) {
+					if (response.success) {
+						$('#viewCount').text(response.newViewCount);
+					} else {
+						console.error("Error updating view count");
 					}
+				},
+				error: function () {
+					console.error("Error updating view count");
+				}
+			});
+
+			$('#btnArticalLike').click(function () {
+				var isLiked = $(this).data('frliked');
+				$.ajax({
+					type: "POST",
+					url: '@(Url.Action("LikeArticle", "Forum"))',
+					data: {
+						id: '@(Model.Article.ArticalId)'
+					},
+					success: function (response) {
+						if (response.success) {
+							$('#likeCount').text(response.newLikeCount);
+							$('#btnArticalLike').data('frliked', response.liked);
+							if (response.liked) {
+								$('#btnArticalLike').addClass('frliked');
+							} else {
+								$('#btnArticalLike').removeClass('frliked');
+							}
+						} else {
+							alert("An error occurred: " + response.message);
+						}
+					},
+					error: function () {
+						alert("An error occurred while processing your request.");
+					}
+				});
+
+				
+			});
 		});
 
-		var num = 0;
-		$('#btnArticalLike').on('click', function () {
-
-			num++;
-
-			$('#likeNumber').html(num);
-
-		})
-		$(".CommentCreateDate").each(function () {
-			let time = new Date(Number($(this).attr("timestramp")));
-			$(this).html(DateFormat.format.prettyDate(time));
-		})
-		$(".CreatedAt").each(function () {
-			let time = new Date(Number($(this).attr("timestramp")));
-			$(this).html(DateFormat.format.prettyDate(time));
-		})
-	});
-
-</script>
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const emojiButton = document.getElementById('emoji-button');
-		const emojiPicker = document.getElementById('emoji-picker');
-		const inputBox = document.getElementById('input-box');
-
-		emojiButton.addEventListener('click', () => {
-			emojiPicker.style.display = emojiPicker.style.display === 'block' ? 'none' : 'block';
-		});
-
-		emojiPicker.addEventListener('click', (event) => {
-			if (event.target.classList.contains('emoji')) {
-				inputBox.value += event.target.textContent;
-				emojiPicker.style.display = 'none';
-			}
-		});
-
-		document.addEventListener('click', (event) => {
-			if (!emojiPicker.contains(event.target) && !emojiButton.contains(event.target)) {
-				emojiPicker.style.display = 'none';
-			}
-		});
-	});
-	document.addEventListener('DOMContentLoaded', () => {
-		document.querySelectorAll('.comment-form').forEach(form => {
-			const emojiButton = form.querySelector('.emoji-button');
-			const emojiPicker = form.querySelector('.emoji-picker');
-			const inputBox = form.querySelector('.input-box');
+	</script>
+	<script>
+		// 表情符號
+		document.addEventListener('DOMContentLoaded', () => {
+			const emojiButton = document.getElementById('emoji-button');
+			const emojiPicker = document.getElementById('emoji-picker');
+			const inputBox = document.getElementById('input-box');
 
 			emojiButton.addEventListener('click', () => {
 				emojiPicker.style.display = emojiPicker.style.display === 'block' ? 'none' : 'block';
@@ -294,5 +316,29 @@
 				}
 			});
 		});
-	});
-</script>
+		document.addEventListener('DOMContentLoaded', () => {
+			document.querySelectorAll('.comment-form').forEach(form => {
+				const emojiButton = form.querySelector('.emoji-button');
+				const emojiPicker = form.querySelector('.emoji-picker');
+				const inputBox = form.querySelector('.input-box');
+
+				emojiButton.addEventListener('click', () => {
+					emojiPicker.style.display = emojiPicker.style.display === 'block' ? 'none' : 'block';
+				});
+
+				emojiPicker.addEventListener('click', (event) => {
+					if (event.target.classList.contains('emoji')) {
+						inputBox.value += event.target.textContent;
+						emojiPicker.style.display = 'none';
+					}
+				});
+
+				document.addEventListener('click', (event) => {
+					if (!emojiPicker.contains(event.target) && !emojiButton.contains(event.target)) {
+						emojiPicker.style.display = 'none';
+					}
+				});
+			});
+		});
+	</script>
+</body>

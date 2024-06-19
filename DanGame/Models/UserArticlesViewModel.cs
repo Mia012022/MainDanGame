@@ -15,6 +15,10 @@ namespace DanGame.Models
 		public List<ArticalCommentLike> CommentLikes { get; set; }
 
 		public int TotalLikesCounts { get; set; }
-		
+		public Dictionary<int, int>? CommentCounts { get; set; }
+		public Dictionary<int, int>? ReplyCounts { get; set; }
+		public Dictionary<int, int>? TotalCounts { get; set; }
+		public Dictionary<int, int>? LikeCounts { get; set; }
+
 	}
 }

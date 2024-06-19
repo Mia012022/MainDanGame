@@ -8,7 +8,7 @@ public partial class ArticleList
 {
     public int ArticalId { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     public string ArticalTitle { get; set; } = null!;
 

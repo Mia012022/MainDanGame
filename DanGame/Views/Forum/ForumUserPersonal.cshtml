@@ -4,8 +4,10 @@
 @model DanGame.Models.UserArticlesViewModel
 @{
 	ViewData["Title"] = "ForumUser";
+	var parser = new DanGame.Helpers.HtmlParser();
 }
 <link href="~/css/ForumIndex.css" rel="stylesheet" />
+<script src="~/js/jquery-dateformat.min.js"></script>
 <style>
 	.frbghhh {
 		position: relative; /* 確保文字可以相對於這個元素定位 */
@@ -136,7 +138,7 @@
 		font-size: 16px;
 	}
 
-	
+
 
 	.popup {
 		display: none;
@@ -173,253 +175,304 @@
 			cursor: pointer;
 		}
 
-	
-	
 </style>
-<div class="frbghhh" id="bg">
-	<div class="frbghhhAbsolute container " >
-		<div class="d-flex mb-3 ">
-			<div>
-				<img class="rounded-circle " style="width: 80px; height: 80px; object-fit: cover;" src="@Model.UserProfile.ProfilePictureUrl">
-			</div>
-			<div class="ms-3 w-100">
-				<span class="text-light" style="font-size:large;">@Model.User.UserName</span>
-				<div class="mt-4 ">
-					<span class="text-secondary">@Model.Articles.Count</span>
-					<span class="text-secondary">文章</span>
-					<span class="text-secondary ms-2">@Model.Comments.Count</span>
-					<span class="text-secondary">評論</span>
-					<span class="text-secondary ms-2">@Model.Likes.Count</span>
-					<span class="text-secondary">收藏</span>
-					<span class="text-secondary ms-2">@Model.TotalLikesCounts</span>
-					<span class="text-secondary">讚數</span>
-					<span class="text-secondary ms-2">0</span>
-					<span class="text-secondary">追蹤</span>
-					<span class="text-secondary ms-2">0</span>
-					<span class="text-secondary">粉絲</span>
+<body>
+	<div class="frbghhh" id="bg">
+		<div class="frbghhhAbsolute container ">
+			<div class="d-flex mb-3 ">
+				<div>
+					<img class="rounded-circle " style="width: 80px; height: 80px; object-fit: cover;" src="@Model.UserProfile.ProfilePictureUrl">
 				</div>
-			</div>
-			<div class="d-flex justify-content-end w-50">
-				<div class="">
-					<button class="btn m-1 me-5 pe-2 btn-outline-light" id="openPopup">更換背景<i class="bi bi-image"></i></button>
+				<div class="ms-3 w-100">
+					<span class="text-light" style="font-size:large;">@Model.User.UserName</span>
+					<div class="mt-4 ">
+						<span class="text-secondary">@Model.Articles.Count</span>
+						<span class="text-secondary">文章</span>
+						<span class="text-secondary ms-2">@Model.Comments.Count</span>
+						<span class="text-secondary">評論</span>
+						<span class="text-secondary ms-2">@Model.Likes.Count</span>
+						<span class="text-secondary">收藏</span>
+						<span class="text-secondary ms-2">@Model.TotalLikesCounts</span>
+						<span class="text-secondary">讚數</span>
+
+					</div>
+				</div>
+				<div class="d-flex justify-content-end w-50">
+					<div class="">
+						<button class="btn m-1 me-5 pe-2 btn-outline-light" id="openPopup">更換背景<i class="bi bi-image"></i></button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
 
 
-<div class=" mt-5 pb-5" style="background-color:#EEDFF3;">
-	<div class="container">
-		<div class="d-flex  m-auto">
-			<div class="shadow border border-1 w-100 m-auto mt-4 me-3 bg-white" style="border-radius:20px;">
-				<div class="m-4 ">
-					<ul class="nav nav-tabs" id="myTab" role="tablist">
-						<li class="nav-item" role="presentation">
-							<button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">文章</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">評論</button>
-						</li>
-						<li class="nav-item" role="presentation">
-							<button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">收藏</button>
-						</li>
-					</ul>
-					<div class="tab-content" id="myTabContent">
-						<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+	<div class=" mt-5 pb-5" style="background-color:#EEDFF3;">
+		<div class="container">
+			<div class="d-flex  m-auto">
+				<div class="shadow border border-1 w-100 m-auto mt-4 me-3 bg-white" style="border-radius:20px;">
+					<div class="m-4 ">
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							<li class="nav-item" role="presentation">
+								<button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true" style="color:#6405a9;">文章</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" style="color:#6405a9;">評論</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false" style="color:#6405a9;">收藏</button>
+							</li>
+						</ul>
+						<div class="tab-content" id="myTabContent">
+							<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
-							@if (!Model.Articles.Any())
-							{
-								<div class="row justify-content-center">
-									<img src="https://www.hoyolab.com/_nuxt/img/7ea569b.png" style="width:250px" />
-									<div><p class="text-center">你還沒有已發表的內容喔!</p></div>
-
-								</div>
-							}
-							else
-							{
-
-
-								@foreach (var item in Model.Articles)
+								@if (!Model.Articles.Any())
 								{
-
-									<div class="row mb-2 mt-2">
-										<div class="col-10 "><a asp-action="Artical" asp-route-id="@item.ArticalId" class="text-decoration-none"> @Html.DisplayFor(modelItem => item.ArticalTitle)</a></div>
-										<div class="col-1 "><a asp-action="Edit" asp-route-id="@item.ArticalId" class="text-decoration-none">編輯</a></div>
-										<div class="col-1"><a asp-action="DeleteArticle" asp-route-id="@item.ArticalId" class="text-decoration-none">刪除</a></div>
+									<div class="row justify-content-center">
+										<img src="https://www.hoyolab.com/_nuxt/img/7ea569b.png" style="width:250px" />
+										<div><p class="text-center">你還沒有已發表的內容喔!</p></div>
 
 									</div>
 								}
-							}
-						</div>
-						<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-							@if (!Model.Comments.Any())
-							{
-								<div class="row justify-content-center">
-									<img src="https://www.hoyolab.com/_nuxt/img/2247615.png" style="width:250px" />
-									<div><p class="text-center">你還沒有已評論的內容喔!</p></div>
-
-								</div>
-							}
-							else
-							{
-
-
-								@foreach (var comment in Model.Comments)
+								else
 								{
-									<div class="row mb-2 mt-2">
-										<div class="col-11 "><a asp-action="Artical" asp-route-id="@comment.ArticalId" class="text-decoration-none"> @Html.DisplayFor(modelItem => comment.CommentContent)</a></div>
 
-										<div class="col-1"><a asp-action="" asp-route-id="@comment.CommentId" class="text-decoration-none">刪除</a></div>
+
+									@foreach (var item in Model.Articles)
+									{
+										var concatenatedContent = parser.ConcatenateParagraphContents(item.ArticalContent);
+										<div class="row mb-2 mt-2">
+											<div class="col-10 "></div>
+											<div class="col-1 "><a asp-action="Edit" asp-route-id="@item.ArticalId" class="text-decoration-none" style="color:#6405a9;"><i class="bi bi-pencil-fill"></i>編輯</a></div>
+											<div class="col-1"><a asp-action="DeleteArticle" asp-route-id="@item.ArticalId" class="text-decoration-none" style="color:#6405a9;"><i class="bi bi-trash-fill"></i>刪除</a></div>
+
+										</div>
+										<a asp-action="Artical" asp-route-id="@item.ArticalId" class="text-decoration-none">
+											<div class="row">
+
+												<div class="me-4 col">
+
+													<div class="h5 arTitle">@item.ArticalTitle</div>
+													<div class=" articalcontent two-lines" style="color:#003566;">
+														<p>@Html.Raw(concatenatedContent)</p>
+													</div>
+
+
+													<div class="mt-4 row">
+														<div class="col-2"><span class="bg-primary bg-opacity-50 p-1 rounded text-white" style="font-size:small">@item.ArticleCategory</span> </div>
+														<div class="ArticalCreateDate col-2 text-secondary p-1" timestramp="@(((DateTimeOffset)item.ArticalCreateDate).ToUnixTimeSeconds()*1000)" style=" font-size:small;"></div>
+														<div class="col text-secondary p-1" style=" font-size:small;"><i class="fa-solid fa-eye me-1"></i><span>@item.ViewCount</span></div>
+														<div class="col text-secondary p-1" style=" font-size:small;"><i class="fa-solid fa-message me-1"></i><span>@(Model.TotalCounts.TryGetValue(item.ArticalId, out var totalCount) ? totalCount : 0)</span></div>
+														<div class="col text-secondary p-1" style=" font-size:small;"><i class="bi bi-heart-fill me-1"></i><span>@(Model.LikeCounts.TryGetValue(item.ArticalId, out var likeCount) ? likeCount : 0)</span></div>
+
+														<div class="col-5"></div>
+
+													</div>
+												</div>
+												<!-- 封面 -->
+												<div class="col-3">
+													<img src="data:image;base64,@Convert.ToBase64String(item.ArticalCoverPhoto)"
+														 alt="" style="width:150px;height: 90px; object-fit: cover;" class="rounded">
+
+												</div>
+											</div>
+										</a>
+									}
+
+								}
+							</div>
+							<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+								@if (!Model.Comments.Any())
+								{
+									<div class="row justify-content-center">
+										<img src="https://www.hoyolab.com/_nuxt/img/2247615.png" style="width:250px" />
+										<div><p class="text-center">你還沒有已評論的內容喔!</p></div>
 
 									</div>
 								}
-							}
-						</div>
-
-						<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-							@if (!Model.LikedArticles.Any())
-							{
-								<div class="row justify-content-center">
-									<img src="https://www.hoyolab.com/_nuxt/img/2247615.png" style="width:250px" />
-									<div><p class="text-center">你還沒有已收藏的內容喔!</p></div>
-								</div>
-							}
-							else
-							{
-								@foreach (var articalLike in Model.LikedArticles)
+								else
 								{
-									<div class="row mb-2 mt-2">
-										<div class="col-11 "><a asp-action="Artical" asp-route-id="@articalLike.ArticalId" class="text-decoration-none"> @Html.DisplayFor(modelItem => articalLike.ArticalTitle)</a></div>
 
 
+									@foreach (var comment in Model.Comments)
+									{
+										<div class="row mb-2 mt-2">
+											<div class="col-11 "><a asp-action="Artical" asp-route-id="@comment.ArticalId" class="text-decoration-none"> @Html.DisplayFor(modelItem => comment.CommentContent)</a></div>
+
+											<div class="col-1"><a asp-action="" asp-route-id="@comment.CommentId" class="text-decoration-none">刪除</a></div>
+
+										</div>
+									}
+								}
+							</div>
+
+							<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+								@if (!Model.LikedArticles.Any())
+								{
+									<div class="row justify-content-center">
+										<img src="https://www.hoyolab.com/_nuxt/img/2247615.png" style="width:250px" />
+										<div><p class="text-center">你還沒有已收藏的內容喔!</p></div>
 									</div>
 								}
-							}
+								else
+								{
+									@foreach (var articalLike in Model.LikedArticles)
+									{
+										var concatenatedContent = parser.ConcatenateParagraphContents(articalLike.ArticalContent);
+
+										<a asp-action="Artical" asp-route-id="@articalLike.ArticalId" class="text-decoration-none">
+											<div class="row py-2">
+
+												<div class="me-4 col">
+
+													<div class="h5 arTitle">@articalLike.ArticalTitle</div>
+													<div class=" articalcontent two-lines" style="color:#003566;">
+														<p>@Html.Raw(concatenatedContent)</p>
+													</div>
+
+
+													<div class="mt-4 row">
+														<div class="col-2"><span class="bg-primary bg-opacity-50 p-1 rounded text-white" style="font-size:small">@articalLike.ArticleCategory</span> </div>
+														<div class="ArticalCreateDate col-2 text-secondary p-1" timestramp="@(((DateTimeOffset)articalLike.ArticalCreateDate).ToUnixTimeSeconds()*1000)" style=" font-size:small;"></div>
+														<div class="col text-secondary p-1" style=" font-size:small;"><i class="fa-solid fa-eye me-1"></i><span>@articalLike.ViewCount</span></div>
+														<div class="col text-secondary p-1" style=" font-size:small;"><i class="fa-solid fa-message me-1"></i><span>@(Model.TotalCounts.TryGetValue(articalLike.ArticalId, out var totalCount) ? totalCount : 0)</span></div>
+														<div class="col text-secondary p-1" style=" font-size:small;"><i class="bi bi-heart-fill me-1"></i><span>@(Model.LikeCounts.TryGetValue(articalLike.ArticalId, out var likeCount) ? likeCount : 0)</span></div>
+
+														<div class="col-5"></div>
+
+													</div>
+												</div>
+												<!-- 封面 -->
+												<div class="col-3">
+													<img src="data:image;base64,@Convert.ToBase64String(articalLike.ArticalCoverPhoto)"
+														 alt="" style="width:150px;height: 90px; object-fit: cover;" class="rounded">
+
+												</div>
+											</div>
+										</a>
+									}
+								}
+
+							</div>
+
+
 
 						</div>
-
-
-
 					</div>
 				</div>
-			</div>
 
-			<div id="popup" class="popup">
-				<div class="background-editor" id="backgroundEditor">
-					<div class="background-editor-header">
-						<span>修改背景圖</span>
-						<button id="closebtn" class="close-btn">×</button>
-					</div>
-					<div class="background-preview">
-						<img class="selected-background" src="/img/frNight.webp" alt="Selected Background">
-					</div>
-					<div class="background-tabs">
-						<button class="tab-btn active">全部</button>
-					</div>
-					<div class="background-options">
-						<div class="background-option">
-							<img src="/img/frNight.webp" alt="Background 1">
+				<div id="popup" class="popup">
+					<div class="background-editor" id="backgroundEditor">
+						<div class="background-editor-header">
+							<span>修改背景圖</span>
+							<button id="closebtn" class="close-btn">×</button>
 						</div>
-						<div class="background-option">
-							<img src="/img/frFire.webp" alt="Background 2">
+						<div class="background-preview">
+							<img class="selected-background" src="/img/frNight.webp" alt="Selected Background">
 						</div>
-					</div>
-					<div class="d-flex justify-content-center">
-						<button class="apply-btn">使用</button>
+						<div class="background-tabs">
+							<button class="tab-btn active">全部</button>
+						</div>
+						<div class="background-options">
+							<div class="background-option">
+								<img src="/img/frNight.webp" alt="Background 1">
+							</div>
+							<div class="background-option">
+								<img src="/img/frFire.webp" alt="Background 2">
+							</div>
+						</div>
+						<div class="d-flex justify-content-center">
+							<button class="apply-btn">使用</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<!-- 右側 -->
-			<div class="m-1 p-1 w-25">
+				<!-- 右側 -->
+				<div class="m-1 p-1 w-25">
 
-				<div class="  p-3 rounded ">
-					<div class="list-group">
-						<a href="/Forum/Post" class="btn blob-btn">
-							快來發文吧!<i class="bi bi-file-earmark-post text-secondary"></i>
-							<span class="blob-btn__inner">
-								<span class="blob-btn__blobs">
-									<span class="blob-btn__blob"></span>
-									<span class="blob-btn__blob"></span>
-									<span class="blob-btn__blob"></span>
-									<span class="blob-btn__blob"></span>
+					<div class="  p-3 rounded ">
+						<div class="list-group">
+							<a href="/Forum/Post" class="btn blob-btn">
+								快來發文吧!<i class="bi bi-file-earmark-post text-secondary"></i>
+								<span class="blob-btn__inner">
+									<span class="blob-btn__blobs">
+										<span class="blob-btn__blob"></span>
+										<span class="blob-btn__blob"></span>
+										<span class="blob-btn__blob"></span>
+										<span class="blob-btn__blob"></span>
+									</span>
 								</span>
-							</span>
-						</a>
-					</div>
-
-				</div>
-				<div class="mt-1  p-3 rounded ">
-
-					<div class="card" style="width: 18rem;">
-						<div class="card-header">
-							誰追蹤你
+							</a>
 						</div>
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item"></li>
-							<li class="list-group-item"></li>
-							<li class="list-group-item"></li>
-						</ul>
-					</div>
-				</div>
-				<div class="mt-1  p-3 rounded ">
 
-					<div class="card" style="width: 18rem;">
-						<div class="card-header">
-							我的粉絲
-						</div>
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item"></li>
-							<li class="list-group-item"></li>
-							<li class="list-group-item"></li>
-						</ul>
 					</div>
+					<div class="mt-1  p-3 rounded ">
+
+						<div class="card" style="width: 18rem;">
+							<div class="card-header">
+								我的追蹤
+							</div>
+							<ul class="list-group list-group-flush">
+
+								<li class="list-group-item"></li>
+
+
+
+								<li class="list-group-item"></li>
+								<li class="list-group-item"></li>
+							</ul>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-	$(document).ready(function () {
-		// 打開彈出視窗
-		$("#openPopup").click(function () {
-			$("#popup").show();
-		});
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			// 打開彈出視窗
+			$("#openPopup").click(function () {
+				$("#popup").show();
+			});
 
-		// 關閉彈出視窗
-		$("#closebtn").click(function () {
-			$("#popup").hide();
-		});
-
-		// 點擊彈出視窗外部關閉彈出視窗
-		$(window).click(function (event) {
-			if ($(event.target).is("#popup")) {
+			// 關閉彈出視窗
+			$("#closebtn").click(function () {
 				$("#popup").hide();
-			}
-		});
+			});
 
-		// Tab 切換
-		$('.tab-btn').on('click', function () {
-			$('.tab-btn').removeClass('active');
-			$(this).addClass('active');
-			// 根據需要篩選和顯示不同的背景選項
-		});
+			// 點擊彈出視窗外部關閉彈出視窗
+			$(window).click(function (event) {
+				if ($(event.target).is("#popup")) {
+					$("#popup").hide();
+				}
+			});
 
-		// 選擇背景圖片
-		$('.background-option').on('click', function () {
-			var selectedSrc = $(this).find('img').attr('src');
-			$('.selected-background').attr('src', selectedSrc);
-		});
+			// Tab 切換
+			$('.tab-btn').on('click', function () {
+				$('.tab-btn').removeClass('active');
+				$(this).addClass('active');
+				// 根據需要篩選和顯示不同的背景選項
+			});
 
-		// 應用選擇的背景圖片
-		$('.apply-btn').on('click', function () {
-			var selectedBackground = $('.selected-background').attr('src');
-			$('#bg').css('background-image', 'url(' + selectedBackground + ')');
-			alert('背景圖已應用！');
-			$("#popup").hide();
+			// 選擇背景圖片
+			$('.background-option').on('click', function () {
+				var selectedSrc = $(this).find('img').attr('src');
+				$('.selected-background').attr('src', selectedSrc);
+			});
+
+			// 應用選擇的背景圖片
+			$('.apply-btn').on('click', function () {
+				var selectedBackground = $('.selected-background').attr('src');
+				$('#bg').css('background-image', 'url(' + selectedBackground + ')');
+				alert('背景圖已應用！');
+				$("#popup").hide();
+			});
+			$(".ArticalCreateDate").each(function () {
+				let time = new Date(Number($(this).attr("timestramp")));
+				$(this).html(DateFormat.format.prettyDate(time));
+			})
 		});
-	});
-</script>
+	</script>
+</body>

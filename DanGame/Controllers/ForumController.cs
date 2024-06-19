@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using DanGame.Extensions;
+using HtmlAgilityPack;
 namespace DenGame.Controllers
 {
 	public class ForumController : Controller
@@ -71,10 +72,11 @@ namespace DenGame.Controllers
 									   .OrderByDescending(g => g.Amount)
 									   .Take(3)
 									   .ToListAsync();
-			
+		
 			// 查询每个用户的文章数量并取前3名
 			var oneWeekAgo = DateTime.Now.AddDays(-7);
-			var topuser = await (from a in _context.ArticleLists
+			
+			var	topuser = await (from a in _context.ArticleLists
 								 where a.ArticalCreateDate >= oneWeekAgo
 								 group a by a.User into g
 								 select new TopUserViewModel
@@ -84,7 +86,7 @@ namespace DenGame.Controllers
 									 ArticleCount = g.Count(),
 									 ProfilePictureUrl = (from profile in _context.UserProfiles
 														  where profile.UserId == g.Key.UserId
-														  select profile.ProfilePictureUrl).FirstOrDefault()
+														  select profile.ProfilePictureUrl).FirstOrDefault() ?? "~/image/user_profile.jpg"
 								 })
 								.OrderByDescending(u => u.ArticleCount)
 								.Take(3)
@@ -126,6 +128,7 @@ namespace DenGame.Controllers
 		//-----------------文章細節---------------------
 		public async Task<IActionResult> Artical(int? id)
 		{
+			var userId = HttpContext.Session.GetInt32("UserId");
 			if (id == null)
 			{
 				return NotFound();
@@ -172,7 +175,8 @@ namespace DenGame.Controllers
 				Comments = article.ArticalComments.ToList(),
 				Replies = article.ArticalComments.SelectMany(c => c.ArticalCommentReplies).ToList(),
 				CommentLikes = commentLikes,
-				Views = views
+				Views = views,
+				UserHasLiked = userId.HasValue && article.ArticalLikes.Any(l => l.UserId == userId.Value)
 			};
 			return View(viewModel);
 		}
@@ -186,8 +190,8 @@ namespace DenGame.Controllers
 			//	return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
 			//}
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
-			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == id);
-			var forumuser = await _context.ArticleLists.Where(x => x.UserId == id).ToListAsync();
+			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == id) ?? throw new Exception("User profile not found");
+			var articles = await _context.ArticleLists.Where(x => x.UserId == id).ToListAsync();
 			var comment = await _context.ArticalComments.Where(x => x.UserId == id).ToListAsync();
 			var like = await _context.ArticalLikes.Where(x => x.UserId == id).ToListAsync();
 			var commentlike = await _context.ArticalCommentLikes.Where(x => x.UserId == id).ToListAsync();
@@ -195,6 +199,27 @@ namespace DenGame.Controllers
 			.Where(like => like.UserId == id)
 			.Select(like => like.Artical)
 			.ToListAsync();
+			var totalLikesCount = await (from l in _context.ArticalLikes
+										 join article in _context.ArticleLists
+										 on l.ArticalId equals article.ArticalId
+										 where article.UserId == id
+										 select l)
+										.CountAsync();
+			var commentCounts = new Dictionary<int, int>();
+			var replyCounts = new Dictionary<int, int>();
+			var totalCounts = new Dictionary<int, int>();
+			var likeCounts = new Dictionary<int, int>();
+			foreach (var articleA in articles)
+			{
+				int commentCount = articleA.ArticalComments.Count;
+				int replyCount = articleA.ArticalComments.Sum(c => c.ArticalCommentReplies.Count);
+				int likeCount = await _context.ArticalLikes.CountAsync(l => l.ArticalId == articleA.ArticalId);
+				int totalCount = commentCount + replyCount;
+				commentCounts[articleA.ArticalId] = commentCount;
+				replyCounts[articleA.ArticalId] = replyCount;
+				likeCounts[articleA.ArticalId] = likeCount;
+				totalCounts[articleA.ArticalId] = totalCount;
+			}
 			if (user == null)
 			{
 				return NotFound();
@@ -203,11 +228,16 @@ namespace DenGame.Controllers
 			{
 				User = user,
 				UserProfile = userProfile,
-				Articles = forumuser,
+				Articles = articles,
 				Likes = like,
 				Comments = comment,
 				CommentLikes = commentlike,
-				LikedArticles = likedArticles
+				LikedArticles = likedArticles,
+				TotalLikesCounts = totalLikesCount,
+				CommentCounts = commentCounts,
+				ReplyCounts = replyCounts,
+				TotalCounts = totalCounts,
+				LikeCounts = likeCounts
 
 			};
 
@@ -223,8 +253,8 @@ namespace DenGame.Controllers
 				return RedirectToAction("Login", "User");
 			}
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
-			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId);
-			var forumuser = await _context.ArticleLists.Where(x => x.UserId == userId).ToListAsync();
+			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId) ?? throw new Exception("User profile not found");
+			var articles = await _context.ArticleLists.Where(x => x.UserId == userId).ToListAsync();
 			var comment = await _context.ArticalComments.Where(x => x.UserId == userId).ToListAsync();
 			var like = await _context.ArticalLikes.Where(x => x.UserId == userId).ToListAsync();
 			var commentlike = await _context.ArticalCommentLikes.Where(x => x.UserId == userId).ToListAsync();
@@ -240,6 +270,22 @@ namespace DenGame.Controllers
 										 where article.UserId == userId
 										 select l)
 										.CountAsync();
+			var commentCounts = new Dictionary<int, int>();
+			var replyCounts = new Dictionary<int, int>();
+			var totalCounts = new Dictionary<int, int>();
+			var likeCounts = new Dictionary<int, int>();
+			foreach (var articleA in articles)
+			{
+				int commentCount = articleA.ArticalComments.Count;
+				int replyCount = articleA.ArticalComments.Sum(c => c.ArticalCommentReplies.Count);
+				int likeCount = await _context.ArticalLikes.CountAsync(l => l.ArticalId == articleA.ArticalId);
+				int totalCount = commentCount + replyCount;
+				commentCounts[articleA.ArticalId] = commentCount;
+				replyCounts[articleA.ArticalId] = replyCount;
+				likeCounts[articleA.ArticalId] = likeCount;
+				totalCounts[articleA.ArticalId] = totalCount;
+			}
+
 
 			if (user == null)
 			{
@@ -249,13 +295,16 @@ namespace DenGame.Controllers
 			{
 				User = user,
 				UserProfile = userProfile,
-				Articles = forumuser,
+				Articles = articles,
 				Likes = like,
 				Comments = comment,
 				CommentLikes = commentlike,
 				LikedArticles = likedArticles,
 				TotalLikesCounts = totalLikesCount,
-
+				CommentCounts = commentCounts,
+				ReplyCounts = replyCounts,
+				TotalCounts = totalCounts ,
+				LikeCounts = likeCounts
 			};
 
 			return View(viewModel);
@@ -281,7 +330,7 @@ namespace DenGame.Controllers
 					await file.CopyToAsync(memoryStream);
 					var artical = new ArticleList
 					{
-						UserId = 5,
+						UserId = userId,
 						ArticalCoverPhoto = memoryStream.ToArray(),
 						ArticalTitle = title,
 						ArticalContent = description,
@@ -385,7 +434,7 @@ namespace DenGame.Controllers
 			}
 			_context.ArticleLists.Remove(article);
 			_context.SaveChanges();
-			return Redirect("/Forum/ForumUser");
+			return Redirect("/Forum/ForumUserPersonal");
 		}
 
 		//-------------------留言------------------------------
@@ -479,6 +528,60 @@ namespace DenGame.Controllers
 
 
 
+		}
+
+		//--------------------點讚文章---------------------
+		[HttpPost]
+		public async Task<IActionResult>  LikeArticle(int id)
+		{
+			var userId = HttpContext.Session.GetInt32("UserId");
+
+			if (!userId.HasValue)
+			{
+				return RedirectToAction("Login", "User");
+			}
+
+			var articleLike = await _context.ArticalLikes
+								  .FirstOrDefaultAsync(l => l.UserId == userId && l.ArticalId == id);
+
+			if (articleLike != null)
+			{
+				_context.ArticalLikes.Remove(articleLike);
+				await _context.SaveChangesAsync();
+
+				var newLikeCount = await _context.ArticalLikes.CountAsync(l => l.ArticalId == id);
+				return Json(new { success = true, newLikeCount, liked = false });
+			}
+			else
+			{
+				// 未点赞，添加点赞
+				var like = new ArticalLike
+				{
+					ArticalId = id,
+					UserId = userId.Value,
+					
+				};
+
+				_context.ArticalLikes.Add(like);
+				await _context.SaveChangesAsync();
+
+				var newLikeCount = await _context.ArticalLikes.CountAsync(l => l.ArticalId == id);
+				return Json(new { success = true, newLikeCount, liked = true });
+			}
+		}
+		[HttpPost]
+		public async Task<IActionResult> IncrementViewCount(int id)
+		{
+			var article = await _context.ArticleLists.FirstOrDefaultAsync(a => a.ArticalId == id);
+			if (article == null)
+			{
+				return Json(new { success = false, message = "Article not found" });
+			}
+
+			article.ViewCount += 1;
+			await _context.SaveChangesAsync();
+
+			return Json(new { success = true, newViewCount = article.ViewCount });
 		}
 	}
 }
