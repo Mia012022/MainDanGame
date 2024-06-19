@@ -250,7 +250,7 @@
                                     <div style="position:absolute; bottom: 10px; right: 15px;">
                                         <button class="btn btn-secondary float-end">
                                             <a href="" class="list-group-item-action">
-                                                <i class="bi bi-cart-plus"></i>
+                                                <i class="bi bi-cart-plus check-button"></i>
                                             </a>
                                         </button>
                                     </div>
@@ -326,7 +326,7 @@
                                         <div style="position:absolute; bottom: 10px; right: 15px;">
                                             <button class="btn btn-secondary float-end">
                                                 <a href="" class="list-group-item-action">
-                                                    <i class="bi bi-cart-plus"></i>
+                                                    <i class="bi bi-cart-plus check-button"></i>
                                                 </a>
                                             </button>
                                         </div>
@@ -358,5 +358,30 @@
             console.log('Error:', error);
         }
     });
+
+    $(".check-button").on("click", function () {
+        if (!alreadyLogin) {
+            window.open('/User/Login?redirectTo=/Game/@(Model.detail.AppId)#game-action');
+            return
+        }
+        if (!alreadyInShoppingCart) {
+            $.ajax({
+
+                url: "/API/User/ShoppingCart",
+                method: "POST",
+                data: JSON.stringify({ appId: @(Model.detail.AppId)}),
+                contentType: 'application/json',
+
+                success: function (res) {
+                    $(".check-button").text("已加入購物車").css({
+                        cursor: "default",
+                        filter: "brightness(0.5)"
+                    })
+                    alreadyInShoppingCart = true;
+                },
+                error: function (err) { console.log(err) },
+            });
+        }
+    })
     
 </script>
