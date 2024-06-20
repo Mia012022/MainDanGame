@@ -267,6 +267,8 @@
     </div>
 
     <script>
+        var formatDate = time => time.split("-").map(t => t.padStart(2, "0")).join("/");
+        formatDate("2000-5-5");
         function GetUserInfo() {
             $(document).ready(function () {
                 $.ajax({
@@ -276,7 +278,7 @@
                         if (data) {
                             $("#profilePicture").attr("src", data.profilePictureUrl);
                             $("#userName").text(data.userName);
-                            $("#userInfo").text("Birthday: " + data.birthDay);
+                            $("#userInfo").text("Birthday: " + formatDate(data.birthDay));
                             $("#userStatus").text("Status: Active"); // Assuming a static status, adjust as needed
                         } else {
                             $("#userName").text("No user data found");
@@ -384,7 +386,7 @@
                                         <div class="card-body">
                                             <h5 class="card-title">${item.firstName} ${item.lastName}</h5>
                                             <p class="card-text">${item.userId}</p>
-                                            <p class="card-text"><small class="text-muted">${item.dateOfbirth}</small></p>
+                                            <p class="card-text"><small class="text-muted">${formatDate(item.dateOfbirth)}</small></p>
                                         </div>
                                     </div>
                                     <div class="col-4">
@@ -538,10 +540,10 @@
                     var setHtml = `<div class="card col-6">
                                     <div class="row">
                                         <div class="col-sm-4">
-                                                    <img src=${item.profilePictureUrl} alt="..." class="img-fluid rounded-start" />
+                                             <img src=${item.profilePictureUrl} alt="..." class="img-fluid rounded-start" />
                                         </div>
                                         <div class="col" style="align-self:center">
-                                             <p class="p-0 m-0 fw-bold">${item.orderDate}</p>
+                                             <p class="p-0 m-0 fw-bold">${formatDate(item.orderDate)}</p>
                                              <p class="p-0 m-0 fw-bold">購買</p>
                                              <p class="p-0 m-0 fw-bold">${item.appName}</p>
                                         </div>
