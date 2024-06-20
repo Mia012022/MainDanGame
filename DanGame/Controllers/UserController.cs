@@ -113,6 +113,11 @@ namespace DanGame.Controllers
                 return  await _context.Users
                 .SingleOrDefaultAsync(u => u.Email == useremail && u.PasswordHash == GetSHA256(password));
         }
+        // 好友介面
+        public IActionResult Friend()
+        {
+            return View();
+        }
 
         // GET: User/Register
         [HttpGet]
