@@ -96,8 +96,10 @@ namespace DanGame.Controllers
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("Username", user.UserName);
 
-                // 重新導向至HomeController的index頁面
-                return RedirectToAction("Index", "Home");
+				
+				
+				// 重新導向至HomeController的index頁面
+				return RedirectToAction("Index", "Home");
             }
 
             // 驗證失敗，顯示錯誤訊息

@@ -72,12 +72,12 @@ namespace DenGame.Controllers
 									   .OrderByDescending(g => g.Amount)
 									   .Take(3)
 									   .ToListAsync();
-		
+
 			// 查询每个用户的文章数量并取前3名
-			var oneWeekAgo = DateTime.Now.AddDays(-7);
-			
+			var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
 			var	topuser = await (from a in _context.ArticleLists
-								 where a.ArticalCreateDate >= oneWeekAgo
+								 where a.ArticalCreateDate >= firstDayOfMonth
 								 group a by a.User into g
 								 select new TopUserViewModel
 								 {
@@ -250,12 +250,29 @@ namespace DenGame.Controllers
 
 			if (!userId.HasValue)
 			{
-				return RedirectToAction("Login", "User");
+				//return RedirectToAction("Login", "User");
+				return RedirectToAction("Login", "User", new { returnUrl = Url.Action("ForumUserPersonal", "Forum") });
 			}
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId) ?? throw new Exception("User profile not found");
 			var articles = await _context.ArticleLists.Where(x => x.UserId == userId).ToListAsync();
-			var comment = await _context.ArticalComments.Where(x => x.UserId == userId).ToListAsync();
+			var comments = await _context.ArticalComments.Where(x => x.UserId == userId).ToListAsync();
+			var commentsWithArticles = await (from comment in _context.ArticalComments
+											  join article in _context.ArticleLists
+											  on comment.ArticalId equals article.ArticalId
+											  where comment.UserId == userId
+											  select new CommentWithArticleViewModel
+											  {
+												 CommentId= comment.CommentId,
+												 CommentContent= comment.CommentContent,
+												 ArticalId= comment.ArticalId,
+												 ArticalTitle= article.ArticalTitle,
+												 ArticalContent= article.ArticalContent,
+												 CommentDate= comment.CommentCreateDate
+											  })
+											  
+											  .ToListAsync();
+											
 			var like = await _context.ArticalLikes.Where(x => x.UserId == userId).ToListAsync();
 			var commentlike = await _context.ArticalCommentLikes.Where(x => x.UserId == userId).ToListAsync();
 			var likedArticles = await (from a in _context.ArticleLists
@@ -297,14 +314,15 @@ namespace DenGame.Controllers
 				UserProfile = userProfile,
 				Articles = articles,
 				Likes = like,
-				Comments = comment,
+				commentWithArticleViewModels = commentsWithArticles,
 				CommentLikes = commentlike,
 				LikedArticles = likedArticles,
 				TotalLikesCounts = totalLikesCount,
 				CommentCounts = commentCounts,
 				ReplyCounts = replyCounts,
 				TotalCounts = totalCounts ,
-				LikeCounts = likeCounts
+				LikeCounts = likeCounts,
+				Comments = comments
 			};
 
 			return View(viewModel);
@@ -318,11 +336,14 @@ namespace DenGame.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Upload(IFormFile file, string title, string description, string Category)
 		{
-			var userIds = (HttpContext.Session.GetString("UserId"));
-			if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
+			var userId = HttpContext.Session.GetInt32("UserId");
+
+			if (!userId.HasValue)
 			{
-				return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
+				return RedirectToAction("Login", "User");
+
 			}
+			
 			if (file != null && file.Length > 0)
 			{
 				using (var memoryStream = new MemoryStream())
@@ -538,7 +559,7 @@ namespace DenGame.Controllers
 
 			if (!userId.HasValue)
 			{
-				return RedirectToAction("Login", "User");
+				return Json(new { success = false, message = "你需要登入才可點讚", requiresLogin = true });
 			}
 
 			var articleLike = await _context.ArticalLikes
@@ -569,6 +590,7 @@ namespace DenGame.Controllers
 				return Json(new { success = true, newLikeCount, liked = true });
 			}
 		}
+		//-----------------------文章點擊次數----------------
 		[HttpPost]
 		public async Task<IActionResult> IncrementViewCount(int id)
 		{

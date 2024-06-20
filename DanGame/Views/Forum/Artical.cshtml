@@ -75,10 +75,14 @@
 					@Html.Raw(Model.Article.ArticalContent)
 				</div>
 				<!-- 按讚 -->
-				<div class="mb-2">
-					<i class="fa-solid fa-eye me-1"></i><span id="viewCount">@Model.Article.ViewCount</span>
-					<button class="btn "><i class="bi bi-chat-dots h4"></i></button><span>@(@Model.Comments.Count + @Model.Replies.Count)</span>
-					<button id="btnArticalLike" class="btn @(Model.UserHasLiked ? "frliked" : "")" data-liked="@Model.UserHasLiked"><i class="bi bi-heart-fill me-1"></i></button><span id="likeCount">@Model.Likes.Count</span>
+				<div class="my-3 row">
+					<div class="col"><button class="btn " ><i class="fa-solid fa-eye h6 me-1" style="margin-bottom:0px;"></i><span id="viewCount" >@Model.Article.ViewCount</span></button></div>
+					<div class="col"><button class="btn "><i class="bi bi-chat-dots h6 me-1"></i><span>@(@Model.Comments.Count + @Model.Replies.Count)</span></button></div>
+					<div class="col-6"></div>
+					<div class="col-2"><button id="btnArticalLike" class=" btn btn-dark @(Model.UserHasLiked ? "frliked" : "")" data-liked="@Model.UserHasLiked"><span style="color:white">收藏</span><i class="bi bi-heart-fill  h6 mx-1"></i><span id="likeCount" style="color:white">@Model.Likes.Count</span></button></div>
+					
+					
+					
 				</div>
 				<!-- 留言 -->
 
@@ -245,21 +249,7 @@
 				let time = new Date(Number($(this).attr("timestramp")));
 				$(this).html(DateFormat.format.prettyDate(time));
 			})
-			$.ajax({
-				type: "POST",
-				url: '@Url.Action("IncrementViewCount", "Article")',
-				data: { id: '@Model.Article.ArticalId' },
-				success: function (response) {
-					if (response.success) {
-						$('#viewCount').text(response.newViewCount);
-					} else {
-						console.error("Error updating view count");
-					}
-				},
-				error: function () {
-					console.error("Error updating view count");
-				}
-			});
+			
 
 			$('#btnArticalLike').click(function () {
 				var isLiked = $(this).data('frliked');
@@ -279,7 +269,12 @@
 								$('#btnArticalLike').removeClass('frliked');
 							}
 						} else {
-							alert("An error occurred: " + response.message);
+							if (response.requiresLogin) {
+								window.location.href = '@Url.Action("Login", "User")';
+							} 
+							else {
+								alert("An error occurred: " + response.message);
+							}
 						}
 					},
 					error: function () {
