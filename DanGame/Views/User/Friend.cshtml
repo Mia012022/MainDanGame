@@ -14,6 +14,7 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/50cf5e00fc.js" crossorigin="anonymous"></script>
     <!-- 好友聊天室css start -->
     <!--<link rel="stylesheet" href="/css/chatbox.css">
     <link rel="stylesheet" href="/css/action_menu.css">-->
@@ -142,10 +143,7 @@
                                         <div id="removeUser" class="d-flex align-items-end flex-column bd-highlight mb-3" style="height: 200px;">
                                             <div  class="p-2 bd-highlight">
                                                 <button type="button" class="btn btn-secondary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
-                                                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
-                                                        <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
-                                                    </svg>
+                                                    <i class="fa-solid fa-rectangle-list fa-lg"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -222,10 +220,7 @@
                 <div class="d-flex" role="search">
                     <input class="form-control me-2" type="search" id="searchInput" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" id="searchBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                        </svg>
+                        <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
                 <br>
@@ -351,19 +346,12 @@
                 actionButtons = `
                             <div class="p-1 bd-highlight">
                                 <button type="button" onclick="acceptFriend(${item.userId})" class="btn btn-success invitebtn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                        class="bi bi-person-plus" viewBox="0 0 16 16">
-                                        <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path>
-                                        <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"></path>
-                                    </svg>
+                                    <i class="fa-solid fa-user-plus fa-lg fa-bounce"></i>
                                 </button>
                             </div>
                             <div class="p-1 bd-highlight">
                                 <button type="button" onclick="removeFriend(${item.userId})" class="btn btn-danger">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-dash" viewBox="0 0 16 16">
-                                      <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                                      <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                                    </svg>
+                                    <i class="fa-solid fa-user-slash fa-lg"></i>
                                 </button>
                             </div>`;
             }
@@ -383,14 +371,8 @@
                                     <div class="col-4">
                                          <div class="d-flex align-items-end flex-column bd-highlight mb-3" style="height: 50px;">
                                              <div class="p-1 bd-highlight">
-                                                       <button id='userinfo' type="button" class="btn btn-secondary" onclick="showUserInfo(${item.userId})">
-                                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                                   class="bi bi-card-list" viewBox="0 0 16 16">
-                                                   <path
-                                                     d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
-                                                   <path
-                                                     d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
-                                                 </svg>
+                                               <button id='userinfo' type="button" class="btn btn-secondary" onclick="showUserInfo(${item.userId})">
+                                                  <i class="fa-solid fa-rectangle-list fa-lg"></i>
                                                </button>
                                              </div>
                                              ${actionButtons}
@@ -415,10 +397,7 @@
                         $("#removeUser").append(`
                             <div class="p-2 bd-highlight">
                                 <button type="button" onclick="removeFriend(${userId})" class="btn btn-danger">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-dash" viewBox="0 0 16 16">
-                                      <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                                      <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                                    </svg>
+                                    <i class="fa-solid fa-user-slash fa-lg"></i>
                                 </button>
                             </div>
                         `);
@@ -596,16 +575,8 @@
                                                       <div class="col-4">
                                                         <div class="d-flex align-items-end flex-column bd-highlight mb-3" style="height: 50px;">
                                                           <div class="p-2 bd-highlight">
-                                                            <button type="button" onclick="${temp.userID}" class="btn btn-secondary invitebtn">
-                                                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                                                class="bi bi-person-plus" viewBox="0 0 16 16">
-                                                                <path
-                                                                  d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z">
-                                                                </path>
-                                                                <path fill-rule="evenodd"
-                                                                  d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5">
-                                                                </path>
-                                                              </svg>
+                                                            <button type="button" onclick="${temp.userID}" class="btn btn-success invitebtn">
+                                                              <i class="fa-solid fa-user-plus fa-bounce fa-lg"></i>
                                                             </button>
                                                           </div>
                                                         </div>
