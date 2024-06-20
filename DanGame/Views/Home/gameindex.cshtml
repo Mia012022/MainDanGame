@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    List<AppDetail> ownGames = Model.ownGames;
+    dynamic ownGames = Model.ownGames;
 }
 @model dynamic;
 <style>
@@ -219,7 +219,7 @@
             </div>
         </div>
         
-        @if (ownGames.Count > 0)
+        @if (ownGames.Length > 0)
         {
             <div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
                 <div class="badge bg-warning text-white position-absolute"
@@ -230,8 +230,9 @@
                     @{
                         List<int> AppIds = new List<int>();
                     }
-                    @foreach (AppDetail appDetail in ownGames)
+                    @foreach (dynamic ownGame in ownGames)
                     {
+                        AppDetail appDetail = ownGame.appDetail;
                         if (AppIds.Contains(appDetail.AppId))
                         {
                             continue;
@@ -248,11 +249,7 @@
                                         </button>
                                     </div>
                                     <div style="position:absolute; bottom: 10px; right: 15px;">
-                                        <button class="btn btn-secondary float-end">
-                                            <a href="" class="list-group-item-action">
-                                                <i class="bi bi-cart-plus check-button"></i>
-                                            </a>
-                                        </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -295,6 +292,20 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
 <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
 <script>
+
+    var alreadyInShoppingCartAppIDs = [];
+
+    $.ajax({
+        url: '/api/User/ShoppingCart',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) { 
+            alreadyInShoppingCartAppIDs = response.map(a => a.appId)   
+        },
+        always: function () {
+            
+        }
+    })
     
     $.ajax({
         url: 'http://localhost:5000/api/app',
@@ -311,30 +322,28 @@
             $('#tagnameFriend').append(tagNameFriend);
             $('#tagnameAll').append(tagnameAll);
 
+
             response.forEach(function (app) {
                 var slide = `
-                            <swiper-slide>
-                                <div class="card" style="height: 315px;">
-                                    <img src="${app.headerImage}" class="card-img-top" alt="${app.appName}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${app.appName}</h5>
-                                        <div style="position:absolute; bottom: 10px; left: 15px;">
-                                                <button class="btn btn-secondary" onclick="window.open('/Game/${app.appId}')">
-                                                詳細資訊
-                                            </button>
-                                        </div>
-                                        <div style="position:absolute; bottom: 10px; right: 15px;">
-                                            <button class="btn btn-secondary float-end">
-                                                <a href="" class="list-group-item-action">
-                                                    <i class="bi bi-cart-plus check-button"></i>
-                                                </a>
-                                            </button>
-                                        </div>
-                                    </div>
+                    <swiper-slide>
+                        <div class="card" style="height: 315px;">
+                            <img src="${app.headerImage}" class="card-img-top" alt="${app.appName}">
+                            <div class="card-body">
+                                <h5 class="card-title">${app.appName}</h5>
+                                <div style="position:absolute; bottom: 10px; left: 15px;">
+                                        <button class="btn btn-secondary" onclick="window.open('/Game/${app.appId}')">
+                                        詳細資訊
+                                    </button>
                                 </div>
-                            </swiper-slide>
-                        `;
-
+                                <div style="position:absolute; bottom: 10px; right: 15px;">
+                                    <button class="btn float-end check-button" appID="${app.appId}" alreadyInShoppingCart="${alreadyInShoppingCartAppIDs.includes(app.appId)}">
+                                        <i class="check-button-icon ${alreadyInShoppingCartAppIDs.includes(app.appId) ? 'bi bi-check-lg' : 'bi bi-cart-plus'}"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+                `;
                 // 添加到所有遊戲的容器
                 $('.mySwiperAll').append(slide);
 
@@ -352,36 +361,55 @@
                     }
                 });
             });
+            $(".check-button").on("click", function () {
+                let appID = $(this).attr("appID");
+                let alreadyInShoppingCart = $(this).attr("alreadyInShoppingCart");
+                let alreadyLogin = @(Model.alreadyLogin ? 1 : 0);
+                if (!alreadyLogin) {
+                    window.open(`/User/Login?redirectTo=/Home/gameindex`);
+                    return
+                }
+
+                if (alreadyInShoppingCart == "false") {
+                    console.log(JSON.stringify({ AppId: appID }))
+                    $.ajax({
+                        url: "/API/User/ShoppingCart",
+                        method: "POST",
+                        data: JSON.stringify({ AppId: appID }),
+                        contentType: 'application/json',
+
+                        success: (res) => {
+                            $(`.check-button[appID="${appID}"]`).find(".check-button-icon").removeClass("bi bi-cart-plus").addClass("bi bi-check-lg")
+                            $(`.check-button[appID="${appID}"]`).attr("alreadyInShoppingCart", true)
+                        },
+                        error: function (err) { console.log(err) },
+                    });
+                } else {
+                    $.ajax({
+                        url: "/API/User/ShoppingCart",
+                        method: "DELETE",
+                        data: JSON.stringify({ AppId: appID }),
+                        contentType: 'application/json',
+
+                        success: (res) => {
+
+                            $(`.check-button[appID="${appID}"]`).find(".check-button-icon").removeClass("bi bi-check-lg").addClass("bi bi-cart-plus")
+                            $(`.check-button[appID="${appID}"]`).attr("alreadyInShoppingCart", false)
+                        },
+                        error: function (err) { console.log(err) },
+                    });
+                }
+            })
 
         },
         error: function (error) {
             console.log('Error:', error);
+        },
+        always: function () {
+            
         }
     });
 
-    $(".check-button").on("click", function () {
-        if (!alreadyLogin) {
-            window.open('/User/Login?redirectTo=/Game/@(Model.detail.AppId)#game-action');
-            return
-        }
-        if (!alreadyInShoppingCart) {
-            $.ajax({
-
-                url: "/API/User/ShoppingCart",
-                method: "POST",
-                data: JSON.stringify({ appId: @(Model.detail.AppId)}),
-                contentType: 'application/json',
-
-                success: function (res) {
-                    $(".check-button").text("已加入購物車").css({
-                        cursor: "default",
-                        filter: "brightness(0.5)"
-                    })
-                    alreadyInShoppingCart = true;
-                },
-                error: function (err) { console.log(err) },
-            });
-        }
-    })
+    
     
 </script>

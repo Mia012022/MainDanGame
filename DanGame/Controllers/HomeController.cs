@@ -89,15 +89,25 @@ namespace DanGame.Controllers
         public IActionResult gameindex()
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
-            var orderItems = from order in _context.Orders
+            var ownGames = from order in _context.Orders
                              where order.UserId == userId
-                             select order.OrderItems;
+                             select (from items in order.OrderItems
+                                    select new { appDetail = items.App.AppDetail, alreadyInShoppingCart = items.App.ShoppingCarts.Any(s => s.UserId == userId) }).ToArray();
 
             var tagApps = (from tag in _context.GenreTags
                           where tag.TagId == 70
                           select tag.Apps.Select(a => a.AppDetail)).FirstOrDefault();
 
-            return View(new { ownGames = orderItems.Select(items => items.Select(item => item.App.AppDetail)).SelectMany(i => i).ToList(), tagApps = tagApps.ToArray() });
+            //var ownGames = orderItems.Select(items => items.Select(item => item.App.AppDetail)).SelectMany(i => i).ToList();
+
+            //var query = from appDetail in ownGames
+            //            select new { appDetail, alreadyInShoppingCart = appDetail.App.ShoppingCarts.Any(s => s.UserId == userId) };
+
+            return View(new {
+                alreadyLogin = userId != null,
+                ownGames = ownGames.SelectMany(a => a).ToArray(), 
+                tagApps = tagApps.ToArray() 
+            });
         }
 
         public IActionResult RedirectToUserIndex()

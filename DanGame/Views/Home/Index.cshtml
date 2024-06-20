@@ -70,20 +70,15 @@
 	.my-footer {
 		background-color: rgb(202, 202, 202, 0.5);
 	}
+
 </style>
 
 <body class="area">
+	<br />
+	<br />
+	<br />
+	<div style="position: relative; background-color: gray; height: 882px;">
 
-	<div style="position: relative;">
-		<div class="snow-container">
-			<div class="snow foreground"></div>
-			<div class="snow foreground layered"></div>
-			<div class="snow middleground"></div>
-			<div class="snow middleground layered"></div>
-			<div class="snow background"></div>
-			<div class="snow background layered"></div>
-		</div>
-		<img class="w-100" src="~/image/HLEGACY.jpg" alt="">
 		<div class="text-center"
 			 style="margin: 15px; position: absolute; top: 20%; right: 10%; backdrop-filter: blur(5px); width: 700px; height: 350px; color: white;">
 			<h1 class="fw-bold" style="text-shadow: black 0.3em 0.1em 0.18em">無限遊玩，無限可能</h1>
@@ -96,12 +91,13 @@
 			<div class="fs-5 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">高品質的遊戲庫，包含多種類型的遊戲，應有盡有。</div>
 			<div class="fs-4 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">立即訂閱，開始你的遊戲之旅！</div>
 		</div>
-
-		<div class="arrow-container"
-			 style="position: absolute; top: 45%; right: 30%; animation: arrowAnimation 1s ease infinite alternate;">
-			<a href="#content" class="scroll-down-arrow">
-				<i class="fas fa-chevron-down"></i>
-			</a>
+		<div class="arrow-container d-flex justify-content-center align-items-end" style="position:absolute; bottom: 0 ; width: 100%; height: 8vh;">
+			<div class="w-100 text-center" style="position: relative">
+				<a href="#content" class="scroll-down-arrow list-group-item" style="width: 200px; animation: arrowAnimation 1s ease infinite alternate;transform: translate(0, -50%);">
+					<span class="text-center text-white fs-5">點擊購買訂閱</span><br>
+					<i class="fas fa-chevron-down text-white" style="font-size: xx-large;"></i>
+				</a>
+			</div>
 		</div>
 	</div>
 
@@ -453,11 +449,8 @@
 		let value = $(document).scrollTop() > 20;
 
 		$(".my-header").css({
-			"top": value ? "0px" : "-80px",
 			"z-index": 1000,
 			"transition": "top 0.5s",
-			"height": value ? "60px" : "60px",
-			"backdrop-filter": value ? "blur(5px)" : "blur(0px)"
 		})
 	}
 	headerEffect();

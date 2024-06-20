@@ -103,12 +103,17 @@ namespace DanGame.Controllers
 
         }
 
+        public class ShoppingCartRequest
+        {
+            public int AppId { get; set; }
+        }
+
         // API: GET API/User/ShoppingCart 取得個人購物車品項
         [HttpGet("User/ShoppingCart")]
         [AuthorizeUser]
         async public Task<ShoppingCart[]> GetUserShoppingItem()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var query = from shoppingCart in _context.ShoppingCarts
                         where shoppingCart.UserId == userId
@@ -120,14 +125,19 @@ namespace DanGame.Controllers
         // API: POST API/User/ShoppingCart 新增個人購物車品項
         [HttpPost("User/ShoppingCart")]
         [AuthorizeUser]
-        async public Task<ShoppingCart[]> AddUserShoppingItem([FromBody] int appId)
+        async public Task<ShoppingCart[]> AddUserShoppingItem(ShoppingCartRequest shoppingCartRequest)
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+            {
+                return [];
+            }
 
             var newShoppingItem = new ShoppingCart()
             {
-                UserId = userId,
-                AppId = appId,
+                UserId = userId.Value,
+                AppId = shoppingCartRequest.AppId,
                 AddedTime = DateTime.UtcNow,
             };
 
@@ -145,15 +155,15 @@ namespace DanGame.Controllers
         // API: DELETE API/User/ShoppingCart 刪除個人購物車品項
         [HttpDelete("User/ShoppingCart")]
         [AuthorizeUser]
-        async public Task<ShoppingCart[]> DelUserShoppingItem([FromBody] int appId)
+        async public Task<ShoppingCart[]> DelUserShoppingItem(ShoppingCartRequest shoppingCartRequest)
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var query = from shoppingCart in _context.ShoppingCarts
                         where shoppingCart.UserId == userId
                         select shoppingCart;
 
-            var target = query.Where((c) => c.AppId == appId).First();
+            var target = query.Where((c) => c.AppId == shoppingCartRequest.AppId).First();
 
             if (target != null)
             {
