@@ -35,5 +35,5 @@ public partial class AppDetail
 
     public int Downloaded { get; set; }
 
-    public virtual App App { get; set; } = null!;
+    public virtual App? App { get; set; } = null!;
 }
