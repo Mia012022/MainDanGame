@@ -8,7 +8,7 @@ public partial class ArticleList
 {
     public int ArticalId { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     public string ArticalTitle { get; set; } = null!;
 
@@ -20,7 +20,7 @@ public partial class ArticleList
 
     public string? ArticleCategory { get; set; }
 
-    public int? ViewCount { get; set; }
+    public int ViewCount { get; set; }
 
     public virtual ICollection<ArticalComment> ArticalComments { get; set; } = new List<ArticalComment>();
 

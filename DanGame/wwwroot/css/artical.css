@@ -1,4 +1,11 @@
-﻿﻿.reply-button {
+﻿.my-header > .row {
+    margin-left: 0;
+}
+
+.my-footer > .row{
+    margin-left: 0;
+}
+.reply-button {
     background: white;
     color: gray;
     border: none;

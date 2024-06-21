@@ -1,11 +1,4 @@
 ﻿
-
-
-/*img {
-    width: 150px;
-    object-fit: cover;
-}
-*/
 .title {
     width: 700px;
 }
@@ -29,13 +22,11 @@
 }
 
 .wrapper {
-    height: 180%;
+    height: 200%;
     width: 100%;
-    /*background: linear-gradient(180deg, #04fafd, 5%, #119dff, 50%, #030423);*/
-    /*background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);*/
-    background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+    
     position: absolute;
-    z-index: -1000;
+   z-index:-1000;
 }
 
     .wrapper h1 {
@@ -162,6 +153,7 @@ div .dot {
     left: 80%;
     animation: animate 9s linear infinite;
 }
+
 @keyframes animate {
     0% {
         transform: scale(0) translateY(0) rotate(70deg);
@@ -171,6 +163,7 @@ div .dot {
         transform: scale(1.3) translateY(-100px) rotate(360deg);
     }
 }
+
 
 .bgpurple {
     background-color: lightpink;
@@ -206,12 +199,12 @@ div .dot {
 }
 
 .arTitle {
-    color: hotpink;
-    font-weight: 800;
+    color: black;
+    font-weight: 600;
 }
 
     .arTitle:hover {
-        color: purple;
+        color: hotpink;
         font-weight: 800;
     }
 
@@ -220,9 +213,9 @@ div .dot {
 }
 
     .clcategory:hover {
-        color: gray;
+        color: whitesmoke;
     }
-
+/*搜尋框*/
 .custom-search {
     position: relative;
 }
@@ -249,3 +242,128 @@ div .dot {
     padding: 5px 5px;
     z-index: 2;
 }
+.forumCardHeader {
+    background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);
+}
+.forumPostBtn {
+    background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);
+}
+
+.blob-btn {
+    position: relative;
+    padding: 20px 46px;
+    margin-top: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #6405a9;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    transition: color 0.5s;
+    cursor: pointer;
+    border-radius: 30px;
+}
+
+    .blob-btn:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border: 2px solid #6405a9;
+        border-radius: 30px;
+        z-index: 1;
+    }
+
+    .blob-btn:after {
+        content: "";
+        position: absolute;
+        left: calc(2px * 1.5);
+        top: calc(2px * 1.5);
+        width: 100%;
+        height: 100%;
+        transition: all 0.3s 0.2s;
+        border-radius: 30px;
+        z-index: -2;
+    }
+
+    .blob-btn:hover {
+        color: #FFFFFF;
+    }
+
+        .blob-btn:hover:after {
+            transition: all 0.3s;
+            left: 0;
+            top: 0;
+        }
+
+.blob-btn__inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    background: #ffffff;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.blob-btn__blobs {
+    position: relative;
+    display: block;
+    height: 100%;
+    filter: url('#goo');
+}
+
+.blob-btn__blob {
+    position: absolute;
+    /* top: 2px; */
+    width: calc(30%);
+    height: 100%;
+    background: #6405a9;
+    border-radius: 100%;
+    transform: translate3d(0, 150%, 0) scale(1.7);
+    transition: transform 0.45s;
+}
+
+@supports (filter: url('#goo')) {
+    .blob-btn__blob {
+        transform: translate3d(0, 150%, 0) scale(1.4);
+    }
+}
+
+.blob-btn__blob:nth-child(1) {
+    left: calc((1 - 1) * (120% / 4));
+    transition-delay: calc((1 - 1) * 0.08s);
+}
+
+.blob-btn__blob:nth-child(2) {
+    left: calc((2 - 1) * (120% / 4));
+    transition-delay: calc((2 - 1) * 0.08s);
+}
+
+.blob-btn__blob:nth-child(3) {
+    left: calc((3 - 1) * (120% / 4));
+    transition-delay: calc((3 - 1) * 0.08s);
+}
+
+.blob-btn__blob:nth-child(4) {
+    left: calc((4 - 1) * (120% / 4));
+    transition-delay: calc((4 - 1) * 0.08s);
+}
+
+.blob-btn:hover .blob-btn__blob {
+    transform: translateZ(0) scale(1.7);
+}
+
+@supports (filter: url('#goo')) {
+    .blob-btn:hover .blob-btn__blob {
+        transform: translateZ(0) scale(1.4);
+    }
+}
+
+

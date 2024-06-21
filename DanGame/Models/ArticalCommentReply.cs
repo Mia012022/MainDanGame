@@ -9,7 +9,7 @@ public partial class ArticalCommentReply
 
     public int CommentId { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     public string ReplyContent { get; set; } = null!;
 
