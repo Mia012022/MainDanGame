@@ -250,7 +250,7 @@ bottom: -150px;
 
 .snow-container {
     position: absolute;
-    height: 950px;
+    height: 882px;
     width: 100%;
     max-width: 100%;
     top: 0;
@@ -346,4 +346,15 @@ bottom: -150px;
     object-fit: cover;
     object-position: center;
     border-radius: 50%;
+
+}
+
+.topbox {
+    width: 100%;
+    animation: rotatebox 2s linear infinite;
+}
+
+@keyframes rotatebox {
+    0% { transform: rotate(0deg)}
+    100% { transform: rotate(360deg)}
 }
