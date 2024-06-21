@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using OpenAI.Extensions;
 using DanGame.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,9 @@ builder.Services.AddControllers();
 
 // 加入 IHttpContextAccessor 服務
 builder.Services.AddHttpContextAccessor();
+
+// 加入Open AI 服務
+builder.Services.AddOpenAIService();
 
 // Configure HttpClient
 builder.Services.AddHttpClient();
@@ -51,7 +55,13 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=10");
+    }
+});
 
 app.UseRouting();
 

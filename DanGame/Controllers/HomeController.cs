@@ -1,28 +1,72 @@
-using DanGame.Models;
+ï»¿using DanGame.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Text;
 
 namespace DanGame.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly DanGameContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, DanGameContext dbContext)
         {
             _logger = logger;
+            _context = dbContext;
         }
 
-        public IActionResult Index()
-        {
-            //// ÀË¬d¬O§_¦³¤wµn¤Jªºsession
+		public IActionResult Index()
+		{
+            //// æª¢æŸ¥æ˜¯å¦æœ‰å·²ç™»å…¥çš„session
             //if (HttpContext.Session.GetString("UserId") != null)
             //{
-            //    // ¦pªG¤wµn¤J¡A¾É¦VUserControllerªºUserIndex­¶­±
+            //    // å¦‚æžœå·²ç™»å…¥ï¼Œå°Žå‘UserControllerçš„UserIndexé é¢
             //    return RedirectToAction("UserIndex", "User");
             //}
 
-            //// §_«hÅã¥ÜIndex­¶­±
+            //// å¦å‰‡é¡¯ç¤ºIndexé é¢
+            ///
+            var query = from app in _context.Apps
+						where app.AppDetail.AppType == "game"
+						select new
+						{
+							appId = app.AppId,
+							appName = app.AppName,
+							headerImage = app.AppDetail.HeaderImage,
+							appDesc = app.AppDetail.ShortDescription,
+							releaseDate = app.AppDetail.ReleaseDate,
+							downloaded = app.AppDetail.Downloaded,
+							price = app.AppDetail.Price,
+							tags = app.Tags
+						};
+			return View(new
+			{
+				apps = query.ToArray(),
+				subscriptionPlans = _context.SubscriptionPlans.ToList()
+			});
+		}
+
+		public IActionResult ranking()
+		{
+
+			return View();
+		}
+
+        [HttpGet("/Game/{id}")]
+        public IActionResult Game(int id)
+        {
+            var query = from appDetail in _context.AppDetails
+                        where appDetail.AppId == id
+                        select new { detail = appDetail, media = appDetail.App.AppMedia, DLCs = appDetail.App.Dlcapps.Select((d) => d.AppDetail)};
+            return View(query.FirstOrDefault());
+        }
+
+        [HttpGet("/test")]
+        public IActionResult test()
+        {
             return View();
         }
 
@@ -31,15 +75,34 @@ namespace DanGame.Controllers
             return View();
         }
 
-        public IActionResult RedirectToUserIndex()
-        {
-            return RedirectToAction("UserIndex", "User");
+            public IActionResult gameindex()
+		{
+			var userId = Request.HttpContext.Session.GetInt32("UserId");
+			var friends = from friendShip in _context.Friendships
+						  where friendShip.FriendUserId == userId.Value || friendShip.UserId == userId.Value
+						  select (friendShip.FriendUserId == userId.Value ? friendShip.UserId : friendShip.FriendUserId);
+
+			var orderItems = from order in _context.Orders
+						 where friends.Contains(order.UserId)
+						 select order.OrderItems;
+
+			return View(orderItems.Select(items => items.Select(item => item.App.AppDetail)).SelectMany(i => i));
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-    }
+		public IActionResult category()
+		{
+			return View();
+		}
+
+		public IActionResult RedirectToUserIndex()
+		{
+			return RedirectToAction("UserIndex", "User");
+		}
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
+	}
 }

@@ -11,7 +11,7 @@ public partial class Friendship
 
     public string Status { get; set; } = null!;
 
-    public virtual User FriendUser { get; set; } = null!;
+    public virtual User? FriendUser { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; } = null!;
 }

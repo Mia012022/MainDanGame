@@ -1,0 +1,812 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model dynamic;
+@{
+
+    if (Model.media == null)
+    {
+        Model.media = new AppMedium[0];
+    };
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script src="~/lib/color-thife/color-thief.umd.js"></script>
+    <script src="~/js/colorTool.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
+    <title>@Model.detail.AppName</title>
+
+    <style>
+        * {
+            font-family: "微軟正黑體", "Microsoft JhengHei", "新細明體", sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: rgb(18, 19, 20);
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background-color: rgb(95, 95, 95);
+            border-radius: 20px;
+        }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background-color: rgb(116, 116, 116);
+            }
+
+        .my-header {
+            background-color: rgba(0,0,0,0) !important;
+            background: rgba(0,0,0,0) !important;
+        }
+
+        .game-hero {
+            position: relative;
+            width: 100%;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1)), linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.1)), url(https://cdn.cloudflare.steamstatic.com/steam/apps/@Model.detail.AppId/library_hero.jpg);
+            /*https://cdn.akamai.steamstatic.com/steam/apps/294100/page.bg.jpg*/
+            object-fit: cover;
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-weight: 300;
+            .content-grid
+
+        {
+            width: 90%;
+            margin: auto;
+            padding-top: 150px;
+            .game-title
+
+        {
+            font-size: 75px;
+            font-style: normal;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .publisher {
+            color: white;
+            text-indent: 6px;
+            font-size: 20px;
+            margin-bottom: 40px;
+        }
+
+        .platform {
+            color: white;
+            text-indent: 6px;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        .downloads {
+            color: white;
+            text-indent: 6px;
+            margin-bottom: 40px;
+        }
+
+        .re {
+            color: white;
+            text-indent: 6px;
+        }
+
+        }
+        }
+
+        .scroll-down-bar {
+            position: absolute;
+            height: 8vh;
+            width: 100%;
+            bottom: 0px;
+            text-align: center;
+            cursor: pointer;
+            .scroll-down-title
+
+        {
+            position: relative;
+            color: white;
+            animation: scroll-down 1.5s infinite;
+            p
+
+        {
+            margin-bottom: 0px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .bi-chevron-down {
+            font-size: 30px;
+            color: white;
+        }
+
+        }
+
+        :hover {
+            p
+
+        {
+            opacity: 1;
+        }
+
+        }
+        }
+
+
+        .game-media {
+            padding: 60px 0;
+            position: relative;
+            height: 100vh;
+            background-color: rgb(18, 19, 20);
+            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1));
+            .swiper-button-next, .swiper-button-prev
+
+        {
+            color: white;
+        }
+
+        .swiper-pagination-progressbar-fill {
+            background: white;
+        }
+
+        .game-media-full {
+            position: relative;
+            height: calc(50vh+60px);
+            /* background-image: url(https://cdn.akamai.steamstatic.com/steam/apps/294100/ss_371726c10a1b640dbf748fa62a500d911ac62427.1920x1080.jpg); */
+            background-size: cover;
+            overflow: hidden;
+            .swiper-slide
+
+        {
+            background-color: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0;
+            padding-top: 60px;
+            padding-bottom: 60px;
+            transition: background-color 0.5s;
+            img
+
+        {
+            height: 50vh;
+            aspect-ratio: 16 / 9;
+        }
+
+        video {
+            height: 50vh;
+        }
+
+        }
+        }
+
+        .game-media-thumbnail {
+            position: relative;
+            height: 20vh;
+            top: 6vh;
+            margin: auto;
+            justify-content: space-between;
+            overflow: hidden;
+            .swiper-slide
+
+        {
+            opacity: 0.4;
+            img
+
+        {
+            height: 20vh;
+        }
+
+        }
+
+        .swiper-slide-thumb-active {
+            opacity: 1;
+            img
+
+        {
+            border: 3px solid white;
+        }
+
+        }
+        }
+        }
+
+        .game-desc {
+            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.6)), url(https://cdn.akamai.steamstatic.com/steam/apps/@Model.detail.AppId/page.bg.jpg);
+            ;
+            min-height: 100vh;
+            padding: 10vh 0px;
+            object-fit: cover;
+            background-size: cover;
+            background-repeat: no-repeat;
+            .game-desc-title
+
+        {
+            color: white;
+            font-size: 45px;
+            text-align: center;
+            margin-bottom: 50px;
+            .game-logo
+
+        {
+            width: 20%;
+            min-width: 300px;
+            transition: transform 0.5s;
+        }
+
+        .game-logo:hover {
+            transform: scale(1.05);
+        }
+
+        }
+
+        .desc {
+            width: 80%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 50px;
+            color: white;
+            text-align: center;
+            a
+
+        {
+            text-decoration: none;
+        }
+
+        }
+        }
+
+        .game-action {
+            position: relative;
+            width: 100%;
+            height: clamp(450px, 75vh, 450px);
+            display: flex;
+            hr
+
+        {
+            height: 80%;
+            width: 2px;
+            background-color: rgb(70, 70, 70);
+            margin: auto;
+        }
+
+        .background-wrapper-image {
+            position: absolute;
+            height: clamp(450px, 75vh, 450px);
+            width: 100%;
+            background-image: url(https://cdn.cloudflare.steamstatic.com/steam/apps/@Model.detail.AppId/library_hero.jpg);
+            object-fit: cover;
+            background-size: cover;
+            background-repeat: no-repeat;
+            filter: blur(4px);
+        }
+
+        .game-action-content {
+            position: relative;
+            display: flex;
+            background-color: rgb(18, 19, 20);
+            height: 80%;
+            width: clamp(765px, 80%, 1536px);
+            margin: auto;
+            .left-side-content
+
+        {
+            width: 20%;
+            height: 100%;
+            .game-capsule-image
+
+        {
+            position: absolute;
+            height: 95%;
+            top: -5vh;
+            left: 6vw;
+            transition: transform 0.5s;
+        }
+
+        :hover {
+            transform: scale(1.1);
+        }
+
+        }
+
+        .center-content {
+            width: 60%;
+            height: 100%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            #detail-tab
+
+        {
+            font-size: 20px;
+            button
+
+        {
+            color: lightgrey;
+        }
+
+        .active {
+            color: white;
+        }
+
+        }
+
+        .row {
+            height: 100%;
+            .tab-content
+
+        {
+            height: 100%;
+            color: white;
+        }
+
+        }
+
+        #DLCs {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            img
+
+        {
+            width: auto;
+            height: 200px;
+        }
+
+        .swiper-container {
+            width: 400px;
+            height: 300px;
+        }
+
+        .swiper-slide {
+            background-position: center;
+            background-size: cover;
+        }
+
+            .swiper-slide img {
+                display: block;
+                width: 100%;
+            }
+
+        .swiper-pagination-bullet-active {
+            background-color: #ffffff !important;
+        }
+
+        .swiper-pagination-bullet {
+            background-color: gray !important;
+        }
+
+        }
+        }
+
+        .right-side-content {
+            display: flex;
+            width: 20%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            .form-check
+
+        {
+            width: 90%;
+            color: white;
+            padding-top: 20px;
+            flex: 1;
+            .check
+
+        {
+            height: 70px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 5px 10px 5px 30px;
+            margin-top: 40px;
+            background-color: transparent;
+            transition: background-color 0.5s;
+            border-radius: 10px;
+            input
+
+        {
+            width: 16px;
+            height: 16px;
+            margin-right: 20px;
+        }
+
+        p {
+            font-size: 12px;
+            color: goldenrod;
+            margin: 0;
+        }
+
+        }
+
+        .check:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        }
+
+        .check-button {
+            height: 50px;
+            width: 70%;
+            background-color: orange;
+            color: white;
+            text-align: center;
+            border: 1px solid orange;
+            font-weight: 900;
+            border-radius: 10px;
+            line-height: 3;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        }
+        }
+        }
+
+
+
+        @@keyframes scroll-down {
+            0% {
+                opacity: 0.8;
+                top: 0;
+            }
+
+            50% {
+                opacity: 0.6;
+                top: -1em;
+            }
+
+            100% {
+                opacity: 0.8;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 中間內容 start -->
+
+    <div class="game-hero vh-100">
+
+        <div class="content-grid">
+            <p class="game-title">@Model.detail.AppName</p>
+            <p class="publisher">@Model.detail.DevloperName</p>
+            <p class="platform">
+                <i class="bi bi-windows"></i>
+                <i class="bi bi-apple"></i>
+            </p>
+            <p class="re"><i class="bi bi-calendar4-event"></i> 上架日期 @Model.detail.ReleaseDate</p>
+            <p class="downloads"><i class="bi bi-arrow-down-circle"></i> 下載次數 @Model.detail.Downloaded 次</p>
+
+
+            <!-- <div class="cart-content">
+                <div class="add-to-cart2">
+                    <i class="bi bi-people-fill"></i> 加入會員
+                </div>
+                <div class="add-to-cart">
+                    <i class="bi bi-cart-plus"></i> 加入購物車
+                </div>
+            </div> -->
+        </div>
+        <div class="scroll-down-bar">
+            <div class="scroll-down-title">
+                <p>遊戲畫面</p>
+                <i class="bi bi-chevron-down"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-media">
+
+        <div class="swiper-container game-media-full">
+            <div class="swiper-wrapper">
+                @foreach (AppMedium media in @Model.media)
+                {
+                    <div class="swiper-slide">
+                        @if (media.MediaType == "Screenshot")
+                        {
+                            <img src="@media.OriginalPath" alt="Screenshot" />
+                        }
+                        else if (media.MediaType == "Movie")
+                        {
+                            <video src="@media.OriginalPath" controls></video>
+                        }
+                    </div>
+                }
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- Add Navigation -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+
+        <div class="swiper-container game-media-thumbnail">
+            <div class="swiper-wrapper">
+                @foreach (AppMedium media in @Model.media)
+                {
+                    <div class="swiper-slide">
+                        @if (media.MediaType == "Screenshot")
+                        {
+                            <img src="@media.ThumbnailPath" alt="Screenshot" />
+                        }
+                        else if (media.MediaType == "Movie")
+                        {
+                            <img src="@media.ThumbnailPath" alt="@media.Title" controls></img>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="scroll-down-bar">
+            <div class="scroll-down-title">
+                <p>遊戲介紹</p>
+                <i class="bi bi-chevron-down"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-desc">
+        <div class="game-desc-title">
+            <img class="game-logo" src="https://steamcdn-a.akamaihd.net/steam/apps/@Model.detail.AppId/logo.png" alt="game-logo">
+        </div>
+        <div class="desc">
+            <p class="desc-content">@Html.Raw(Model.detail.Description)</p>
+        </div>
+    </div>
+
+    <div class="game-action">
+        <div class="background-wrapper-image"></div>
+        <div class="game-action-content">
+            <div class="left-side-content">
+                <img class="game-capsule-image"
+                     src="https://steamcdn-a.akamaihd.net/steam/apps/@Model.detail.AppId/library_600x900.jpg" alt="game-capsule">
+            </div>
+            <div class="center-content">
+                <div class="row">
+                    <div class="col-3">
+                        <!-- Tab navs -->
+                        <div class="nav flex-column nav-pills text-center" id="detail-tab" role="tablist"
+                             aria-orientation="vertical">
+                            <button class="nav-link active" id="v-pills-link1-tab" data-bs-toggle="tab"
+                                    data-bs-target="#short-description" href="#v-pills-link1" role="tab"
+                                    aria-controls="v-pills-link1" aria-selected="true">
+                                遊戲簡介
+                            </button>
+                            <button class="nav-link" id="v-pills-link2-tab" data-bs-toggle="tab"
+                                    data-bs-target="#requirements" href="#v-pills-link2" role="tab"
+                                    aria-controls="v-pills-link2" aria-selected="false">
+                                系統需求
+                            </button>
+                            <button class="nav-link" id="v-pills-link3-tab" data-bs-toggle="tab" data-bs-target="#DLCs"
+                                    href="#v-pills-link3" role="tab" aria-controls="v-pills-link3"
+                                    aria-selected="false">
+                                可下載內容
+                            </button>
+                            <!-- <button class="nav-link" id="v-pills-link4-tab" data-bs-toggle="tab" data-bs-target="#home"
+                                href="#v-pills-link4" role="tab" aria-controls="v-pills-link4"
+                                aria-selected="false">詳細數據</button> -->
+                        </div>
+                        <!-- Tab navs -->
+                    </div>
+
+                    <div class="col-9">
+                        <!-- Tab content -->
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="short-description" role="tabpanel"
+                                 aria-labelledby="v-pills-link1-tab">
+                                @Model.detail.ShortDescription
+                            </div>
+                            <div class="tab-pane fade" id="requirements" role="tabpanel"
+                                 aria-labelledby="v-pills-link2-tab">
+                            </div>
+                            <div class="tab-pane fade" id="DLCs" role="tabpanel" aria-labelledby="v-pills-link3-tab">
+
+                                <div class="swiper-container DLCsSwiper">
+                                    <div class="swiper-wrapper">
+                                        @foreach (var dlcApp in Model.DLCs)
+                                        {
+                                            <div class="swiper-slide">
+                                                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/@dlcApp.AppId/header.jpg" />
+                                                <p>@dlcApp.AppName</p>
+                                                <p>NT$@dlcApp.Price</p>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-link4" role="tabpanel"
+                                 aria-labelledby="v-pills-link4-tab">
+                            </div>
+                        </div>
+                        <!-- Tab content -->
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="right-side-content">
+                <div class="form-check">
+                    <div class="subscript-check check">
+                        <input class="form-check-input" type="radio" name="RadioDefault" id="Radio-subscript" checked>
+                        <label class="form-check-label" for="Radio-subscript">
+                            訂閱
+                            <p style="color: goldenrod;">DanGame Plus升級即可存取此遊戲和其他數款作品</p>
+                        </label>
+                    </div>
+                    <div class="add-to-cart-check check">
+                        <input class="form-check-input" type="radio" name="RadioDefault" id="Radio-add-to-cart">
+                        <label class="form-check-label" for="Radio-add-to-cart">
+                            購買 NT$ @Model.detail.Price
+                            <p style="color: gray;">單獨購買此遊戲</p>
+                        </label>
+                    </div>
+                </div>
+                <div class="check-button">
+                    訂閱
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 中間內容 end -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var thumbnailSwiper = new Swiper('.game-media-thumbnail', {
+                loop: true,
+                spaceBetween: 20,
+                slidesPerView: 4,
+                freeMode: true,
+                watchSlidesProgress: true,
+                centeredSlides: true,
+                effect: 'coverflow',
+                coverflowEffect: {
+                    rotate: 35,
+                    stretch: 0,
+                    depth: 100,
+                    modifier: 1,
+                    slideShadows: true,
+                }
+            });
+
+            var fullSwiper = new Swiper('.game-media-full', {
+                loop: true,
+                spaceBetween: 10,
+                speed: 1000,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: 'progressbar',
+                },
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: true,
+                },
+                thumbs: {
+                    swiper: thumbnailSwiper,
+                },
+                on: {
+                    transitionStart: function () {
+
+                        var videos = document.querySelectorAll('video');
+
+                        Array.prototype.forEach.call(videos, function (video) {
+                            video.pause();
+                        });
+
+                        var activeIndex = this.activeIndex;
+                        var activeSlide = document.getElementsByClassName('swiper-slide')[activeIndex];
+                        $(activeSlide).css({
+                            "backgroundColor": "rgba(0, 0, 0, 1)"
+                        })
+                    },
+
+                    transitionEnd: function () {
+
+                        var activeIndex = this.activeIndex;
+                        var activeSlide = document.getElementsByClassName('swiper-slide')[activeIndex];
+                        var activeSlideVideo = activeSlide.getElementsByTagName('video')[0];
+                        if (activeSlideVideo) {
+                            activeSlideVideo.play();
+                        }
+
+
+                        $(".game-media-full").css({
+                            "background-image": `url(${$(activeSlide).find("img").attr("src")})`
+                        })
+                        $(activeSlide).css({
+                            "backgroundColor": "rgba(0, 0, 0, 0.55)"
+                        })
+                    },
+
+                }
+            });
+
+            var DLCsSwiper = new Swiper('.DLCsSwiper', {
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true
+                },
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: true,
+                },
+                effect: 'cube',
+                grabCursor: true,
+                cubeEffect: {
+                    shadow: true,
+                    slideShadows: true,
+                    shadowOffset: 20,
+                    shadowScale: 0.94
+                }
+            });
+
+        });
+
+        $(document).ready(function () {
+            $(".scroll-down-bar").each((index, elm) => {
+                $(elm).on("click", () => {
+                    $('html,body').animate({
+                        scrollTop: $(window).height() * (index + 1),
+                    }, 100)
+                })
+            })
+
+            $(".offerItemTitle").click(function () {
+                $(this).parents(".offerslide").children(".offerItem").removeClass("active");
+                $(this)
+                    .parents(".offerslide")
+                    .children(".offerItem")
+                    .children(".offerItemTitle")
+                    .removeClass("hide");
+                $(this).parent(".offerItem").addClass("active");
+                $(this).addClass("hide");
+            });
+        });
+
+        $(document).on("scroll", headerEffect)
+
+        function headerEffect() {
+            let value = $(document).scrollTop() > 20;
+
+            $(".my-header").css({
+                "top": value ? "0px" : "-80px",
+                "background-color": "rgba(0,0,0,0)",
+                "background": "transparent",
+                "z-index": 1000,
+                "transition": "top 0.5s",
+                "height": value ? "60px" : "60px",
+                "backdrop-filter": value ? "blur(5px)" : "blur(0px)"
+            })
+        }
+        headerEffect();
+        $("#requirements").html("<div>\u003Cstrong\u003E最低配備:\u003C/strong\u003E\u003Cbr\u003E\u003Cul class=\"bb_ul\"\u003E\u003Cli\u003E\u003Cstrong\u003E作業系統 *:\u003C/strong\u003E Windows 7\u003Cbr\u003E\u003C/li\u003E\u003Cli\u003E\u003Cstrong\u003E處理器:\u003C/strong\u003E Core 2 Duo\u003Cbr\u003E\u003C/li\u003E\u003Cli\u003E\u003Cstrong\u003E記憶體:\u003C/strong\u003E 4 GB 記憶體\u003Cbr\u003E\u003C/li\u003E\u003Cli\u003E\u003Cstrong\u003E顯示卡:\u003C/strong\u003E Intel HD Graphics 4000 or other shader model 4.0\u003Cbr\u003E\u003C/li\u003E\u003Cli\u003E\u003Cstrong\u003E儲存空間:\u003C/strong\u003E 1 GB 可用空間\u003C/li\u003E\u003C/ul\u003E \u003Cstrong\u003E最低配備:\u003C/strong\u003E\u003Cbr\u003E\u003Cul class=\"bb_ul\"\u003E\u003Cli\u003E\u003Cstrong\u003E作業系統:\u003C/strong\u003E macOS 10.12\u003Cbr\u003E\u003C/li\u003E\u003Cli\u003E\u003Cstrong\u003E處理器:\u003C/strong\u003E Core 2 Duo\u003Cbr\u003E\u003C/li\u003E\u003Cli\u003E\u003Cstrong\u003E記憶體:\u003C/strong\u003E 4 GB 記憶體\u003Cbr\u003E\u003C/li\u003E\u003Cli\u003E\u003Cstrong\u003E顯示卡:\u003C/strong\u003E Intel HD Graphics 4000 or other shader model 4.0\u003Cbr\u003E\u003C/li\u003E\u003Cli\u003E\u003Cstrong\u003E儲存空間:\u003C/strong\u003E 1 GB 可用空間\u003C/li\u003E\u003C/ul\u003E")
+    </script>
+</body>

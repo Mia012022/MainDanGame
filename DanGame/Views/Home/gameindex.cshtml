@@ -1,0 +1,403 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model dynamic;
+<style>
+	.chart-line {
+		fill: none;
+		stroke: #007bff;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+	}
+
+    .my-footer {
+        background-color: rgb(202, 202, 202, 0.5);
+    }
+</style>
+
+<br />
+<br />
+<br />
+
+<body class="area">
+	<ul class="circles">
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+    <div id="carouselExampleCaptions" class="carousel slide z-0">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active mh-100">
+                <img src="https:\/\/cdn.akamai.steamstatic.com\/steam\/apps\/1329410\/header.jpg?t=1715415038"
+                     class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>雀魂麻將(MahjongSoul)</h5>
+                    <p>隨時隨地，輕鬆麻將！ 精美和風立直麻將遊戲———— 《雀魂麻將》國際中文服Steam版現已正式上線！</p>
+                </div>
+            </div>
+            <div class="carousel-item mh-100">
+                <img src="image/test2.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>《Apex 英雄》</h5>
+                    <p>
+                        《Apex 英雄》是一款由 Respawn Entertainment
+                        打造的獲獎免費英雄射擊遊戲。掌握一系列不斷增加且擁有強大技能的傳說級角色，並體驗戰略性小隊玩法和新一代英雄射擊與大逃殺遊戲中的創新玩法。
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item mh-100">
+                <img src="image/test3.jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>《鬥陣特攻® 2》</h5>
+                    <p>《鬥陣特攻 2》是一款廣受好評的團隊取向射擊遊戲，故事背景設定在樂觀的未來時代，並且有持續成長的英雄陣容。立即與好友組隊，體驗刺激的戰鬥。</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="row w-100 d-flex justify-content-center align-items-center" style="margin: 5rem 0 2rem 0;">
+            <!-- 卡片輪播 -->
+            <div class="col-md-10 card w-75" style="border: 1px solid gray;">
+                <h5 class="card-header" style="padding: 10px; background-color: #fff;">依類別選擇</h5>
+                <div id="carouselExampleSlidesOnly" class="carousel slide carousel-dark" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="container">
+                                <div class="row">
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none; ">
+                                        <div class="card">
+                                            <img src="~/image/action.png" class="card-img-top object-fit-sm-contain"
+                                                 alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center">動作</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/strategy.png" class="card-img-top object-fit-sm-contain"
+                                                 alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center">策略</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/rpg.png" class="card-img-top object-fit-sm-contain"
+                                                 alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center">角色扮演</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="container">
+                                <div class="row">
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/casual.png" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center list-group-item-action">休閒</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/adventure.png" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center list-group-item-action">冒險</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/simulation.png" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center list-group-item-action">模擬</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="container">
+                                <div class="row">
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/rogue_like_rogue_lite.png" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center">獨立創作</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/sports.png" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center">運動</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/strategy_cities_settlements.png" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center">競速</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="container">
+                                <div class="row">
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/multiplayer_coop.png" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center">大型多人連線</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/freetoplay.png" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center">免費遊玩</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="col-md-4" style="margin: 10px 0 10px 0; text-decoration: none;">
+                                        <div class="card">
+                                            <img src="~/image/vr.png" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <div class="text-center">搶先體驗</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 左側箭頭 -->
+                <button class="carousel-control-prev position-absolute start-100" type="button"
+                        data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <!-- 右側箭頭 -->
+                <button class="carousel-control-next position-absolute end-100" type="button"
+                        data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
+            <div class="badge bg-warning text-white position-absolute"
+                 style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
+                <span id="tagnameFriend"></span>
+            </div>
+            <swiper-container class="mySwiperFriend" space-between="30" slides-per-view="3">
+                @{
+                    List<int> AppIds = new List<int>();
+                }
+                @foreach (AppDetail appDetail in Model)
+                {
+                    if (AppIds.Contains(appDetail.AppId))
+                    {
+                        continue;
+                    }
+                    AppIds.Add(appDetail.AppId);
+                    <swiper-slide>
+                        <div class="card" style="height: 315px;">
+                            <img src="@appDetail.HeaderImage)" class="card-img-top" alt="@appDetail.AppName">
+                            <div class="card-body">
+                                <h5 class="card-title">@appDetail.AppName</h5>
+                                <div style="position:absolute; bottom: 10px; left: 15px;">
+                                    <button class="btn btn-secondary" onclick="window.open('/Game/@appDetail.AppId')">
+                                        詳細資訊
+                                    </button>
+                                </div>
+                                <div style="position:absolute; bottom: 10px; right: 15px;">
+                                    <button class="btn btn-secondary float-end">
+                                        <a href="" class="list-group-item-action">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </swiper-slide>
+                }
+            </swiper-container>
+        </div>
+
+        <div div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
+            <div class="badge text-bg-danger position-absolute"
+                 style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
+                <span id="tagname2"></span>
+            </div>
+            <swiper-container class="mySwiper2" space-between="30" slides-per-view="3"></swiper-container>
+        </div>
+
+        <div div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
+            <div class="badge text-bg-primary position-absolute"
+                 style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
+                <span id="tagname3"></span>
+            </div>
+            <swiper-container class="mySwiper3" space-between="30" slides-per-view="3"></swiper-container>
+        </div>
+
+        <div div class="row" style="margin: 5rem 0 5rem 0;  position: relative;">
+            <div class="badge text-bg-secondary position-absolute"
+                 style="transform: translate(-50%, -50%); width: 8%; font-size: 20px; top: -40px; left: -30px;">
+                <span id="tagnameAll"></span>
+            </div>
+            <swiper-container class="mySwiperAll" space-between="30" slides-per-view="3"></swiper-container>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+
+    </div>
+
+	</div>
+</body>
+
+<script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
+<script>
+    
+    $.ajax({
+        url: 'http://localhost:5000/api/app',
+        type: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            // for (var i = 0; i < response.length; i++) {
+            //     for (var j = 0; j < response[i].tags.length; j++) {
+            //         if (response[i].tags[j].tagId === 1) {
+            //             console.log(response[i].appName);
+            //             break;
+            //         }
+            //     }
+            // }
+            var tagNameFriend = "好友"
+            var tagnameAll = "所有";
+            var tagname2 = "策略";
+            var tagname3 = "角色扮演";
+            $('#tagname2').append(tagname2);
+            $('#tagname3').append(tagname3);
+            $('#tagnameFriend').append(tagNameFriend);
+            $('#tagnameAll').append(tagnameAll);
+
+            response.forEach(function (app) {
+                var slide = `
+                            <swiper-slide>
+                                <div class="card" style="height: 315px;">
+                                    <img src="${app.headerImage}" class="card-img-top" alt="${app.appName}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${app.appName}</h5>
+                                        <div style="position:absolute; bottom: 10px; left: 15px;">
+                                                <button class="btn btn-secondary" onclick="window.open('/Game/${app.appId}')">
+                                                詳細資訊
+                                            </button>
+                                        </div>
+                                        <div style="position:absolute; bottom: 10px; right: 15px;">
+                                            <button class="btn btn-secondary float-end">
+                                                <a href="" class="list-group-item-action">
+                                                    <i class="bi bi-cart-plus"></i>
+                                                </a>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </swiper-slide>
+                        `;
+
+                // 添加到所有遊戲的容器
+                $('.mySwiperAll').append(slide);
+
+                // 檢查 tagId = 2 的標籤
+                app.tags.forEach(function (tag) {
+                    if (tag.tagId === 2) {
+                        $('.mySwiper2').append(slide);
+                    }
+                });
+
+                // 檢查 tagId = 3 的標籤
+                app.tags.forEach(function (tag) {
+                    if (tag.tagId === 3) {
+                        $('.mySwiper3').append(slide);
+                    }
+                });
+            });
+
+            // 初始化 Swiper 
+            new Swiper('.mySwiper2', {
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                spaceBetween: 30,
+                slidesPerView: 3,
+            });
+
+            new Swiper('.mySwiper3', {
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                spaceBetween: 30,
+                slidesPerView: 3,
+            });
+
+            new Swiper('.mySwiperAll', {
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                spaceBetween: 30,
+                slidesPerView: 3,
+            });
+        },
+        error: function (error) {
+            console.log('Error:', error);
+        }
+    });
+    
+</script>

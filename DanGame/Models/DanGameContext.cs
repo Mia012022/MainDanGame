@@ -290,9 +290,9 @@ public partial class DanGameContext : DbContext
 
         modelBuilder.Entity<ChatMessage>(entity =>
         {
-            //entity.HasKey(e => new { e.MessageId, e.ChatRoomId });
-			entity.HasKey(e => e.MessageId).HasName("PK_ChatMessage_1");
-			entity.ToTable("ChatMessage");
+            entity.HasKey(e => e.MessageId).HasName("PK_ChatMessage_1");
+
+            entity.ToTable("ChatMessage");
 
             entity.Property(e => e.MessageId).HasColumnName("MessageID");
             entity.Property(e => e.ChatRoomId).HasColumnName("ChatRoomID");
@@ -567,9 +567,6 @@ public partial class DanGameContext : DbContext
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(255);
             entity.Property(e => e.PasswordHash).HasMaxLength(75);
-            //entity.Property(e => e.Status)
-            //    .HasMaxLength(10)
-            //    .IsFixedLength();
             entity.Property(e => e.UpdateAt).HasColumnType("datetime");
             entity.Property(e => e.UserName).HasMaxLength(75);
         });

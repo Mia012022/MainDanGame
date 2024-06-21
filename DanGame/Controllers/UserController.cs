@@ -96,10 +96,8 @@ namespace DanGame.Controllers
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("Username", user.UserName);
 
-				
-				
-				// 重新導向至HomeController的index頁面
-				return RedirectToAction("Index", "Home");
+                // 重新導向至HomeController的index頁面
+                return RedirectToAction("Index", "Home");
             }
 
             // 驗證失敗，顯示錯誤訊息
@@ -114,6 +112,11 @@ namespace DanGame.Controllers
             // 比如：使用Entity Framework從資料庫中查詢
                 return  await _context.Users
                 .SingleOrDefaultAsync(u => u.Email == useremail && u.PasswordHash == GetSHA256(password));
+        }
+        // 好友介面
+        public IActionResult Friend()
+        {
+            return View();
         }
 
         // GET: User/Register
@@ -132,7 +135,6 @@ namespace DanGame.Controllers
                 UserName = model.UserName ?? string.Empty,
                 Email = model.Email ?? string.Empty,
                 PasswordHash = model.PasswordHash ?? string.Empty,
-                //Status = "Offline",
                 CreatedAt = DateTime.Now,
                 UpdateAt = DateTime.Now
             };

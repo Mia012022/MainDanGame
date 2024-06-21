@@ -10,18 +10,18 @@
             <img src="~/image/logo-hw.png" class="my-logo" alt="" style="margin-left: 3rem;">
         </a>
         <ul class="col-sm-8 d-flex list-group-numbered align-self-center text-center fs-5" style="margin: 0; color: #fff;">
-            <li class="flex-fill"><a href="" class="list-group-item-action list-group-item">訂閱</a></li>
-            <li class="flex-fill"><a href="" class="list-group-item-action list-group-item">遊戲</a></li>
-            <li class="flex-fill"><a href="" class="list-group-item-action list-group-item">排行榜</a></li>
+            <li class="flex-fill"><a asp-controller="Home" asp-action="index" class="list-group-item-action list-group-item">訂閱</a></li>
+            <li class="flex-fill"><a asp-controller="Home" asp-action="gameindex" class="list-group-item-action list-group-item">遊戲</a></li>
+            <li class="flex-fill"><a asp-controller="Home" asp-action="ranking" class="list-group-item-action list-group-item">排行榜</a></li>
             <li class="flex-fill"><a href="/Forum/Index" class="list-group-item-action list-group-item">論壇</a></li>
-            <li class="flex-fill"><a href="" class="list-group-item-action list-group-item">好友</a></li>
+            <li class="flex-fill"><a asp-controller="User" asp-action="Friend" class="list-group-item-action list-group-item">好友</a></li>
             <li class="flex-fill"></li>
             <li class="flex-fill"></li>
         </ul>
         <ul class="col-sm-2 d-flex list-group-numbered align-self-center text-center fs-4" style="margin: 0; color: #fff;">
             <li class="flex-fill"><a href="" class="justify-content-center align-items-center list-group-item-action"><i class="bi bi-search"></i></a></li>
             <li class="flex-fill"><a asp-controller="User" asp-action="UserIndex" class="list-group-item-action"><i class="bi bi-person-circle"></i></a></li>
-            <li class="flex-fill"><a href="" class="list-group-item-action"><i class="bi bi-cart-plus"></i></a></li>
+            <li class="flex-fill"><a href="#" class="list-group-item-action"><i class="bi bi-cart-plus"></i></a></li>
         </ul>
     </nav>
 </div>
