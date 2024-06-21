@@ -139,7 +139,7 @@
 									<span class="ms-3"><button class="reply-button btn btn-light" style="font-size:x-small" data-comment-id="@comment.CommentId">回覆</button></span>
 
 									<div class="btn-group btn-group-sm ">
-										<button class="btn "><i class="bi bi-heart" style="font-size: x-small;"></i><span class=" ms-1" style="font-size: x-small;">@comment.ArticalCommentLikes.Count</span></button>
+										<button class="btn" ><i class="bi bi-heart" style="font-size: x-small;"></i><span class=" ms-1" style="font-size: x-small;">@comment.ArticalCommentLikes.Count</span></button>
 									</div>
 
 								</div>
@@ -278,6 +278,7 @@
 								$('#btnArticalLike').removeClass('frliked');
 
 							}
+							location.reload();
 						} else {
 							if (response.requiresLogin) {
 								window.location.href = '@Url.Action("Login", "User")';

@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DanGame.Models;
 using Microsoft.EntityFrameworkCore;
-using X.PagedList.Mvc.Core;
+//using X.PagedList.Mvc.Core;
 using X.PagedList;
-using Microsoft.Extensions.Hosting;
-//using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-using System.IO;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
-using DanGame.Extensions;
 using HtmlAgilityPack;
+//using Microsoft.Extensions.Hosting;
+//using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+//using System.IO;
+//using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Http;
+//using DanGame.Extensions;
+//using HtmlAgilityPack;
 namespace DenGame.Controllers
 {
 	public class ForumController : Controller
@@ -30,9 +31,11 @@ namespace DenGame.Controllers
 		//---------------論壇首頁 有做分頁-------------
 		public async Task<IActionResult> Index(string category = "全部主題", int page = 1)
 		{
+			//宣告一頁有幾筆
 			int pageNumber = page;
 			int pageSize = 5;
-
+			//判斷是哪個文章分類
+			//分頁功能(x.pagedList套件)
 			var article = (from a in _context.ArticleLists
 						   where a.ArticleCategory == category || category == "全部主題"
 						   orderby a.ArticalId descending
@@ -44,21 +47,26 @@ namespace DenGame.Controllers
 						   .ThenInclude(u => u.UserProfile)
 						   .ToPagedList(pageNumber, pageSize);
 
-			var commentCounts = new Dictionary<int, int>();
-			var replyCounts = new Dictionary<int, int>();
-			var totalCounts = new Dictionary<int, int>();
-			var likeCounts = new Dictionary<int, int>();
+			//計算每篇文章的(評論數+回覆數)和收藏數
+			//定義字典用來存放每篇文章的
+			var commentCounts = new Dictionary<int, int>();//留言數
+			var replyCounts = new Dictionary<int, int>();//回覆數
+			var likeCounts = new Dictionary<int, int>();//收藏數
+			var totalCounts = new Dictionary<int, int>();//總評論數
+			//迴圈 計算每篇文章
 			foreach (var articleA in article)
 			{
-				int commentCount = articleA.ArticalComments.Count;
-				int replyCount = articleA.ArticalComments.Sum(c => c.ArticalCommentReplies.Count);
-				int likeCount = await _context.ArticalLikes.CountAsync(l => l.ArticalId == articleA.ArticalId);
-				int totalCount = commentCount + replyCount;
+				int commentCount = articleA.ArticalComments.Count;//留言數
+				int replyCount = articleA.ArticalComments.Sum(c => c.ArticalCommentReplies.Count);//回覆數
+				int likeCount = await _context.ArticalLikes.CountAsync(l => l.ArticalId == articleA.ArticalId);//收藏數
+				int totalCount = commentCount + replyCount;//總評論數
+			//將計算結果儲存到相應的字典中，鍵是文章的Id
 				commentCounts[articleA.ArticalId] = commentCount;
 				replyCounts[articleA.ArticalId] = replyCount;
 				likeCounts[articleA.ArticalId] = likeCount;
 				totalCounts[articleA.ArticalId] = totalCount;
 			}
+			//取得熱門推薦文章
 			var popularArticle = await (from v in _context.ArticalViews
 										join l in _context.ArticleLists on v.ArticalId equals l.ArticalId
 										group new { v, l } by new { v.ArticalId, l.ArticalTitle, l.ArticalContent } into g
@@ -73,9 +81,10 @@ namespace DenGame.Controllers
 									   .Take(3)
 									   .ToListAsync();
 
-			// 查询每个用户的文章数量并取前3名
+			
+			//獲取當前月份的第一天
 			var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
+			//查詢每個用戶當月的文章數量並取得前3名
 			var	topuser = await (from a in _context.ArticleLists
 								 where a.ArticalCreateDate >= firstDayOfMonth
 								 group a by a.User into g
@@ -91,7 +100,7 @@ namespace DenGame.Controllers
 								.OrderByDescending(u => u.ArticleCount)
 								.Take(3)
 								.ToListAsync();
-		
+		//建立一個實例，來填充不同的數據
 			var viewModel = new PageListViewModel
 			{
 				ArticleList = article,
@@ -111,28 +120,26 @@ namespace DenGame.Controllers
 
 		public IActionResult Post()
 		{
+			//進入發文的頁面時，會判斷是否有登入
 			var userId = HttpContext.Session.GetInt32("UserId");
-
+			//如果沒登入會進到登入頁面
 			if (!userId.HasValue)
 			{
 				return RedirectToAction("Login", "User");
 			}
 			
-			//var userIds = (HttpContext.Session.GetString("UserId"));
-			//if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
-			//{
-			//	return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
-			//}
 			return View();
 		}
 		//-----------------文章細節---------------------
 		public async Task<IActionResult> Artical(int? id)
 		{
+			//取得使用者的Id,方便在收藏按鈕的畫面上，藉由使用者的Id，去顯示已收藏或收藏
 			var userId = HttpContext.Session.GetInt32("UserId");
 			if (id == null)
 			{
 				return NotFound();
 			}
+			//查詢特定Id的文章，包括該文章相關聯的評論、回覆、用戶、用戶資料
 			var article = await (from a in _context.ArticleLists
 								 where a.ArticalId == id
 								 select a)
@@ -152,16 +159,18 @@ namespace DenGame.Controllers
 			}
 			var user = await (from u in _context.Users
 							  where u.UserId == article.UserId
-							  select u).FirstOrDefaultAsync();
+							  select u).FirstOrDefaultAsync() ?? throw new Exception("User not found");
+			
 			var userProfile = await (from p in _context.UserProfiles
 									 where p.UserId == article.UserId
-									 select p).FirstOrDefaultAsync();
+									 select p).FirstOrDefaultAsync() ?? throw new Exception("User profile not found");
 			var likes = await (from l in _context.ArticalLikes
 							   where l.ArticalId == id
 							   select l).ToListAsync();
 			var views = await (from v in _context.ArticalViews
 							   where v.ArticalId == id
 							   select v).ToListAsync();
+			//從當前文章的所有評論中選擇符合的commentId
 			var commentLikes = await (from cl in _context.ArticalCommentLikes
 									  where article.ArticalComments.Select(c => c.CommentId).Contains(cl.CommentId)
 									  select cl).ToListAsync();
@@ -173,9 +182,11 @@ namespace DenGame.Controllers
 				UserProfile = userProfile,
 				Likes = likes,
 				Comments = article.ArticalComments.ToList(),
+				//從文章的評論中去提取所有回覆並將其轉換為列表
 				Replies = article.ArticalComments.SelectMany(c => c.ArticalCommentReplies).ToList(),
 				CommentLikes = commentLikes,
 				Views = views,
+				//檢查特定用戶是否收藏這篇文章，將結果賦值給UserHasLiked,成立為true 反之false
 				UserHasLiked = userId.HasValue && article.ArticalLikes.Any(l => l.UserId == userId.Value)
 			};
 			return View(viewModel);
@@ -184,21 +195,24 @@ namespace DenGame.Controllers
 
 		public async Task<IActionResult> ForumUser(int id)
 		{
+			//取得當前使用者Id，來判斷是否追蹤此人
 			var userId = HttpContext.Session.GetInt32("UserId");
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
 			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == id) ?? throw new Exception("User profile not found");
 			var articles = await _context.ArticleLists.Where(x => x.UserId == id).ToListAsync();
 			var comment = await _context.ArticalComments.Where(x => x.UserId == id).ToListAsync();
 			var like = await _context.ArticalLikes.Where(x => x.UserId == id).ToListAsync();
-			var commentlike = await _context.ArticalCommentLikes.Where(x => x.UserId == id).ToListAsync();
+			//var commentlike = await _context.ArticalCommentLikes.Where(x => x.UserId == id).ToListAsync();
+			//查詢使用者收藏哪些文章
 			var likedArticles = await _context.ArticalLikes
 			.Where(like => like.UserId == id)
 			.Select(like => like.Artical)
 			.ToListAsync();
+			//此人追蹤誰
 			var friends = await (from f in _context.Friendships
 								 join u in _context.Users on f.FriendUserId equals u.UserId
 								 join up in _context.UserProfiles on f.FriendUserId equals up.UserId
-								 where f.UserId == id
+								 where f.UserId == id && f.Status == "Accepted"
 								 select new ForumFriendModel
 								 {
 									 FriendUserId= f.FriendUserId,
@@ -206,12 +220,15 @@ namespace DenGame.Controllers
 									 FriendPicture= up.ProfilePictureUrl
 								 }
 								 ).ToListAsync();
+			//收到的讚數
 			var totalLikesCount = await (from l in _context.ArticalLikes
 										 join article in _context.ArticleLists
 										 on l.ArticalId equals article.ArticalId
 										 where article.UserId == id
 										 select l)
 										.CountAsync();
+			//計算每篇文章的(評論數+回覆數)和收藏數
+			//定義字典用來存放每篇文章的
 			var commentCounts = new Dictionary<int, int>();
 			var replyCounts = new Dictionary<int, int>();
 			var totalCounts = new Dictionary<int, int>();
@@ -238,7 +255,7 @@ namespace DenGame.Controllers
 				Articles = articles,
 				Likes = like,
 				Comments = comment,
-				CommentLikes = commentlike,
+				//CommentLikes = commentlike,
 				LikedArticles = likedArticles,
 				TotalLikesCounts = totalLikesCount,
 				CommentCounts = commentCounts,
@@ -246,6 +263,7 @@ namespace DenGame.Controllers
 				TotalCounts = totalCounts,
 				LikeCounts = likeCounts,
 				forumFriendModels = friends,
+				//檢查特定用戶是否追蹤此人，將結果賦值給UserIsFollowing,成立為true 反之false
 				UserIsFollowing = _context.Friendships.Any(f => f.FriendUserId == id && f.UserId == userId),
 
 			};
@@ -396,12 +414,20 @@ namespace DenGame.Controllers
 		[HttpPost]
 		public IActionResult UploadImage(List<IFormFile> files)
 		{
+			//用來存儲上傳文件的 URL
 			var filepath = "";
 			foreach (IFormFile photo in Request.Form.Files)
 			{
+				//生成服務器上的文件路徑
+				//使用 Path.Combine 方法生成文件在服務器上的路徑
+				//_env.WebRootPath 是應用程序的 Web 根目錄，"images" 是目錄名稱
+				//photo.FileName 是上傳文件的名稱
 				string serverMapPath = Path.Combine(_env.WebRootPath, "images", photo.FileName);
+				//使用 FileStream 創建一個文件流，並將文件保存到服務器上的指定路徑
+				//FileMode.Create 表示如果文件不存在，則創建它；如果存在，則覆蓋它
 				using (var stream = new FileStream(serverMapPath, FileMode.Create))
 				{ photo.CopyTo(stream); }
+				//文件的路徑
 				filepath = "http://localhost:5000/" + "images/" + photo.FileName;
 			}
 			return Json(new { url = filepath });
@@ -542,34 +568,34 @@ namespace DenGame.Controllers
 			return View(articles);
 		}
 		//---------------------瀏覽文章--------------------
-		public async Task<IActionResult> ViewArticle(int id)
-		{
-			// 檢查用戶是否已經查看過該文章
-			var sessionKey = $"viewed_{id}";
-			var article = await _context.ArticleLists.FindAsync(id);
-			if (HttpContext.Session.GetString(sessionKey) == null)
-			{
+		//public async Task<IActionResult> ViewArticle(int id)
+		//{
+		//	// 檢查用戶是否已經查看過該文章
+		//	var sessionKey = $"viewed_{id}";
+		//	var article = await _context.ArticleLists.FindAsync(id);
+		//	if (HttpContext.Session.GetString(sessionKey) == null)
+		//	{
 				
-				if (article == null)
-				{
-					return NotFound();
-				}
+		//		if (article == null)
+		//		{
+		//			return NotFound();
+		//		}
 
-				// 增加觀看次數
-				article.ViewCount++;
-				_context.Update(article);
-				await _context.SaveChangesAsync();
+		//		// 增加觀看次數
+		//		article.ViewCount++;
+		//		_context.Update(article);
+		//		await _context.SaveChangesAsync();
 
-				// 將已查看標記寫入 Session
-				HttpContext.Session.SetString(sessionKey, "true");
+		//		// 將已查看標記寫入 Session
+		//		HttpContext.Session.SetString(sessionKey, "true");
 				
-			}
-			return View(article);
+		//	}
+		//	return View(article);
 
 
 
 
-		}
+		//}
 
 		//--------------------點讚文章---------------------
 		[HttpPost]
@@ -625,6 +651,7 @@ namespace DenGame.Controllers
 
 			return Json(new { success = true, newViewCount = article.ViewCount });
 		}
+		//---------------------追蹤按鈕-----------------
 		[HttpPost]
 		public async Task<IActionResult> FollowUser(int id)
 		{
