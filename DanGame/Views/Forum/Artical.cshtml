@@ -15,9 +15,11 @@
 	.frliked {
 		color: red;
 	}
-	.frliked:hover{
-		color:red
-	}
+
+		.frliked:hover {
+			color: red
+		}
+
 	img {
 		max-width: 100%;
 		max-height: 500px;
@@ -29,8 +31,8 @@
 	}
 
 	/* . {
-				box-sizing: border-box;
-			} */
+					box-sizing: border-box;
+				} */
 	body {
 		width: auto;
 	}
@@ -62,7 +64,7 @@
 						<a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@Model.User.UserId">
 							<img class="rounded-circle" style="width:50px;height:50px;object-fit:cover;"
 								 src="@Model.UserProfile.ProfilePictureUrl">
-							
+
 						</a>
 					</div>
 					<div class="ms-2">
@@ -76,13 +78,19 @@
 				</div>
 				<!-- 按讚 -->
 				<div class="my-3 row">
-					<div class="col"><button class="btn " ><i class="fa-solid fa-eye h6 me-1" style="margin-bottom:0px;"></i><span id="viewCount" >@Model.Article.ViewCount</span></button></div>
+					<div class="col"><button class="btn "><i class="fa-solid fa-eye h6 me-1" style="margin-bottom:0px;"></i><span id="viewCount">@Model.Article.ViewCount</span></button></div>
 					<div class="col"><button class="btn "><i class="bi bi-chat-dots h6 me-1"></i><span>@(@Model.Comments.Count + @Model.Replies.Count)</span></button></div>
 					<div class="col-6"></div>
-					<div class="col-2"><button id="btnArticalLike" class=" btn btn-dark @(Model.UserHasLiked ? "frliked" : "")" data-liked="@Model.UserHasLiked"><span style="color:white">收藏</span><i class="bi bi-heart-fill  h6 mx-1"></i><span id="likeCount" style="color:white">@Model.Likes.Count</span></button></div>
-					
-					
-					
+					<div class="col-2">
+						<button id="btnArticalLike" class=" btn w-100 btn-dark @(Model.UserHasLiked ? "frliked" : "")" data-liked="@Model.UserHasLiked">
+							<span style="color:white" id="frCollect">@(Model.UserHasLiked ? "已收藏" : "收藏")</span>
+							<i class="bi bi-heart-fill  h6 mx-1"></i>
+							<span id="likeCount" style="color:white">@Model.Likes.Count</span>
+						</button>
+					</div>
+
+
+
 				</div>
 				<!-- 留言 -->
 
@@ -227,7 +235,7 @@
 				var username = $(this).data('username');
 				$('.reply-form').hide(); // 隐藏所有回复表单
 		@* $('#reply-form-' + commentId).show(); // 显示当前评论的回复表单 *@
-						if (replyId) {
+								if (replyId) {
 					// 显示当前回复的回复表单
 					$('#reply-form-reply-' + replyId).show();
 					$('#reply-form-reply-' + replyId + ' .reply-to-user-id').val($(this).data('user-id'));
@@ -237,10 +245,10 @@
 					$('#reply-form-' + commentId).show();
 					$('#reply-form-' + commentId + ' .reply-to-user-id').val($(this).data('user-id'));
 		@* $('#reply-form-' + commentId + ' .reply-content').val('@' + username + ' '); *@
-							}
+									}
 			});
 
-			
+
 			$(".CommentCreateDate").each(function () {
 				let time = new Date(Number($(this).attr("timestramp")));
 				$(this).html(DateFormat.format.prettyDate(time));
@@ -249,7 +257,7 @@
 				let time = new Date(Number($(this).attr("timestramp")));
 				$(this).html(DateFormat.format.prettyDate(time));
 			})
-			
+
 
 			$('#btnArticalLike').click(function () {
 				var isLiked = $(this).data('frliked');
@@ -265,13 +273,15 @@
 							$('#btnArticalLike').data('frliked', response.liked);
 							if (response.liked) {
 								$('#btnArticalLike').addClass('frliked');
+
 							} else {
 								$('#btnArticalLike').removeClass('frliked');
+
 							}
 						} else {
 							if (response.requiresLogin) {
 								window.location.href = '@Url.Action("Login", "User")';
-							} 
+							}
 							else {
 								alert("An error occurred: " + response.message);
 							}
@@ -282,7 +292,7 @@
 					}
 				});
 
-				
+
 			});
 		});
 

@@ -207,7 +207,11 @@
 				</div>
 				<div class="d-flex justify-content-end w-50">
 					<div>
-						<button class="btn mt-5 me-5 btn btn-dark" style="width:150px;">追蹤</button>
+						<button id="btnFollow" class="btn mt-5 me-5 btn btn-dark @(Model.UserIsFollowing ? "following" : "")" data-following="@Model.UserIsFollowing" )" style="width:150px;">
+							<span style="color:white" id="followText">
+								@(Model.UserIsFollowing ? "已追蹤" : "追蹤")
+							</span>
+							</button>
 					</div>
 				</div>
 			</div>
@@ -348,11 +352,21 @@
 						<div class="card" style="width: 18rem;">
 							<div class="card-header">
 								誰追蹤他
-							</div>
-							<ul class="list-group list-group-flush">
-								<li class="list-group-item"></li>
-								<li class="list-group-item"></li>
-								<li class="list-group-item"></li>
+							</div><ul class="list-group list-group-flush">
+								@foreach (var friend in Model.forumFriendModels)
+								{
+
+									<a asp-action="ForumUser" asp-route-id="@friend.FriendUserId" class="text-decoration-none">
+									<li class="list-group-item d-flex">
+
+										<div class="me-2">
+											<img class="rounded-circle " style="width: 40px; height: 40px; object-fit: cover;" src="@friend.FriendPicture">
+										</div>
+										<div>@friend.FriendName</div>
+									</li>
+									</a>
+
+								}
 							</ul>
 						</div>
 					</div>
@@ -369,6 +383,39 @@
 				let time = new Date(Number($(this).attr("timestramp")));
 				$(this).html(DateFormat.format.prettyDate(time));
 			})
+
+			$('#btnFollow').click(function () {
+				var isFollowing = $(this).data('following');
+				$.ajax({
+					type: "POST",
+					url: '@(Url.Action("FollowUser", "Forum"))',
+					data: {
+						id: '@(Model.User.UserId)' // 替换为实际用户 ID
+					},
+					success: function (response) {
+						if (response.success) {
+							$('#btnFollow').data('following', response.following);
+							if (response.following) {
+								$('#btnFollow').addClass('following');
+								
+							} else {
+								$('#btnFollow').removeClass('following');
+								
+							}
+						} else {
+							if (response.requiresLogin) {
+								window.location.href = '@Url.Action("Login", "User")';
+							} else {
+								alert("An error occurred: " + response.message);
+							}
+						}
+					},
+					error: function () {
+						alert("An error occurred while processing your request.");
+					}
+					
+				});
+			});
 		});
 	</script>
 </body>

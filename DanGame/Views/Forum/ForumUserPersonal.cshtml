@@ -424,13 +424,19 @@
 								我的追蹤
 							</div>
 							<ul class="list-group list-group-flush">
+								@foreach (var friend in Model.forumFriendModels)
+								{
+									<a asp-action="ForumUser" asp-route-id="@friend.FriendUserId" class="text-decoration-none">
+									<li class="list-group-item d-flex">
 
-								<li class="list-group-item"></li>
-
-
-
-								<li class="list-group-item"></li>
-								<li class="list-group-item"></li>
+										<div class="me-2">
+											<img class="rounded-circle " style="width: 40px; height: 40px; object-fit: cover;" src="@friend.FriendPicture">
+											</div>
+										<div >@friend.FriendName</div>
+									</li>
+									</a>
+								}
+				
 							</ul>
 						</div>
 					</div>

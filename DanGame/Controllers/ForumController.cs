@@ -184,11 +184,7 @@ namespace DenGame.Controllers
 
 		public async Task<IActionResult> ForumUser(int id)
 		{
-			//var userIds = (HttpContext.Session.GetString("UserId"));
-			//if (string.IsNullOrEmpty(userIds) || !int.TryParse(userIds, out int userId))
-			//{
-			//	return RedirectToAction("Login", "User"); // 如果沒有登入則重定向到登入頁面
-			//}
+			var userId = HttpContext.Session.GetInt32("UserId");
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
 			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == id) ?? throw new Exception("User profile not found");
 			var articles = await _context.ArticleLists.Where(x => x.UserId == id).ToListAsync();
@@ -199,6 +195,17 @@ namespace DenGame.Controllers
 			.Where(like => like.UserId == id)
 			.Select(like => like.Artical)
 			.ToListAsync();
+			var friends = await (from f in _context.Friendships
+								 join u in _context.Users on f.FriendUserId equals u.UserId
+								 join up in _context.UserProfiles on f.FriendUserId equals up.UserId
+								 where f.UserId == id
+								 select new ForumFriendModel
+								 {
+									 FriendUserId= f.FriendUserId,
+									 FriendName= u.UserName,
+									 FriendPicture= up.ProfilePictureUrl
+								 }
+								 ).ToListAsync();
 			var totalLikesCount = await (from l in _context.ArticalLikes
 										 join article in _context.ArticleLists
 										 on l.ArticalId equals article.ArticalId
@@ -237,7 +244,9 @@ namespace DenGame.Controllers
 				CommentCounts = commentCounts,
 				ReplyCounts = replyCounts,
 				TotalCounts = totalCounts,
-				LikeCounts = likeCounts
+				LikeCounts = likeCounts,
+				forumFriendModels = friends,
+				UserIsFollowing = _context.Friendships.Any(f => f.FriendUserId == id && f.UserId == userId),
 
 			};
 
@@ -253,6 +262,17 @@ namespace DenGame.Controllers
 				//return RedirectToAction("Login", "User");
 				return RedirectToAction("Login", "User", new { returnUrl = Url.Action("ForumUserPersonal", "Forum") });
 			}
+			var friends = await (from f in _context.Friendships
+								 join u in _context.Users on f.FriendUserId equals u.UserId
+								 join up in _context.UserProfiles on f.FriendUserId equals up.UserId
+								 where f.UserId == userId  && f.Status == "Accepted"
+								 select new ForumFriendModel
+								 {
+									 FriendUserId= f.FriendUserId,
+									 FriendName= u.UserName,
+									 FriendPicture= up.ProfilePictureUrl
+								 }
+								 ).ToListAsync();
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId) ?? throw new Exception("User profile not found");
 			var articles = await _context.ArticleLists.Where(x => x.UserId == userId).ToListAsync();
@@ -270,7 +290,6 @@ namespace DenGame.Controllers
 												 ArticalContent= article.ArticalContent,
 												 CommentDate= comment.CommentCreateDate
 											  })
-											  
 											  .ToListAsync();
 											
 			var like = await _context.ArticalLikes.Where(x => x.UserId == userId).ToListAsync();
@@ -322,7 +341,8 @@ namespace DenGame.Controllers
 				ReplyCounts = replyCounts,
 				TotalCounts = totalCounts ,
 				LikeCounts = likeCounts,
-				Comments = comments
+				Comments = comments,
+				forumFriendModels = friends
 			};
 
 			return View(viewModel);
@@ -604,6 +624,37 @@ namespace DenGame.Controllers
 			await _context.SaveChangesAsync();
 
 			return Json(new { success = true, newViewCount = article.ViewCount });
+		}
+		[HttpPost]
+		public async Task<IActionResult> FollowUser(int id)
+		{
+			var userId = HttpContext.Session.GetInt32("UserId");
+
+			if (!userId.HasValue)
+			{
+				return Json(new { success = false, message = "你需要登入才可追蹤", requiresLogin = true });
+			}
+			var friend = await _context.Friendships
+						.FirstOrDefaultAsync(f=>f.FriendUserId == id && f.UserId==userId );
+			if(friend != null)
+			{
+				_context.Friendships.Remove(friend);
+				await _context.SaveChangesAsync();
+				return Json(new { success = true, following = false });
+			}
+			else
+			{
+				var friendship = new Friendship
+				{
+					UserId = userId,
+					FriendUserId = id,
+					Status = "Accepted"
+				};
+				_context.Friendships.Add(friendship);
+				await _context.SaveChangesAsync(); // 确保保存更改
+				return Json(new { success = true, following = true });
+			}
+			 
 		}
 	}
 }
