@@ -14,6 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Net.WebRequestMethods;
 using Azure.Core;
 using static OpenAI.ObjectModels.StaticValues.AssistantsStatics.MessageStatics;
+using System.Numerics;
 
 
 //public class AuthorizeUserAttribute : ActionFilterAttribute
@@ -259,7 +260,7 @@ namespace DanGame.Controllers
                 { "ClientBackURL","http://localhost:5000/ShoppingCart/successbuy" },
                  { "EncryptType", "1" },
                 //{"IgnorePayment ","Credit" },
-                { "ItemName", AppName },
+                { "ItemName", AppName+"#含稅10%"},
                 { "MerchantID", "3002607" },
                 { "MerchantTradeDate", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") },
                 { "MerchantTradeNo", $"Mike{DateTime.Now.ToString("yyyyMMddHHmmss")}" },
@@ -299,10 +300,10 @@ namespace DanGame.Controllers
             Dictionary<string, string> parameters = new Dictionary<string, string>
             {
                 { "ChoosePayment", "ALL" },
-                { "ClientBackURL","http://localhost:5000/ShoppingCart/successbuy" },
+                { "ClientBackURL","http://localhost:5000/ShoppingCart/successbuy/game" },
                  { "EncryptType", "1" },
                 //{"IgnorePayment ","Credit" },
-                { "ItemName", AppName },
+                { "ItemName", AppName+"#含稅10%" },
                 { "MerchantID", "3002607" },
                 { "MerchantTradeDate", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") },
                 { "MerchantTradeNo", $"Mike{DateTime.Now.ToString("yyyyMMddHHmmss")}" },
@@ -316,6 +317,108 @@ namespace DanGame.Controllers
 
             return View(parameters);
         }
+
+
+
+        //當進入Gotocheckmethod先把相關資料算好給前端
+        [HttpGet("Gotosubscriptcheck/{id}")]
+        [AuthorizeUser]
+        public IActionResult Gotosubscriptcheck(int id )
+        {
+            var session = Request.HttpContext.Session;
+            var userId = session.GetInt32("UserId");
+            var query = from o in context.ShoppingCarts
+                        where o.UserId == Convert.ToInt32(userId)
+                        select new
+                        {
+                            Price = o.App.AppDetail.Price,
+                            AppName = o.App.AppName
+
+                        };
+            var subscriptionPlan = (from o in context.SubscriptionPlans
+                                    where o.PlanId == id
+                                    select new SubscriptionPlan
+                                    {
+                                        PlanId = o.PlanId,
+                                        PlanName = o.PlanName,
+                                        Description = o.Description,
+                                        Duration = o.Duration,
+                                        Price = o.Price,
+                                        ThemeColor = o.ThemeColor,
+                                        SafeMessage = o.SafeMessage
+
+                                    }).ToList();
+            var subscriptionTotal = subscriptionPlan.First().Price;
+
+
+
+
+
+            //var total = query.Sum()
+
+            subscriptionTotal = (int)(subscriptionTotal * 1.1);
+            var AppName = subscriptionPlan.First().PlanName;
+
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "ChoosePayment", "ALL" },
+                { "ClientBackURL",$"http://localhost:5000/ShoppingCart/successbuy/subscription?planid={id}" },
+                 { "EncryptType", "1" },
+                //{"IgnorePayment ","Credit" },
+                { "ItemName", AppName },
+                { "MerchantID", "3002607" },
+                { "MerchantTradeDate", DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") },
+                { "MerchantTradeNo", $"Mike{DateTime.Now.ToString("yyyyMMddHHmmss")}" },
+                { "PaymentType", "aio" },
+                { "ReturnURL", "http://localhost:5000/ShoppingCart/Ecplay"},/*http://example.com/ShoppingCart/Ecplay*/
+                { "TotalAmount", $"{subscriptionTotal}" },
+                { "TradeDesc", "遊戲" },
+            };
+
+            parameters.Add("CheckMacValue", BuildCheckMacValue(parameters));
+
+            
+            
+
+
+              var viewModel = new SubscriptionCheckViewModel
+            {
+                Parameters = parameters,
+                SubscriptionPlan = subscriptionPlan
+            };
+
+
+            return View(
+                viewModel);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -500,19 +603,73 @@ namespace DanGame.Controllers
 
 
         //前往結帳成功頁面
-        [HttpGet("successbuy")]
+        [HttpGet("successbuy/{method}")]
         [AuthorizeUser]
-        public IActionResult successbuy()
+        public IActionResult successbuy(string method, [FromQuery] int? planid)
         {
             var userId=Request.HttpContext.Session.GetInt32("UserId");
 
-            var shoppingCartItems = from o in context.ShoppingCarts
-                                   where o.UserId == userId
-                                   select o;
- 
-            context.ShoppingCarts.RemoveRange(shoppingCartItems);
-            context.SaveChanges();
+            if (method == "game")
+            {
+                var userShoppingCarts = from o in context.ShoppingCarts
+                                        where o.UserId == userId
+                                        select o;
 
+                if (userShoppingCarts.FirstOrDefault() == null)
+                {
+                    return NoContent();
+                }
+
+                Order order = new Order()
+                {
+                    UserId = (int)userId
+                };
+
+                context.Orders.Add(order);
+                context.SaveChanges();
+
+                var shoppingCartItems = (from o in context.ShoppingCarts
+                                         where o.UserId == userId
+                                         select
+                                         new
+                                         {
+                                             shoppingcartItem = o,
+                                             orderItem = new OrderItem()
+                                             {
+                                                 OrderId = order.OrderId,
+                                                 AppId = o.AppId,
+                                                 Price = o.App.AppDetail.Price
+                                             }
+                                         }).ToArray();
+
+                context.ShoppingCarts.RemoveRange(shoppingCartItems.Select(s => s.shoppingcartItem));
+                context.OrderItems.AddRange(shoppingCartItems.Select(s => s.orderItem));
+                context.SaveChanges();
+            }
+            else if (method == "subscription")
+            {
+                Order order = new Order()
+                {
+                    UserId = (int)userId
+                };
+                context.Orders.Add(order);
+                context.SaveChanges();
+                var subscription = (from o in context.SubscriptionPlans
+                                    where o.PlanId == planid
+                                    select
+                                    new Subscription()
+                                    {
+                                        OrderId = order.OrderId,
+                                        UserId = (int)userId,
+                                        SubscriptionPlanId = o.PlanId,
+                                        StartDate = DateOnly.FromDateTime(DateTime.Now),
+                                        EndDate = DateOnly.FromDateTime(DateTime.Now.AddDays(o.Duration * 30)),
+                                        CreatedAt = DateTime.Now,
+                                    }).FirstOrDefault();
+                context.Subscriptions.Add(subscription);
+                context.SaveChanges();
+
+            }
             return View();
         }
 
