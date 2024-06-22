@@ -106,13 +106,22 @@
 		background-repeat: no-repeat;
 		background-size: cover;
 	}
+
+	.my-header {
+		position: fixed;
+		top: -80px; 
+		left: 0;
+		right: 0;
+		background: linear-gradient(to bottom, #fec7ff, #cc7edd, #8c56c5);
+		z-index: 1000;
+		transition: top 0.5s;
+		height: 60px;
+		backdrop-filter: blur(0px);
+	}
 </style>
 
 <body class="area">
-	<br />
-	<br />
-	<br />
-	<div class="bg-topbox" style="position: relative; height: 882px; z-index: 0;">
+	<div class="bg-topbox border-bottom" style="position: relative; height: 960px; z-index: 0;">
 		<div class="snow-container">
 			<div class="snow foreground"></div>
 			<div class="snow foreground layered"></div>
@@ -126,7 +135,7 @@
 		{
 			<img src="@gameCovers[y]" style="position: absolute; top: @coverPositions[y].top; left: @coverPositions[y].left; width: 400px; height: 200px; border-radius: 20px;" />
 		}
-		<div class="text-center text-topbox" style="margin: 15px; position: absolute; top: 20%; right: 5%; width: 700px; height: 350px; color: white; padding-top: 10px;">
+		<div class="text-center text-topbox" style="margin: 15px; position: absolute; top: 25%; right: 7%; width: 700px; height: 350px; color: white; padding-top: 10px;">
 			<h1 class="fw-bold" style="text-shadow: black 0.3em 0.1em 0.18em">無限遊玩，無限可能</h1>
 			<div class="fs-4 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">
 				訂閱我們的遊戲平台，暢享超過100款精彩遊戲，體驗無限樂趣！
@@ -484,27 +493,58 @@
 <script>
 
 	// 頁首
-	$(document).on("scroll", headerEffect)
-
-	function headerEffect() {
-		let value = $(document).scrollTop() > 20;
-
-		$(".my-header").css({
-			"z-index": 1000,
-			"transition": "top 0.5s",
-		})
-	}
-	headerEffect();
 
 	$(document).ready(function () {
-		var $header = $('.my-header');
-		// $(window).scroll(function () {
-		// 	if ($(this).scrollTop() > 20) {
-		// 		$header.addClass('fixed').fadeIn();
-		// 	} else {
-		// 		$header.removeClass('fixed').fadeOut();
-		// 	}
-		// });
+		// 顯示和隱藏導航欄的函數
+		function showHeader() {
+			$(".my-header").css({
+				"top": "0px",
+				"transition": "top 0.5s",
+				"backdrop-filter": "blur(5px)"
+			});
+		}
+
+		function hideHeader() {
+			$(".my-header").css({
+				"top": "-80px",
+				"transition": "top 0.5s",
+				"backdrop-filter": "blur(0px)"
+			});
+		}
+
+		// 預設隱藏導航欄
+		hideHeader();
+
+		// 滚动时显示或隐藏导航栏
+		$(window).on("scroll", function () {
+			let value = $(document).scrollTop() > 20;
+			if (value) {
+				showHeader();
+			} else {
+				hideHeader();
+			}
+		});
+
+		// 當鼠標靠近視窗頂部時顯示導航欄
+		$(window).mousemove(function (event) {
+			if (event.clientY < 100) { // 當鼠標靠近頂部 100px 範圍內時
+				showHeader();
+			} else {
+				hideHeader();
+			}
+		});
+
+		// 當鼠標進入或離開 .my-header 時顯示或隱藏導航欄
+		$(".my-header").hover(
+			function () {
+				showHeader(); // 顯示導航欄
+			},
+			function () {
+				if ($(document).scrollTop() <= 20) {
+					hideHeader(); // 隱藏導航欄
+				}
+			}
+		);
 
 		$("#prevButton").on("click", () => moveCarousel(1))
 		$("#nextButton").on("click", () => moveCarousel(-1))

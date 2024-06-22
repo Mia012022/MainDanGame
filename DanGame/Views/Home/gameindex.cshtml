@@ -19,23 +19,26 @@
 
     .card-img-container {
         position: relative;
-        overflow: hidden; 
     }
 
-    .img-text {
-        position: absolute;
-        bottom: 0;
-        left: 0; 
-        right: 0; 
-        width: 100%;
-        text-align: center;
-        background-color: rgba(0, 0, 0, 0.5); 
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-        color: white; 
-        padding: 5px 0; 
-        box-sizing: border-box; 
-    }
+        .card-img-container .bottom-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to bottom,rgba(0,0,0,0), rgba(0,0,0,0.3),rgba(0,0,0,0.7),rgba(0,0,0,0.9), rgba(0,0,0,1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-img-container .img-text {
+            color: white;
+            font-size: 1.2em;
+            padding: 5px 10px; /* 內邊距 */
+            text-align: center;
+        }
 </style>
 
 <br />
@@ -104,9 +107,8 @@
                                     <a href="/Home/category/1" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
-                                                <img src="~/image/action.png" class="card-img-top object-fit-sm-contain"
-                                                     alt="...">
-                                                <div class="card-body">
+                                                <img src="~/image/action.png" class="card-img-top object-fit-sm-contain" alt="...">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">動作</div>
                                                 </div>
                                             </div>
@@ -115,9 +117,8 @@
                                     <a href="/Home/category/2" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
-                                                <img src="~/image/strategy.png" class="card-img-top object-fit-sm-contain"
-                                                     alt="...">
-                                                <div class="card-body">
+                                                <img src="~/image/strategy.png" class="card-img-top object-fit-sm-contain" alt="...">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">策略</div>
                                                 </div>
                                             </div>
@@ -126,9 +127,8 @@
                                     <a href="/Home/category/3" class="col-md-4 text-decoration-none" style="margin: 10px 0 10px 0;">
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
-                                                <img src="~/image/rpg.png" class="card-img-top object-fit-sm-contain"
-                                                     alt="...">
-                                                <div class="card-body">
+                                                <img src="~/image/rpg.png" class="card-img-top object-fit-sm-contain" alt="...">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">角色扮演</div>
                                                 </div>
                                             </div>
@@ -144,7 +144,7 @@
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
                                                 <img src="~/image/casual.png" class="card-img-top" alt="...">
-                                                <div class="card-body">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">休閒</div>
                                                 </div>
                                             </div>
@@ -154,7 +154,7 @@
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
                                                 <img src="~/image/adventure.png" class="card-img-top" alt="...">
-                                                <div class="card-body">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">冒險</div>
                                                 </div>
                                             </div>
@@ -164,7 +164,7 @@
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
                                                 <img src="~/image/simulation.png" class="card-img-top" alt="...">
-                                                <div class="card-body">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">模擬</div>
                                                 </div>
                                             </div>
@@ -181,7 +181,7 @@
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
                                                 <img src="~/image/rogue_like_rogue_lite.png" class="card-img-top" alt="...">
-                                                <div class="card-body">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">獨立創作</div>
                                                 </div>
                                             </div>
@@ -191,7 +191,7 @@
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
                                                 <img src="~/image/sports.png" class="card-img-top" alt="...">
-                                                <div class="card-body">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">運動</div>
                                                 </div>
                                             </div>
@@ -201,7 +201,7 @@
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
                                                 <img src="~/image/strategy_cities_settlements.png" class="card-img-top" alt="...">
-                                                <div class="card-body">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">競速</div>
                                                 </div>
                                             </div>
@@ -217,7 +217,7 @@
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
                                                 <img src="~/image/multiplayer_coop.png" class="card-img-top" alt="...">
-                                                <div class="card-body">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">大型多人連線</div>
                                                 </div>
                                             </div>
@@ -227,7 +227,7 @@
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
                                                 <img src="~/image/freetoplay.png" class="card-img-top" alt="...">
-                                                <div class="card-body">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center text-decoration-none img-text">免費遊玩</div>
                                                 </div>
                                             </div>
@@ -237,7 +237,7 @@
                                         <div class="card">
                                             <div class="card-img-container" style="position: relative;">
                                                 <img src="~/image/vr.png" class="card-img-top" alt="...">
-                                                <div class="card-body">
+                                                <div class="bottom-overlay">
                                                     <div class="text-center img-text">搶先體驗</div>
                                                 </div>
                                             </div>
@@ -369,25 +369,25 @@
 
             response.forEach(function (app) {
                 var slide = `
-                    <swiper-slide>
-                        <div class="card" style="height: 315px;">
-                            <img src="${app.headerImage}" class="card-img-top" alt="${app.appName}">
-                            <div class="card-body">
-                                <h5 class="card-title">${app.appName}</h5>
-                                <div style="position:absolute; bottom: 10px; left: 15px;">
-                                        <button class="btn btn-secondary" onclick="window.open('/Game/${app.appId}')">
-                                        詳細資訊
-                                    </button>
-                                </div>
-                                <div style="position:absolute; bottom: 10px; right: 15px;">
-                                    <button class="btn float-end check-button" appID="${app.appId}" alreadyInShoppingCart="${alreadyInShoppingCartAppIDs.includes(app.appId)}">
-                                        <i class="check-button-icon ${alreadyInShoppingCartAppIDs.includes(app.appId) ? 'bi bi-check-lg' : 'bi bi-cart-plus'}"></i>
-                                    </button>
+                        <swiper-slide>
+                            <div class="card" style="height: 315px;">
+                                <img src="${app.headerImage}" class="card-img-top" alt="${app.appName}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${app.appName}</h5>
+                                    <div style="position:absolute; bottom: 10px; left: 15px;">
+                                            <button class="btn btn-secondary" onclick="window.open('/Game/${app.appId}')">
+                                            詳細資訊
+                                        </button>
+                                    </div>
+                                    <div style="position:absolute; bottom: 10px; right: 15px;">
+                                        <button class="btn float-end check-button" appID="${app.appId}" alreadyInShoppingCart="${alreadyInShoppingCartAppIDs.includes(app.appId)}">
+                                            <i class="check-button-icon ${alreadyInShoppingCartAppIDs.includes(app.appId) ? 'bi bi-check-lg' : 'bi bi-cart-plus'}"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </swiper-slide>
-                `;
+                        </swiper-slide>
+                    `;
                 // 添加到所有遊戲的容器
                 $('.mySwiperAll').append(slide);
 
@@ -448,12 +448,8 @@
         },
         error: function (error) {
             console.log('Error:', error);
-        },
-        always: function () {
-            
         }
     });
-
     
     
 </script>
