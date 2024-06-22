@@ -21,49 +21,24 @@
         position: relative;
     }
 
-    .card-img-container .bottom-overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 30%;
-        background: linear-gradient(to bottom,rgba(0,0,0,0), rgba(0,0,0,0.3),rgba(0,0,0,0.7),rgba(0,0,0,0.9), rgba(0,0,0,1));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+        .card-img-container .bottom-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to bottom,rgba(0,0,0,0), rgba(0,0,0,0.3),rgba(0,0,0,0.7),rgba(0,0,0,0.9), rgba(0,0,0,1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .card-img-container .img-text {
-        color: white;
-        font-size: 1.2em;
-        padding: 5px 10px; /* 內邊距 */
-        text-align: center;
-    }
-
-    /* 按鈕樣式 */
-    .check-button {
-        position: relative;
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: white;
-        background-image: linear-gradient(90deg, #a230ff, #d09dff);
-        border: none;
-        border-radius: 50px;
-        cursor: pointer;
-        overflow: hidden;
-        transition: background-image 0.5s, transform 0.3s;
-        z-index: 0;
-    }
-
-    .check-button:hover {
-        background-image: linear-gradient(135deg, #a230ff, #d09dff);
-        transform: scale(1.1);
-    }
-
-    .check-button:active {
-        transform: scale(0.9);
-    }
+        .card-img-container .img-text {
+            color: white;
+            font-size: 1.2em;
+            padding: 5px 10px; /* 內邊距 */
+            text-align: center;
+        }
 </style>
 
 <br />
@@ -98,7 +73,7 @@
         <div class="carousel-inner">
             @foreach (AppDetail app in Model.tagApps)
             {
-                <div class="border-bottom carousel-item @(Array.IndexOf(Model.tagApps, app) == 0 ? "active":"")" style="height:905px; background-size: cover;background-repeat: no-repeat; background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1)), url(https://cdn.cloudflare.steamstatic.com/steam/apps/@(app.AppId)/library_hero.jpg)">
+                <div class="carousel-item @(Array.IndexOf(Model.tagApps, app) == 0 ? "active":"")" style="height:905px; background-size: cover;background-repeat: no-repeat; background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1)), url(https://cdn.cloudflare.steamstatic.com/steam/apps/@(app.AppId)/library_hero.jpg)">
                     @* <img src="@app.HeaderImage" class="d-block w-100" alt="..."> *@
                     <div class="carousel-caption d-none d-md-block">
                         <h5>@app.AppName</h5>
@@ -114,7 +89,7 @@
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
                 data-bs-slide="next">
-            <span style="color: white;" class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
     </div>
@@ -352,8 +327,10 @@
             <swiper-container class="mySwiperAll" space-between="30" slides-per-view="3"></swiper-container>
         </div>
 
+
     </div>
 
+	</div>
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>

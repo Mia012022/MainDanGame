@@ -359,6 +359,30 @@ bottom: -150px;
     100% { transform: rotate(360deg)}
 }
 
+/* 按鈕樣式 */
+.check-button {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-image: linear-gradient(90deg, #a230ff, #d09dff);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background-image 0.5s, transform 0.3s;
+    z-index: 0;
+}
+
+.check-button:hover {
+    background-image: linear-gradient(135deg, #a230ff, #d09dff);
+    transform: scale(1.1);
+}
+
+.check-button:active {
+    transform: scale(0.9);
+}
 
 /* 粒子特效的容器 */
 .particles {
@@ -385,7 +409,7 @@ bottom: -150px;
 
 @keyframes particle-animation {
     0% {
-        transform: translate(-50%, -50%);
+        transform: translate(0, 0);
         opacity: 1;
     }
 
