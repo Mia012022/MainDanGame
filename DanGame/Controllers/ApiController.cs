@@ -227,7 +227,11 @@ namespace DanGame.Controllers
         {
             var query = from tag in _context.GenreTags
                          where tagIds.Contains(tag.TagId)
-                         select new { tagId = tag.TagId, tagName = tag.TagName, apps = tag.Apps };
+                         select new { 
+                             tagId = tag.TagId, 
+                             tagName = tag.TagName, 
+                             apps = tag.Apps.Select(a => a.AppDetail) 
+                         };
 
             return await query.ToArrayAsync();
         }
