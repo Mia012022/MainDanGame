@@ -81,6 +81,18 @@ namespace DanGame.Controllers
             return await query.ToArrayAsync();
         }
 
+        // API: GET API/User/ChatRoomMessages 取得聊天室訊息
+        [HttpGet("User/ChatRoomMessages/{chatRoomID}")]
+        [AuthorizeUser]
+        async public Task<dynamic> GetChatMessages(int chatRoomID)
+        {
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
+            
+            var query = from message in _context.ChatMessages
+                        where message.ChatRoomId == chatRoomID && message.ChatRoom.ChatRoomMembers.Any(m => m.UserId == userId)
+                        select message;
+            return await query.ToArrayAsync();
+        }
         // API: GET API/User/Friends 登入後取得個人所有好友
         [HttpGet("User/Friends")]
         [AuthorizeUser]
