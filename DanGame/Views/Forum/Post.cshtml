@@ -7,9 +7,9 @@
 <head>
 	<meta charset="UTF-8">
 	<script src="~/ckeditor5/build/ckeditor.js"></script>
-	@* <link rel="stylesheet" href="css/editor.css"> *@
+	
 	<link rel="stylesheet" href="~/css/post.css" asp-append-version="true" />
-	@* <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script> *@
+
 	<script src="https://kit.fontawesome.com/b5dde33e16.js" crossorigin="anonymous"></script>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
 		  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -18,18 +18,25 @@
 
 </head>
 <style>
-	.bgpurple {
-		background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)), url('../img/purple.png') no-repeat 0% 20%/ cover;
-		border-radius: 10px; /* 邊角圓滑 */
-		box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* 模糊邊框 */
-		
+	.row {
+		margin-left: 0;
 	}
 	.hhh{
 		height:100px;
 	}
+
+	.bgStyle {
+		height: 600px;
+		width: 100%;
+		background-image: linear-gradient(to top, #ffffff 30%, rgba(222, 213, 213, 0)), url(/img/frLeft.webp);
+		background-repeat: no-repeat;
+		background-position: top;
+		background-size: cover;
+		background-attachment: fixed;
+	}
 </style>
-<body>
-	<div class="bgpurple">
+<body class="bgStyle">
+	
 	<div class="hhh"></div>
 		<div class="shadow border border-1 rounded container m-auto mt-5 bg-white bg-opacity-75 pb-4">
 			<form class="m-2" asp-action="Upload" asp-controller="Forum" method="post" enctype="multipart/form-data">
@@ -103,7 +110,7 @@
 					@* 預覽BUTTON *@
 					<div class="col-6 ">
 						<div class="row justify-content-center">
-							<button id="previewBtn" class="btn btn-light w-50">預覽</button>
+							<button id="previewBtn" class="btn btn-light w-50" >預覽</button>
 						</div>
 
 					</div>
@@ -120,7 +127,7 @@
 			</form>
 
 		</div>
-	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script>
 		class MyUploadAdapter {
 			constructor(loader) {

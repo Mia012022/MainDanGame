@@ -9,7 +9,7 @@ public partial class ArticalComment
 
     public int ArticalId { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     public int ParentOrChild { get; set; }
 
