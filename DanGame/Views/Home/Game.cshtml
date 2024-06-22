@@ -257,7 +257,7 @@
             }
         }
 
-        .game-action {
+        #game-action {
             position: relative;
             width: 100%;
             height: clamp(450px, 75vh, 450px);
@@ -297,7 +297,7 @@
                         position: absolute;
                         height: 95%;
                         top: -5vh;
-                        left: 6vw;
+                        left: 2vw;
                         transition: transform 0.5s;
 
                     }
@@ -386,7 +386,7 @@
                         flex: 1;
 
                         .check {
-                            height: 70px;
+                            height: 80px;
                             display: flex;
                             flex-direction: row;
                             align-items: center;
@@ -395,6 +395,7 @@
                             background-color: transparent;
                             transition: background-color 0.5s;
                             border-radius: 10px;
+                            font-size: 16px;
 
                             input {
                                 width: 16px;
@@ -402,8 +403,8 @@
                                 margin-right: 20px;
                             }
 
-                            p {
-                                font-size: 12px;
+                            .form-check-label-desc {
+                                font-size: 14px;
                                 color: goldenrod;
                                 margin: 0;
                             }
@@ -547,7 +548,7 @@
         </div>
     </div>
 
-    <div class="game-action">
+    <div id="game-action">
         <div class="background-wrapper-image"></div>
         <div class="game-action-content">
             <div class="left-side-content">
@@ -605,7 +606,6 @@
                             </div>
                             <div class="tab-pane fade" id="v-pills-link4" role="tabpanel"
                                 aria-labelledby="v-pills-link4-tab">
-                                
                             </div>
                         </div>
                         <!-- Tab content -->
@@ -616,21 +616,21 @@
             <div class="right-side-content">
                 <div class="form-check">
                     <div class="subscript-check check">
-                        <input class="form-check-input" type="radio" name="RadioDefault" id="Radio-subscript" checked>
+                        <input class="form-check-input" type="radio" name="RadioDefault" id="Radio-subscript" @(Model.alreadySubscription ? "disabled" : "checked")>
                         <label class="form-check-label" for="Radio-subscript">
-                            訂閱
-                            <p style="color: goldenrod;">DanGame Plus升級即可存取此遊戲和其他數款作品</p>
+                            @(Model.alreadySubscription ? "已訂閱" : "訂閱")
+                            <p class="form-check-label-desc" style="color: goldenrod;">DanGame Plus升級即可存取此遊戲和其他數款作品</p>
                         </label>
                     </div>
                     <div class="add-to-cart-check check">
-                        <input class="form-check-input" type="radio" name="RadioDefault" id="Radio-add-to-cart">
+                        <input class="form-check-input" type="radio" name="RadioDefault" id="Radio-add-to-cart" @(Model.alreadyOwnThisGame ? "disabled" : "")>
                         <label class="form-check-label" for="Radio-add-to-cart">
                             購買 NT$ @Model.detail.Price
-                            <p style="color: gray;">單獨購買此遊戲</p>
+                            <p class="form-check-label-desc" style="color: gray;">@(Model.alreadyOwnThisGame ? "已擁有此遊戲" : "單獨購買此遊戲")</p>
                         </label>
                     </div>
                 </div>
-                <div class="check-button">
+                <div class="check-button" @(Model.alreadySubscription && Model.alreadyOwnThisGame && !Model.alreadyInShoppingCart ? "disabled" : "")>
                     訂閱
                 </div>
             </div>
@@ -640,6 +640,11 @@
     <!-- 中間內容 end -->
 
     <script>
+        let alreadySubscription = @(Model.alreadySubscription ? "true" : "false");
+        let alreadyOwnThisGame = @(Model.alreadyOwnThisGame ? "true" : "false");
+        let alreadyInShoppingCart = @(Model.alreadyInShoppingCart ? "true" : "false");
+        let alreadyLogin = @(Model.alreadyLogin ? "true" : "false");
+
         document.addEventListener('DOMContentLoaded', function () {
             var thumbnailSwiper = new Swiper('.game-media-thumbnail', {
                 loop: true,
@@ -732,7 +737,6 @@
                     shadowScale: 0.94
                 }
             });
-
         });
 
         $(document).ready(function () {
@@ -754,6 +758,62 @@
                 $(this).parent(".offerItem").addClass("active");
                 $(this).addClass("hide");
             });
+
+            $('input[type=radio][name=RadioDefault]').change(function (event) {
+                switch ($(event.target).attr("id")) {
+                    case "Radio-add-to-cart":
+                        if (alreadyInShoppingCart) {
+                            $(".check-button").text("已加入購物車").css({
+                                cursor: "default",
+                                filter: "brightness(0.5)"
+                            })
+                        } else {
+                            $(".check-button").text("加入購物車").css({
+                                cursor: "pointer",
+                                filter: "brightness(1)"
+                            })
+                        }
+                        break
+                    case "Radio-subscript":
+                        if (alreadySubscription) {
+                            $(".check-button").text("已訂閱").css({
+                                cursor: "default",
+                                filter: "brightness(0.5)"
+                            })
+                        } else {
+                            $(".check-button").text("訂閱 DanGame Plus").css({
+                                cursor: "pointer",
+                                filter: "brightness(1)"
+                            });
+                        }
+                        break
+                }
+            })
+
+            $(".check-button").on("click", function () {
+                if (!alreadyLogin) {
+                    window.open('/User/Login?redirectTo=/Game/@(Model.detail.AppId)#game-action');
+                    return
+                } 
+                if (!alreadyInShoppingCart) {
+                    $.ajax({
+
+                        url: "/API/User/ShoppingCart",
+                        method: "POST",
+                        data: JSON.stringify({ appId: @(Model.detail.AppId)}),
+                        contentType: 'application/json',
+
+                        success: function(res) { 
+                            $(".check-button").text("已加入購物車").css({
+                                cursor: "default",
+                                filter: "brightness(0.5)"
+                            })
+                            alreadyInShoppingCart = true;
+                        },
+                        error: function (err) { console.log(err) },
+                    });
+                }
+            })
         });
 
         $(document).on("scroll", headerEffect)
