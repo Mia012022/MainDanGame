@@ -13,6 +13,30 @@ namespace DanGame.Models
 		public List<ArticalLike> Likes { get; set; }
 		public List<ArticalView> Views { get; set; }
 		public List<ArticalCommentLike> CommentLikes { get; set; }
-		
+
+		public int TotalLikesCounts { get; set; }
+		public Dictionary<int, int>? CommentCounts { get; set; }
+		public Dictionary<int, int>? ReplyCounts { get; set; }
+		public Dictionary<int, int>? TotalCounts { get; set; }
+		public Dictionary<int, int>? LikeCounts { get; set; }
+		public List<CommentWithArticleViewModel>? commentWithArticleViewModels { get; set; }
+		public List<ForumFriendModel>? forumFriendModels {  get; set; }	
+		public bool UserIsFollowing { get; set; }
+
+	}
+	public class CommentWithArticleViewModel
+	{
+		public int CommentId { get; set; }
+		public string? CommentContent { get; set; }
+		public int ArticalId { get; set; }
+		public string? ArticalTitle { get; set; }
+		public string? ArticalContent { get; set; }
+		public DateTime CommentDate { get; set; }
+	}
+	public class ForumFriendModel
+	{
+		public int  FriendUserId { get; set; }
+		public string? FriendName { get; set; }
+		public string? FriendPicture { get; set;}
 	}
 }

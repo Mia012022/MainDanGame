@@ -223,7 +223,13 @@ class ChatApp {
                 height: "120px",
                 "border-radius": "5px 5px 5px 5px"
             })
+            this.AppElement.ChatAppWindow.css({
+                "z-index": 999
+            })
         } else {
+            this.AppElement.ChatAppWindow.css({
+                "z-index": 1001
+            })
             this.AppElement.chatAppSideBar.css({
                 height: "450px",
                 "border-radius": "0 5px 5px 0"

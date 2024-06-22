@@ -3,7 +3,7 @@
 *@
 
 <!-- 頁尾 start -->
-<div class="footer row d-flex my-footer border-top border-opacity-10" style="white-space:nowrap;">
+<div class="footer row d-flex my-footer border-top border-opacity-10" style="white-space:nowrap;" id="footer">
     <div class="col-sm-4 flex-fill text-end">
         <a href="#"><img class="my-footer-logo" src="~/image/logo-b.png" alt=""></a>
     </div>
@@ -42,7 +42,7 @@
         let value = $(document).scrollTop() > 20;
 
         $(".my-header").css({
-            "background-color": value ? `rgb(172, 172, 172, 0.76)` : `rgb(52, 58, 64, 0)`,
+            "background-color": value ? `rgb(52, 58, 64, 0.8)` : `rgb(52, 58, 64, 0)`,
             "height": value ? "60px" : "80px",
             "backdrop-filter": value ? "blur(5px)" : "blur(0px)"
         })

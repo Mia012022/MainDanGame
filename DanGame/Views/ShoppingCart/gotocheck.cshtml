@@ -1,0 +1,275 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Dictionary<string, string>;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <!-- fontawesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/ShoppingCart/css/buy.css" />
+    <title>---------</title>
+</head>
+<body>
+    <!-- 頁首  start -->
+    
+    <!-- 頁首 end -->
+    <!-- ---------------------------------------------------------------------------------------------------------------->
+    <!-- 中間內容 start -->
+    <div class="buy_container">
+        <div class="main">
+            <div class="itembox">
+
+                <!-- <div class="itembt">
+                  <div><a href="javascript: void(0)" class="btn"> 繼續購買 </a></div>
+                  <div>
+                    <a href="javascript: void(0)" class="btn"> 清除所有項目 </a>
+                  </div>
+                </div> -->
+            </div>
+            <hr / style="color: aliceblue;">
+            <div class="moneybox" style="color: aliceblue">
+                <div class="smallbox d-flex">
+                    <p style="color: gray">小計:</p>
+                    <p class="totalmoney"></p>
+                </div>
+                <hr / style="color: aliceblue;border: 2px solid;margin: 0;">
+                <div class="smallbox d-flex">
+                    <p style="color: gray">總計:</p>
+                    <p class="totalmoney"></p>
+                </div>
+                <p>所有價格均包含增值稅(如適用)</p>
+            </div>
+            <hr / style="color: aliceblue;">
+            <div class="checkinfo" style="color: aliceblue">
+                <p style="color: gray">
+                    付款方式<span class="creditnumberlast"
+                              style="color: white">
+                      
+                    </span>
+                    <a href=""
+                       class="special-chang"
+                       style="text-decoration: none">變更</a>
+                </p>
+                <p style="color: gray">
+                    帳單資訊<span class="creditname" style="color: white"></span>
+                </p>
+                <p><span class="creditnumber"></span></p>
+                <p><span class="creditdowntown"></span></p>
+                <p>
+                    <span class="creditcity"></span>
+                    <span class="creditpostal code"></span>
+                </p>
+                <p><span class="creditcountry">TW</span></p>
+                <p style="color: gray">
+                    使用者名稱:<span class="creditaccount"
+                                   style="color: white">mikelee0320</span>
+                </p>
+                <hr / style="color: aliceblue;">
+
+               
+              
+               
+
+                  @*   <form action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"
+                          method="post">
+                    <input type="checkbox" required /><label for="" >
+                        我同意<a href="https://store.steampowered.com/subscriber_agreement/">Steam訂戶協議</a>中的條款(最後修改日期:2023年4月26日)
+                    </label>
+                    <input type="hidden" name="MerchantID" value="@Model["MerchantID"]" />
+                        <input type="hidden"
+                               name="MerchantTradeNo"
+                           value="@Model["MerchantTradeNo"]" />
+                        <input type="hidden"
+                               name="MerchantTradeDate"
+                           value="@Model["MerchantTradeDate"]" />
+                    <input type="hidden" name="PaymentType" value="@Model["PaymentType"]" />
+                  
+                    <input type="hidden" name="TotalAmount" value="@Model["TotalAmount"]" />
+                    <input type="hidden" name="TradeDesc" value="@Model["TradeDesc"]" />
+                    <input type="hidden" name="ItemName" value="@Model["ItemName"]" />
+                        <input type="hidden"
+                               name="ReturnURL"
+                           value="@Model["ReturnURL"]" />
+                    <input type="hidden"
+                           name="ClientBackURL"
+                           value="@Model["ClientBackURL"]" />
+                    <input type="hidden" name="ChoosePayment" value="@Model["ChoosePayment"]" />
+                    <input type="hidden" name="CheckMacValue" value="@Model["CheckMacValue"]" />
+                    <input type="hidden" name="EncryptType" value="@Model["EncryptType"]" />
+                       
+                        <div class="checksubmit" style="text-align: right">
+                        
+                            <input type="submit" value="送出" />
+                        </div>
+                    </form> *@
+                <div style="text-align: right;">
+                    <button class="btn btn-primary gotosuccessbuy">確定購買</button>
+                </div>
+            </div>
+        </div>
+        <div class="checkmedthod bg-light">
+            <p>在STEAM上購物</p>
+            <hr / style="color: aliceblue;">
+            <span>
+                完成本次交易後，將會從您的付款方式扣除交易<br />
+                金額，且您會收到一封確定您已購買的電子郵件<br />訊息。
+            </span>
+        </div>
+    </div>
+    <!-- 中間內容 end -->
+    <!-- ---------------------------------------------------------------------------------------------------------------->
+    <!-- 頁尾 start -->
+   
+    <!-- 頁尾 end -->
+
+    <script>
+        $(function () {
+            
+
+
+
+
+
+            $(document).on("scroll", function () {
+                let value = $(document).scrollTop() > 20;
+
+                $(".my-header").css({
+                    "background-color": value
+                        ? `rgb(172, 172, 172, 0.76)`
+                        : `rgb(52, 58, 64, 0)`,
+                    height: value ? "60px" : "80px",
+                    "backdrop-filter": value ? "blur(5px)" : "blur(0px)",
+                });
+            });
+
+
+
+            var itembox = $(".itembox");
+            var datasource;
+            $.get("User/ShoppingCart", function (data) {
+                let appids = data.map((d) => d.appId)
+
+                $.ajax({
+                    type: "POST",
+                    url: "App/Detail/check",
+                    data: JSON.stringify(appids),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        datasource = data;
+                        // console.log(datasource);
+                        /*console.log(datasource.price);*/
+                        totalmoney();
+                        render(datasource);
+                    }
+                });
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error("Failed to load JSON: ", textStatus, errorThrown);
+            });;
+
+
+
+            function render(apps) {
+                $.each(apps, function (index, app) {
+                    const platformIconMap = { windows: `<i class="bi bi-windows"></i>`, mac: `<i class="bi bi-apple"></i>`, linux: `<i class="bi bi-ubuntu"></i>` }
+                    console.log(apps);
+                    console.log(app.appId);
+                    const item = $(`<div class="item">
+                            <div class="itempic">
+                                <a href="">
+                                            <img src="${app.headerImage}"
+                                         alt="" />
+                                </a>
+                            </div>
+                            <div class="itemtext">
+                                        <p class="item-name">${app.appName} </p>
+                                <p class="item-version">
+                                            平台: ${app.platform.split(",").map((p) => platformIconMap[p]).join(" ")}
+                                </p>
+                                        <p class="relese-date">推出日期:${app.releaseDate}</p>
+                                        <p class="developer">發行商:${app.devloperName}</p>
+                                <div class="price">
+                                    <div>
+                                                <p class="rp">NT:${app.price}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="delete">
+                              <a href=""
+                                ><svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="16"
+                                  height="16"
+                                  fill="currentColor"
+                                  class="bi bi-trash"
+                                  viewBox="0 0 16 16"
+                                >
+                                  <path
+                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
+                                  />
+                                  <path
+                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+                                  /></svg
+                              ></a>
+                            </div> -->
+                        </div>`);
+                    itembox.append(item);
+                })
+            }
+            
+            function totalmoney(){
+                totalPrice = 0;
+                console.log("嗨");
+                //這邊的datasource是沒東西的，因為上面get回來是異步，所以是要等到datasource要給到render，
+                //所以我現在先把fumction updataprice先寫在外面，然後在render裡面執行這個updataprice
+                datasource.forEach((app) => (totalPrice += app.price));
+                $(".totalmoney").text("NT:" + totalPrice);
+            }
+
+            $(".special-chang").attr("href", "/ShoppingCart/CreditCardInfo");
+            $(".gotosuccessbuy").on("click",function(){
+                window.location.href = "/ShoppingCart/successbuy"
+            })
+          
+            //這邊是結帳取得信用卡資料
+            $.ajax({
+                url: "GetCreditCardInfo/check",
+                method:"GET",
+                success:function(data){
+                    console.log(data)
+                    $(".creditnumberlast").text("卡號末四碼" + data.creditCardInfo.cardNumber.slice(-4))
+                    $(".creditname").text(data.creditCardInfo.lastName + data.creditCardInfo.firstName)
+                    $(".creditnumber").text(data.creditCardInfo.phoneNumber)
+                    $(".creditdowntown").text(data.creditCardInfo.billingAddress)
+                    $(".creditcity").text(data.creditCardInfo.city)
+                    $(".creditpostal code").text(data.creditCardInfo.postalCode)
+                    $(".creditaccount").text(data.user)
+
+                }
+                
+            })
+        });
+    </script>
+</body>
+</html>

@@ -112,7 +112,7 @@ namespace DanGame.Controllers
                              {
                                  profile = (friend.UserId == userId) ? friend.FriendUser.UserProfile : friend.User.UserProfile,
                                  status = friend.Status,
-                                 isOnline = ChatHub.onlineUsers.Contains((friend.UserId == userId) ? friend.FriendUserId : friend.UserId)
+                                 isOnline = ChatHub.onlineUsers.Contains((friend.UserId == userId.Value) ? friend.FriendUserId : friend.UserId.Value)
                              };
             
             return new
@@ -253,5 +253,16 @@ namespace DanGame.Controllers
             return await query.ToArrayAsync();
         }
 
+		// 其他API动作方法...
+		[HttpGet("SubscriptionPlan")]
+		public async Task<ActionResult<IEnumerable<SubscriptionPlan>>> GetSubscriptionPlans()
+		{
+			var subscriptionPlans = await _context.SubscriptionPlans.ToListAsync();
+			if (subscriptionPlans == null || subscriptionPlans.Count == 0)
+			{
+				return NotFound();
+			}
+			return subscriptionPlans;
+		}
     }
 }

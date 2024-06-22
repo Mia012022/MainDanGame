@@ -1,0 +1,365 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <!-- fontawesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/ShoppingCart/css/check.css" />
+    <title>---------</title>
+</head>
+<body>
+    <!-- 頁首  start -->
+   
+    <!-- 頁首 end -->
+    <!-- ---------------------------------------------------------------------------------------------------------------->
+    <!-- 中間內容 start -->
+    <!-- 中間內容 end -->
+    <!-- ---------------------------------------------------------------------------------------------------------------->
+    <div class="check_container">
+        <div class="main" style="color: aliceblue">
+            <h3>選擇卡片</h3>
+            <div style="width: 800px">
+                <div class="formtop">
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="selectcheck" class="form-label">請選擇付款方式</label>
+
+                            <select name="method"
+                                    id="paymentMethod"
+                                    class="diffcard"
+                                    style="
+                                        width: 100%;
+                                        height: 50%;
+                                        margin-bottom: 20px;
+                                    ">
+                                <option value="Visa">Visa</option>
+                                <option value="MasterCard">MasterCard</option>
+                                <option value="" disabled>
+                                    -----------------------------------
+                                </option>
+                                <option value="" disabled>我的卡片</option>
+                            </select>
+                        </div>
+
+                        <div class="row formtopnumber">
+                            <div class="col-6 divcardNumber">
+                                <label for="creditnumber"
+                                       class="form-label">信用卡卡號</label>
+                                <i id="checkEye" class="fas fa-eye"></i>
+
+                                <input type="password"
+                                       class="form-control cardNumber"
+                                       id="creditnumber"
+                                       placeholder=""
+                                       maxlength="16" />
+
+                            </div>
+                            <div class="col-2">
+                                <label for="Valid datemonth"
+                                       class="form-label">有效月份</label>
+                                <input type="text"
+                                       class="form-control expiryMonth"
+                                       id="expiryMonth"
+                                       placeholder=""
+                                       maxlength="16" />
+
+                            </div>
+                            <div class="col-2">
+                                <label for="Valid dateyear"
+                                       class="form-label">有效年份</label>
+
+                                <input type="text"
+                                       class="form-control expiryYear"
+                                       id="expiryYear"
+                                       placeholder=""
+                                       maxlength="16" />
+                            </div>
+                            <div class="col-2">
+                                <label for="safenumber" class="form-label">安全碼</label>
+                                <input type="text"
+                                       class="form-control"
+                                       id="safenumber"
+                                       placeholder=""
+                                       maxlength="4" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>帳單資訊</h3>
+                <div class="formmid">
+                    <div class="row g-3">
+                        <div class="col-3">
+                            <label for="firstname" class="form-label">名字</label>
+                            <input type="text"
+                                   class="form-control firstName"
+                                   id="firstname" />
+                        </div>
+                        <div class="col-3">
+                            <label for="Last name
+              "
+                                   class="form-label">姓氏</label>
+                            <input type="text"
+                                   class="form-control lastName"
+                                   id="Last name
+              " />
+                        </div>
+                        <div class="col-6">
+                            <label for="City" class="form-label">城市</label>
+                            <input type="text"
+                                   class="form-control city"
+                                   id="City" />
+                        </div>
+                        <div class="col-6">
+                            <label for="Billing Address" class="form-label">帳單地址</label>
+                            <input type="text"
+                                   class="form-control billingAddress"
+                                   id="Billing Address" />
+                        </div>
+                        <div class="col-6">
+                            <label for="postal code" class="form-label">郵遞區號</label>
+                            <input type="text"
+                                   class="form-control postalCode"
+                                   id="postal code"
+                                   maxlength="5" />
+                        </div>
+                        <div class="col-6">
+                            <label for="Billing Address2" class="form-label">帳單地址第2行</label>
+                            <input type="text"
+                                   class="form-control billingAddress2"
+                                   id="Billing Address2" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formbt">
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="country" class="form-label">國家/地區</label>
+                            <input type="text"
+                                   class="form-control country "
+                                   id="country"
+                                   value="台灣"
+                                   readonly />
+                        </div>
+                        <div class="col-6">
+                            <label for="phonenumber" class="form-label">電話號碼</label>
+                            <input type="text"
+                                   class="form-control phoneNumber"
+                                   id="phonenumber "
+                                   maxlength="15" />
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input my-4"
+                                       type="checkbox"
+                                       id="gridCheck" />
+                                <label class="form-check-label my-4"
+                                       for="gridCheck">
+                                    儲存我的付款資訊以便下次結帳使用
+                                </label>
+                            </div>
+                            <p>您將可以在下訂單前複合訂單內容</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-primary submitcreditinfo">
+                        繼續
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="checkmedthod bg-light">
+            <p>付款方式</p>
+            <span>我們接受下列安全的付款方式:</span>
+            <div class="checkicon">
+                <i class="fa-brands fa-cc-visa fa-3x"></i>
+                <i class="fa-brands fa-cc-mastercard fa-3x"></i>
+            </div>
+        </div>
+    </div>
+    <!-- 頁尾 start -->
+    
+    <!-- 頁尾 end -->
+   
+    <script>
+        var creditCards;
+        $(document).ready(
+            $.post("/ShoppingCart/getcreditinfos", function (data) {
+                creditCards = data;
+                console.log(data); //陣列
+                $.each(creditCards, (index, creditCard) => {
+                    renderCreditCard(creditCard);
+                });
+            })
+        );
+
+        //這邊是將2號所有的資料撈近來，然後把資料拿到插入在.diffcard的下拉式選單
+        function renderCreditCard(creditCard) {
+            // console.log(creditCard.paymentMethod);
+            $(".diffcard").append(
+                $("<option>")
+                    .attr("value", creditCard.cardNumber)
+                    .text(
+                        `${creditCard.paymentMethod
+                        }卡片末四碼${creditCard.cardNumber.slice(-4)}`
+                    )
+            );
+
+            $(".diffcard option").each(function () {
+                let value = $(this).text();
+                // console.log(value);
+            });
+        }
+
+
+
+
+        $(document).ready(function () {
+
+            $(".diffcard").on("change", function () {
+                //我一開始是想用TEXT來判斷，但換個思考用selectindex，透過index來找
+                console.log(this.selectedIndex);
+
+                // console.log(text);
+                if (this.selectedIndex <= 1) {
+                    console.log("是visa");
+                    $("input").val("");
+                    $("#country").val("台灣");
+                    $("input").attr("readonly", false);
+                    $("#country").attr("readonly", true);
+                } else {
+                    $("input").attr("readonly", true);
+                    console.log("不是visa");
+                    $("#safenumber").attr("readonly", false);
+
+                    //這樣寫有兩個小技巧，箭頭函式可以this
+                    let result = creditCards.filter((element) => {
+                        return $(this).val() == element.cardNumber;
+
+                    });
+
+                    console.log(result);
+                    // console.log(result[0].cardNumber);
+                    //Object.entries這是公式https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries
+                    for (const [key, value] of Object.entries(result[0])) {
+                        $(`.${key}`).val(value);
+                        //要記得input的attr("value",asd)這個是設定預設的值，並不是input欄位的值
+                    }
+
+                }
+
+
+                //這邊要加off記得把之前的click先清除
+                $("#checkEye").off("click").on("click", function () {
+                    console.log("你好");
+                    if ($(this).hasClass('fa-eye')) {
+                        $(".cardNumber").attr('type', 'text');
+                        console.log("看的到");
+                    } else {
+                        $(".cardNumber").attr('type', 'password');
+                        console.log("看不到");
+                    }
+                    $(this).toggleClass('fa-eye fa-eye-slash');
+                })
+            });
+            // $(".cardNumber").attr("value", result[0].cardNumber);
+            // $(".expiryMonth").attr("value", result[0].expiryMonth);
+            // $(".expiryYear").attr("value", result[0].expiryYear);
+            // $(".firstName").attr("value", result[0].firstName);
+            // $(".lastName").attr("value", result[0].lastName);
+            // $(".city").attr("value", result[0].city);
+            // $(".billingAddress").attr("value", result[0].billingAddress);
+            // $(".postalCode").attr("value", result[0].postalCode);
+            // $(".billingAddress2").attr("value", result[0].billingAddress2);
+            // $(".phoneNumber").attr("value", result[0].phoneNumber);
+        });
+
+        $(document).on("scroll", function () {
+            let value = $(document).scrollTop() > 20;
+
+            $(".my-header").css({
+                "background-color": value
+                    ? `rgb(172, 172, 172, 0.76)`
+                    : `rgb(52, 58, 64, 0)`,
+                height: value ? "60px" : "80px",
+                "backdrop-filter": value ? "blur(5px)" : "blur(0px)",
+            });
+        });
+
+
+
+        $(".submitcreditinfo").click(function () {
+           
+            // 先存物件，post物件出去
+            var formData = {
+               
+                PaymentMethod: $('.diffcard').val(),
+                CardNumber: $('.cardNumber').val(),
+                ExpiryMonth: parseInt($('.expiryMonth').val()),
+                ExpiryYear: parseInt($('.expiryYear').val()),
+                FirstName: $('.firstName').val(),
+                LastName: $('.lastName').val(),
+                City: $('.city').val(),
+                BillingAddress: $('.billingAddress').val(),
+                PostalCode: $('.postalCode').val(),
+                BillingAddress2: $('.billingAddress2').val(),
+                PhoneNumber: $('.phoneNumber').val(),
+            };
+
+            // safenumber: $('#safenumber').val(),
+            // saveInfo: $('#gridCheck').is(':checked')
+            console.log(formData);
+
+            var save = $("#gridCheck").is(":checked");
+            var url = `/ShoppingCart/PostCreditCardInfo?save=${save}`;
+            //這邊是存取信用卡
+            $.ajax({
+                url: url,
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                success: function (data) {
+                    console.log('Success:', data);
+                    window.location.href = "/ShoppingCart/Gotocheck";
+                },
+                error: function (error) {
+                    if (error.status === 409) {
+                        alert('信用卡已存取');
+                    } else {
+                        alert('此張信用卡已存取');
+                    }
+                }
+            })
+            
+
+
+
+        })
+    </script>
+</body>
+</html>
+
+
