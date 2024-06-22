@@ -792,7 +792,7 @@
 
             $(".check-button").on("click", function () {
                 if (!alreadyLogin) {
-                    window.open('/User/Login?redirectTo=/Game/@(Model.detail.AppId)#game-action');
+                    window.open('/User/Login?redirectTo=/Game/@(Model.detail.AppId)%23game-action');
                     return
                 } 
                 if (!alreadyInShoppingCart) {
