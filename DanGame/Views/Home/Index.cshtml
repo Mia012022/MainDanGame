@@ -135,6 +135,8 @@
 		{
 			<img src="@gameCovers[y]" style="position: absolute; top: @coverPositions[y].top; left: @coverPositions[y].left; width: 400px; height: 200px; border-radius: 20px;" />
 		}
+
+		<img src="~/image/logo-hw.png" style="position: absolute; top: 17%; right: 280px" alt="Alternate Text" />
 		<div class="text-center text-topbox" style="margin: 15px; position: absolute; top: 25%; right: 7%; width: 700px; height: 350px; color: white; padding-top: 10px;">
 			<h1 class="fw-bold" style="text-shadow: black 0.3em 0.1em 0.18em">無限遊玩，無限可能</h1>
 			<div class="fs-4 fw-bolder" style="text-shadow: black 0.2em 0.1em 0.1em">
@@ -487,6 +489,7 @@
 		</div>
 	</div>
 
+	<br />
 </body>
 <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
@@ -540,7 +543,7 @@
 				showHeader(); // 顯示導航欄
 			},
 			function () {
-				if ($(document).scrollTop() <= 20) {
+				if ($(document).scrollTop() <= 15) {
 					hideHeader(); // 隱藏導航欄
 				}
 			}

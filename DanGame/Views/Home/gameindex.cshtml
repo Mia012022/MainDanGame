@@ -288,7 +288,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">@appDetail.AppName</h5>
                                     <div style="position:absolute; bottom: 10px; left: 15px;">
-                                        <button class="btn btn-secondary" onclick="window.open('/Game/@appDetail.AppId')">
+                                        <button class="btn btn-secondary" style="background-image: linear-gradient(45deg, #a230ff, #d09dff); border: double;" onclick="window.open('/Game/@appDetail.AppId')">
                                             詳細資訊
                                         </button>
                                     </div>
@@ -375,7 +375,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">${app.appName}</h5>
                                     <div style="position:absolute; bottom: 10px; left: 15px;">
-                                            <button class="btn btn-secondary" onclick="window.open('/Game/${app.appId}')">
+                                        <button class="btn btn-secondary" style="background-image: linear-gradient(45deg, #a230ff, #d09dff); border: double;" onclick="window.open('/Game/${app.appId}')">
                                             詳細資訊
                                         </button>
                                     </div>
@@ -414,6 +414,9 @@
                     return
                 }
 
+                let buttons = $(`.check-button[appID="${appID}"]`);
+                triggerParticleEffect(buttons);
+
                 if (alreadyInShoppingCart == "false") {
                     console.log(JSON.stringify({ AppId: appID }))
                     $.ajax({
@@ -423,8 +426,8 @@
                         contentType: 'application/json',
 
                         success: (res) => {
-                            $(`.check-button[appID="${appID}"]`).find(".check-button-icon").removeClass("bi bi-cart-plus").addClass("bi bi-check-lg")
-                            $(`.check-button[appID="${appID}"]`).attr("alreadyInShoppingCart", true)
+                            $(`.check-button[appID="${appID}"]`).find(".check-button-icon").removeClass("bi bi-cart-plus").addClass("bi bi-check-lg");
+                            $(`.check-button[appID="${appID}"]`).attr("alreadyInShoppingCart", true);
                         },
                         error: function (err) { console.log(err) },
                     });
@@ -443,7 +446,29 @@
                         error: function (err) { console.log(err) },
                     });
                 }
-            })
+            });
+
+            function triggerParticleEffect(buttons) {
+                buttons.each(function () {
+                    let button = $(this);
+                    let particles = document.createElement("div");
+                    particles.className = "particles";
+
+                    for (let i = 0; i < 50; i++) {
+                        let particle = document.createElement("div");
+                        particle.className = "particle";
+                        particle.style.setProperty("--x", `${(Math.random() - 0.5) * 200}px`);
+                        particle.style.setProperty("--y", `${(Math.random() - 0.5) * 200}px`);
+                        particles.appendChild(particle);
+                    }
+
+                    button.append(particles);
+
+                    setTimeout(() => {
+                        particles.remove();
+                    }, 800); 
+                });
+            }
 
         },
         error: function (error) {
