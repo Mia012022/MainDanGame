@@ -63,14 +63,17 @@
 
 					<textarea id="editor" class="editor" name="ArticalContent" placeholder="請輸入正文">@Model.ArticalContent</textarea>
 				</div>
-
+				@{
 				<div class="form-group mb-4">
 					<label for="">文章分類</label><i class="bi bi-check-all"></i>
-					<select name="" id="" class="form-control">
-						<option value="">綜合討論</option>
-						<option value="">技術交流</option>
+					<select name="Category" id="category" class="form-control" value="@Model.ArticleCategory">
+						<option value="綜合討論">綜合討論</option>
+						<option value="資訊快報">資訊快報</option>
+						<option value="心得攻略">心得攻略</option>
+						<option value="實況專區">實況專區</option>
 					</select>
 				</div>
+				}
 			</div>
 
 			@* 預覽畫面 *@
@@ -106,7 +109,7 @@
 				@* 發表BUTTON *@
 				<div class="col-6 ">
 					<div class="row justify-content-center">
-						<button type="submit" class="btn btn-light w-50">發表</button>
+						<button type="submit" class="btn btn-light w-50">更新</button>
 					</div>
 				</div>
 			</div>

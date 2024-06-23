@@ -159,11 +159,11 @@ namespace DenGame.Controllers
 			}
 			var user = await (from u in _context.Users
 							  where u.UserId == article.UserId
-							  select u).FirstOrDefaultAsync() ?? throw new Exception("User not found");
+							  select u).FirstOrDefaultAsync();
 			
 			var userProfile = await (from p in _context.UserProfiles
 									 where p.UserId == article.UserId
-									 select p).FirstOrDefaultAsync() ?? throw new Exception("User profile not found");
+									 select p).FirstOrDefaultAsync();
 			var likes = await (from l in _context.ArticalLikes
 							   where l.ArticalId == id
 							   select l).ToListAsync();
@@ -198,7 +198,7 @@ namespace DenGame.Controllers
 			//取得當前使用者Id，來判斷是否追蹤此人
 			var userId = HttpContext.Session.GetInt32("UserId");
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
-			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == id) ?? throw new Exception("User profile not found");
+			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == id);
 			var articles = await _context.ArticleLists.Where(x => x.UserId == id).ToListAsync();
 			var comment = await _context.ArticalComments.Where(x => x.UserId == id).ToListAsync();
 			var like = await _context.ArticalLikes.Where(x => x.UserId == id).ToListAsync();
@@ -292,7 +292,7 @@ namespace DenGame.Controllers
 								 }
 								 ).ToListAsync();
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
-			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId) ?? throw new Exception("User profile not found");
+			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId);
 			var articles = await _context.ArticleLists.Where(x => x.UserId == userId).ToListAsync();
 			var comments = await _context.ArticalComments.Where(x => x.UserId == userId).ToListAsync();
 			var commentsWithArticles = await (from comment in _context.ArticalComments
@@ -480,12 +480,13 @@ namespace DenGame.Controllers
 				return View(model);
 			}
 
-			return RedirectToAction("ForumUser");
+			return RedirectToAction("ForumUserPersonal");
 
 		}
 		//-------------------刪除文章頁面-------------------------
 		public IActionResult DeleteArticle(int? id)
 		{
+
 			var article = _context.ArticleLists.Find(id);
 			return View(article);
 		}

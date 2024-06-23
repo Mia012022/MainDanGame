@@ -81,7 +81,7 @@
 					<div class="col"><button class="btn "><i class="fa-solid fa-eye h6 me-1" style="margin-bottom:0px;"></i><span id="viewCount">@Model.Article.ViewCount</span></button></div>
 					<div class="col"><button class="btn "><i class="bi bi-chat-dots h6 me-1"></i><span>@(@Model.Comments.Count + @Model.Replies.Count)</span></button></div>
 					<div class="col-6"></div>
-					<div class="col-2">
+					<div class="col-3">
 						<button id="btnArticalLike" class=" btn w-100 btn-dark @(Model.UserHasLiked ? "frliked" : "")" data-liked="@Model.UserHasLiked">
 							<span style="color:white" id="frCollect">@(Model.UserHasLiked ? "已收藏" : "收藏")</span>
 							<i class="bi bi-heart-fill  h6 mx-1"></i>
