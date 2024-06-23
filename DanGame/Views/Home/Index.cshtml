@@ -373,8 +373,8 @@
 								{
 									var plan = Model.subscriptionPlans[i];
 									<label class="btn mt-3 ms-4 w-75" style="border-radius: 10px;">
-										<input type="radio" name="options" id="option@(i+1)" class="button"
-											   onclick="toggleButtons(@i)"> @(plan.PlanName) 方案
+										<input type="radio" name="options" id="option@(i+1)" class="button" plan_id="@plan.PlanId"
+											   onclick="toggleButtons(@plan.PlanId)"> @(plan.PlanName) 方案
 									</label>
 								}
 
@@ -558,6 +558,11 @@
 		$(".my-subscription").hide();
 		$(".my-subscription").eq(0).show();
 
+		$("#selectButton").on("click", () => { 
+			let planID = $("input[name='options']:checked").attr("plan_id")
+			window.open(`\ShoppingCart/Gotosubscriptcheck/${planID}`)
+		})
+
 		// 監聽單選按鈕的點擊
 		$("input[name='options']").change(function () {
 			// 獲取當前選中的索引
@@ -612,7 +617,6 @@
         currentIndex = Math.abs(currentIndex + direction) % totalItems;
         updateCarousel();
     }
-
 
 
 	// //
