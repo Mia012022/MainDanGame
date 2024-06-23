@@ -25,7 +25,7 @@
     align-items: center;
     background-color: rgba(46, 46, 46, 0);
     overflow: hidden;
-    z-index: 999;
+    z-index: 0;
 }
 
 .windows {
