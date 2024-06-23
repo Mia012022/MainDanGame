@@ -69,7 +69,7 @@
 					</div>
 					<div class="ms-2">
 						<span><a asp-action="ForumUser" asp-controller="Forum" asp-route-id="@Model.User.UserId" style="color:#33386F;">@Model.User.UserName</a> </span>
-						<p class="text-secondary " style="font-size: x-small;">@Model.Article.ArticalCreateDate</p>
+						<p class="text-secondary " style="font-size: x-small;">@Model.Article.ArticalCreateDate.ToString("yyyy/MM/dd tt hh:mm:ss")</p>
 					</div>
 				</div>
 

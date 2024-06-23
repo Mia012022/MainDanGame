@@ -20,6 +20,7 @@ builder.Services.AddDbContext<DanGameContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddSignalR();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -64,6 +65,10 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseRouting();
+
+app.UseCors("AllowAll");
+
+app.MapHub<DanGame.Hubs.ChatHub>("/chatHub");
 
 app.UseAuthorization();
 
