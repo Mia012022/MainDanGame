@@ -1,9 +1,11 @@
 ﻿using Azure;
 using DanGame.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace DanGame.Controllers
@@ -59,9 +61,38 @@ namespace DanGame.Controllers
         [HttpGet("/Game/{id}")]
         public IActionResult Game(int id)
         {
+            int? UserId = Request.HttpContext.Session.GetInt32("UserId");
+            bool alreadyOwnThisGame = false;
+            bool alreadySubscription = false;
+            bool alreadyInShoppingCart = false;
+            bool alreadyLogin = false;
+            if (UserId != null)
+            {
+                var userGames = from order in _context.Orders
+                                where order.UserId == UserId
+                                select order;
+
+                var userShopppingCart = from shoppingCart in _context.ShoppingCarts
+                                        where shoppingCart.UserId == UserId
+                                        select shoppingCart.AppId;
+                
+                alreadyOwnThisGame = userGames.Any(order => order.OrderItems.Select(orderItem => orderItem.AppId).Contains(id));
+                alreadySubscription = userGames.Any(order => order.Subscriptions.Any(subscription => subscription.SubscriptionStatus ?? false));
+                alreadyInShoppingCart = userShopppingCart.Contains(id);
+                alreadyLogin = true;
+            }
+
             var query = from appDetail in _context.AppDetails
                         where appDetail.AppId == id
-                        select new { detail = appDetail, media = appDetail.App.AppMedia, DLCs = appDetail.App.Dlcapps.Select((d) => d.AppDetail) };
+                        select new { 
+                            detail = appDetail, 
+                            media = appDetail.App.AppMedia, 
+                            DLCs = appDetail.App.Dlcapps.Select((d) => d.AppDetail), 
+                            alreadyOwnThisGame, 
+                            alreadySubscription,
+                            alreadyInShoppingCart,
+                            alreadyLogin
+                        };
             return View(query.FirstOrDefault());
         }
 
@@ -97,12 +128,6 @@ namespace DanGame.Controllers
             var tagApps = (from tag in _context.GenreTags
                           where tag.TagId == 70
                           select tag.Apps.Select(a => a.AppDetail)).FirstOrDefault();
-
-            //var ownGames = orderItems.Select(items => items.Select(item => item.App.AppDetail)).SelectMany(i => i).ToList();
-
-            //var query = from appDetail in ownGames
-            //            select new { appDetail, alreadyInShoppingCart = appDetail.App.ShoppingCarts.Any(s => s.UserId == userId) };
-
             return View(new {
                 alreadyLogin = userId != null,
                 ownGames = ownGames.SelectMany(a => a).ToArray(), 

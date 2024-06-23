@@ -169,7 +169,7 @@
 									<div class="col-md-8">
 										<div class="card-body" style="padding: 10px 10px 0 10px;">
 											<h4 class="card-title mx-2" id="app-name">${app.appName}</h4>
-											<div style="position: absolute; top: 15px; right: 50px; font-size: 15px;" id="app-downloads"> 下載次數 : ${app.downloaded}</div>
+												<div style="position: absolute; top: 15px; right: 50px; font-size: 15px;" id="app-downloads"> 下載次數 : ${new Intl.NumberFormat("en-US").format(app.downloaded)}</div>
 											<div class="mb-2 mx-2">
 												<p class="card-text border rounded" id="app-description">${app.appDesc}</p>
 											</div>
@@ -179,7 +179,7 @@
 													</p>
 												</div>
 											</div>
-											<div class="mt-1" style="position: absolute; bottom: 3%; left: 35%; font-size: 12px;" id="app-release-date"> 上架日期 : ${app.releaseDate}</div>
+											<div class="mt-1" style="position: absolute; bottom: 3%; left: 35%; font-size: 12px;" id="app-release-date"> 上架日期 : ${app.releaseDate.replace(/-/g,'/')}</div>
 											<div class="text-end readmore">
 											</div>
 										</div>

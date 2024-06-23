@@ -281,6 +281,7 @@ public partial class DanGameContext : DbContext
             entity.Property(e => e.ArticalTitle).HasMaxLength(50);
             entity.Property(e => e.ArticleCategory).HasMaxLength(50);
             entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.ViewCount).HasDefaultValue(0);
 
             entity.HasOne(d => d.User).WithMany(p => p.ArticleLists)
                 .HasForeignKey(d => d.UserId)

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using DanGame.Models;
+using DanGame.Hubs;
+using System.Linq;
 
 public class AuthorizeUserAttribute : ActionFilterAttribute
 {
@@ -57,7 +59,7 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         async public Task<UserProfile?> GetUserProfile()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var query = from profile in _context.UserProfiles
                         where profile.UserId == userId
@@ -71,13 +73,29 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         async public Task<dynamic> GetUserChatRooms()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var query = from chatRoom in _context.ChatRooms
                         from member in chatRoom.ChatRoomMembers
                         where member.UserId == userId
-                        select new { chatRoomId = chatRoom.ChatRoomId, members = chatRoom.ChatRoomMembers };
+                        select new { 
+                            chatRoomId = chatRoom.ChatRoomId, 
+                            members = chatRoom.ChatRoomMembers.Select(m => new { member = m, profile = m.User.UserProfile}) 
+                        };
 
+            return await query.ToArrayAsync();
+        }
+
+        // API: GET API/User/ChatRoomMessages 取得聊天室訊息
+        [HttpGet("User/ChatRoomMessages/{chatRoomID}")]
+        [AuthorizeUser]
+        async public Task<dynamic> GetChatMessages(int chatRoomID)
+        {
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
+            
+            var query = from message in _context.ChatMessages
+                        where message.ChatRoomId == chatRoomID && message.ChatRoom.ChatRoomMembers.Any(m => m.UserId == userId)
+                        select message;
             return await query.ToArrayAsync();
         }
 
@@ -86,21 +104,22 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         async public Task<dynamic> GetUserFriends()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var userFriend = from friend in _context.Friendships
                              where (friend.UserId == userId || friend.FriendUserId == userId)
                              select new
                              {
                                  profile = (friend.UserId == userId) ? friend.FriendUser.UserProfile : friend.User.UserProfile,
-                                 status = friend.Status
+                                 status = friend.Status,
+                                 isOnline = ChatHub.onlineUsers.Contains((friend.UserId == userId.Value) ? friend.FriendUserId : friend.UserId.Value)
                              };
+            
             return new
             {
-                Accepted = await userFriend.Where(u => u.status == "Accepted").Select(u => u.profile).ToArrayAsync(),
-                Pending = await userFriend.Where(u => u.status == "Pending").Select(u => u.profile).ToArrayAsync()
+                Accepted = await userFriend.Where(u => u.status == "Accepted").Select(u => new { u.profile, u.isOnline }).ToArrayAsync(),
+                Pending = await userFriend.Where(u => u.status == "Pending").Select(u => new { u.profile, u.isOnline }).ToArrayAsync()
             };
-
         }
 
         public class ShoppingCartRequest
@@ -130,7 +149,7 @@ namespace DanGame.Controllers
             var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             if (userId == null)
-            {
+        {
                 return [];
             }
 
