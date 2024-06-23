@@ -399,14 +399,14 @@ function canvascalculate() {
 var bsOffcanvas = new bootstrap.Offcanvas(myOffcanvas);
 
 //點擊跳窗
-$(".bi-cart-plus").on("click", (event) => {
-    event.preventDefault()
-    // if (canvastotal == 0) {
-    //     bsOffcanvas.block();
-    // }
-    bsOffcanvas.toggle();
-    console.log("嗨");
-});
+//$(".bi-cart-plus").on("click", (event) => {
+//    event.preventDefault()
+//    // if (canvastotal == 0) {
+//    //     bsOffcanvas.block();
+//    // }
+//    bsOffcanvas.toggle();
+//    console.log("嗨");
+//});
 
 //購物車圖標model功能結束
 
