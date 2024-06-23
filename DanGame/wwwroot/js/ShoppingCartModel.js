@@ -1,22 +1,25 @@
 $(function () {
+    function update() {
+        $(".mikecanvas_body").html("");
+        $.get("/shoppingcart/User/ShoppingCart", function (data) {
+            let appids = data.map((d) => d.appId)
 
-    $.get("/shoppingcart/User/ShoppingCart", function (data) {
-        let appids = data.map((d) => d.appId)
-
-        $.ajax({
-            type: "POST",
-            url: "/shoppingcart/App/Detail",
-            data: JSON.stringify(appids),
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
-                datasource = data;
-                console.log(datasource);
-                /console.log(datasource.price);/
-                rendermyOffcanvasGameItems(datasource)
-            }
+            $.ajax({
+                type: "POST",
+                url: "/shoppingcart/App/Detail",
+                data: JSON.stringify(appids),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (data) {
+                    datasource = data;
+                    console.log(datasource);
+                    /console.log(datasource.price);/
+                    rendermyOffcanvasGameItems(datasource)
+                }
+            });
         });
-    });
+    }
+
     //購物車圖標model功能開始
     let myOffcanvas = $(`
     <div class="offcanvas offcanvas-bottom mikecanvas" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
@@ -71,6 +74,8 @@ $(function () {
                     url: `/shoppingcart/delete/ShoppingCart/${canvanappid}`,
                     success: function (data) {
                         console.log("成功刪除");
+                        $(`.check-button[appID="${canvanappid}"]`).find(".check-button-icon").removeClass("bi bi-check-lg").addClass("bi bi-cart-plus")
+                        $(`.check-button[appID="${canvanappid}"]`).attr("alreadyInShoppingCart", false)
                     },
                     error: function (xhr, status, error) {
                         console.log("刪除失敗", status, error);
@@ -107,9 +112,12 @@ $(function () {
         // if (canvastotal == 0) {
         //     bsOffcanvas.block();
         // }
+        update();
         bsOffcanvas.toggle();
         console.log("嗨");
     });
+
+    update();
 
     //購物車圖標model功能結束
 });
