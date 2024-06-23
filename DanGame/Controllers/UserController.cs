@@ -171,50 +171,6 @@ namespace DanGame.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //---------------------------------------------------------------------------------------------
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateProfilePicture(IFormFile profilePicture)
-        {
-            if (profilePicture != null && profilePicture.Length > 0)
-            {
-                var fileName = Path.GetFileName(profilePicture.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profile", fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await profilePicture.CopyToAsync(stream);
-                }
-
-                var userId = HttpContext.Session.GetInt32("UserId");
-                if (userId.HasValue)
-                {
-                    var userProfile = await GetUserProfileFromDatabase(userId.Value);
-                    if (userProfile != null)
-                    {
-                        userProfile.ProfilePictureUrl = "/images/profile/" + fileName;
-                        await UpdateUserProfileInDatabase(userProfile);
-
-                        return Json(new { success = true, url = userProfile.ProfilePictureUrl });
-                    }
-                }
-            }
-
-            return Json(new { success = false });
-        }
-
-        private async Task<UserProfile?> GetUserProfileFromDatabase(int userId)
-        {
-            return await _context.UserProfiles.SingleOrDefaultAsync(up => up.UserId == userId);
-        }
-
-        private async Task UpdateUserProfileInDatabase(UserProfile userProfile)
-        {
-            _context.UserProfiles.Update(userProfile);
-            await _context.SaveChangesAsync();
-        }
-        //----------------------------------------------------------------------------------------------------
-
         // GET: /User/UserIndex/CheckEmail
         [HttpGet]
         public async Task<IActionResult> CheckEmail(string email)

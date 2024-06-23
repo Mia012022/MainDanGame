@@ -46,9 +46,9 @@
                 </div>
                 </form>
                 -->
-                <div class="p-2">
-                    <a asp-controller="User" asp-action="ForgetPwd" style="padding-left: 100px;">忘記密碼</a>
-                    <a asp-controller="User" asp-action="Register" style="padding-left: 30px;">註冊</a>
+                <div class="p-2" style="margin-left: 110px">
+                    @Html.ActionLink("忘記密碼", "ForgetPwd", "User")
+                    <a asp-controller="User" asp-action="Register" style="padding-left: 20px;">註冊</a>
                 </div>
                 <div class="p-2">
                     <button type="submit" class="btn btn-primary">登入</button>

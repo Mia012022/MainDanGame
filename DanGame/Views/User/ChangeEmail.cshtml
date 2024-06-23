@@ -76,3 +76,34 @@
         window.location.href = '@Url.Action("Index", "Home")';
     }
 </script>
+
+@section Scripts {
+    <script>
+        // 登出
+        document.getElementById("logoutButton").addEventListener("click", function (event) {
+            event.preventDefault();
+            if (confirm("確定要登出嗎？")) {
+                // 獲取防偽令牌
+                var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                fetch('@Url.Action("Logout", "User")', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': token,
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: "__RequestVerificationToken=" + encodeURIComponent(token)
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = '@Url.Action("Index", "Home")';
+                    } else {
+                        alert("登出失敗，請稍後再試。");
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                    alert("登出過程中發生錯誤。");
+                });
+            }
+        });
+    </script>
+}
