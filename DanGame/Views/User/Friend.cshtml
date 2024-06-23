@@ -55,6 +55,17 @@
             background-color: rgba(0, 0, 0, 0.20);
         }
 
+        .stats {
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: space-around;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            top: auto;
+            color: #000000;
+        }
+
         #action_menu_btn {
             position: absolute;
             right: 10px;
@@ -128,7 +139,7 @@
                                     <div class="col-md-4">
                                         <img id="profilePicture" src="" alt="..." class="img-fluid rounded-start" />
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="card-body">
                                             <h5 id="userName" class="p-2 w-100 bd-highlight">userName</h5>
                                             <p id="userInfo" class="card-text">
@@ -138,12 +149,29 @@
                                                 <small class="text-muted">userStatus</small>
                                             </p>
                                         </div>
+                                        <div class="stats">
+                                            <div>
+                                                <div class="badge bg-info text-wrap" style="width: 8rem;">訂閱月數</div>
+                                                <i class="fa-solid fa-trophy fa-flip" style="color: #FFD43B;"></i>
+                                                <div id="subscriptionMonth" class="value">...</div>
+                                            </div>
+                                            <div>
+                                                <div class="badge bg-info text-wrap" style="width: 8rem;">遊戲總數</div>
+                                                <i class="fa-solid fa-gamepad fa-shake" style="color: #5e4e8d;"></i>
+                                                <div id="totalAppIds" class="value">...</div>
+                                            </div>
+                                            <div>
+                                                <div class="badge bg-info text-wrap" style="width: 8rem;">好友數</div>
+                                                <i class="fa-solid fa-users"></i>
+                                                <div id="totalFriends" class="value">...</div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col">
                                         <div id="removeUser" class="d-flex align-items-end flex-column bd-highlight mb-3" style="height: 200px;">
                                             <div  class="p-2 bd-highlight">
                                                 <button type="button" class="btn btn-secondary">
-                                                    <i class="fa-solid fa-rectangle-list fa-lg"></i>
+                                                    <i class="fa-solid fa-address-card fa-lg"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -246,6 +274,7 @@
                     </div>
                 </dbody>
                 <h6>待接受</h6>
+                <ebody></ebody>
                 <div id="friendListContainer"></div>
 
             </div>
@@ -266,6 +295,9 @@
                             $("#userName").text(data.userName);
                             $("#userInfo").text("Birthday: " + formatDate(data.birthDay));
                             $("#userStatus").text("Status: Active"); // Assuming a static status, adjust as needed
+                            $("#subscriptionMonth").text(data.subscriptionMonth);
+                            $("#totalAppIds").text(data.totalAppIds);
+                            $("#totalFriends").text(data.totalFriends);
                         } else {
                             $("#userName").text("No user data found");
                         }
@@ -324,7 +356,7 @@
                 let acceptedList = dataFrom_API_Server.accepted;
                 let pendingList = dataFrom_API_Server.pending;
 
-                $("#friendList dbody").empty();
+                $("#friendList dbody,#friendList ebody").empty();
                 for (let k = 0; k < acceptedList.length; k++) {
                     let item = acceptedList[k];
                     let flHtml = createFriendCard(item);
@@ -334,7 +366,7 @@
                 for (let k = 0; k < pendingList.length; k++) {
                     let item = pendingList[k];
                     let flHtml = createFriendCard(item, "pending");
-                    $("#friendList h6").append(flHtml);
+                    $("#friendList ebody").append(flHtml);
                 }
             });
         }
@@ -346,7 +378,7 @@
                 actionButtons = `
                             <div class="p-1 bd-highlight">
                                 <button type="button" onclick="acceptFriend(${item.userId})" class="btn btn-success invitebtn">
-                                    <i class="fa-solid fa-user-plus fa-lg fa-bounce"></i>
+                                    <i class="fa-solid fa-user-check fa-lg"></i>
                                 </button>
                             </div>
                             <div class="p-1 bd-highlight">
@@ -372,7 +404,7 @@
                                          <div class="d-flex align-items-end flex-column bd-highlight mb-3" style="height: 50px;">
                                              <div class="p-1 bd-highlight">
                                                <button id='userinfo' type="button" class="btn btn-secondary" onclick="showUserInfo(${item.userId})">
-                                                  <i class="fa-solid fa-rectangle-list fa-lg"></i>
+                                                  <i class="fa-solid fa-address-card fa-lg"></i>
                                                </button>
                                              </div>
                                              ${actionButtons}
@@ -391,6 +423,9 @@
                         $("#userName").text(data.userName);
                         $("#userInfo").text("Birthday: " + data.birthDay);
                         $("#userStatus").text("Status: Active"); // Assuming a static status, adjust as needed
+                        $("#subscriptionMonth").text(data.subscriptionMonth);
+                        $("#totalAppIds").text(data.totalAppIds);
+                        $("#totalFriends").text(data.totalFriends);
                         $("#removeUser").empty();
 
                         // Add the new remove friend button
@@ -416,12 +451,14 @@
             var confirmed = window.confirm("您確定要接受該邀請嗎？");
             if (confirmed) 
             {
+                console.log(userID)
                 $.ajax({
                     url: `http://localhost:5000/api/UserFriend/${userID}`,
                     type: 'PUT',
                     data: JSON.stringify({ status: 'accepted' }),
                     contentType: 'application/json; charset=utf-8',
                     success: function (result) {
+                        $("#friendList dbody").empty();
                         downLordAndRefreshUI();
                     }
                 });
@@ -439,6 +476,7 @@
                     url: `http://localhost:5000/api/UserFriend/${userID}`,
                     type: 'DELETE',
                     success: function (result) {
+                        $("#friendList dbody").empty();
                         downLordAndRefreshUI();
                         GetUserInfo();
                         $("#removeUser").empty();
@@ -565,7 +603,6 @@
                                                         <div class="card-body">
                                                           <h5 class="card-title">${temp.userName}</h5>
                                                           <p id="userId" class="card-text">
-                                                            userinfo
                                                           </p>
                                                           <p class="card-text">
                                                             <small class="text-muted">${temp.userID}</small>
