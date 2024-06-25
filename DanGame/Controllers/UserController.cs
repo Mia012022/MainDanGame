@@ -78,14 +78,14 @@ namespace DanGame.Controllers
 
         // GET: User/Login
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login([FromQuery] string? redirectTo)
         {
-            return View();
+            return View(new { redirectTo });
         }
 
         // POST: User/Login
         [HttpPost]
-        public async Task<IActionResult> Login(string useremail, string password)
+        public async Task<IActionResult> Login(string useremail, string password, string? redirectTo)
         {
             // 假設我們有一個方法來驗證使用者帳號和密碼
             var user = await ValidateUser(useremail, password);
@@ -97,7 +97,13 @@ namespace DanGame.Controllers
                 HttpContext.Session.SetString("Username", user.UserName);
 
                 // 重新導向至HomeController的index頁面
-                return RedirectToAction("Index", "Home");
+                if (redirectTo != null)
+                {
+                    return Redirect(redirectTo);
+                } else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
             // 驗證失敗，顯示錯誤訊息
@@ -151,7 +157,7 @@ namespace DanGame.Controllers
         {
             // 清除 session
             HttpContext.Session.Clear();
-
+           
             // 重新導向至首頁
             return RedirectToAction("Index", "Home");
         }
