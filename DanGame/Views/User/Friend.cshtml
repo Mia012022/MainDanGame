@@ -14,6 +14,7 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/50cf5e00fc.js" crossorigin="anonymous"></script>
     <!-- 好友聊天室css start -->
     <!--<link rel="stylesheet" href="/css/chatbox.css">
     <link rel="stylesheet" href="/css/action_menu.css">-->
@@ -52,6 +53,17 @@
 
         .form-control {
             background-color: rgba(0, 0, 0, 0.20);
+        }
+
+        .stats {
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: space-around;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            top: auto;
+            color: #000000;
         }
 
         #action_menu_btn {
@@ -127,25 +139,38 @@
                                     <div class="col-md-4">
                                         <img id="profilePicture" src="" alt="..." class="img-fluid rounded-start" />
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="card-body">
                                             <h5 id="userName" class="p-2 w-100 bd-highlight">userName</h5>
                                             <p id="userInfo" class="card-text">
-                                                userinfo
                                             </p>
                                             <p class="card-text">
-                                                <small class="text-muted">userStatus</small>
+                                                <small class="text-muted"></small>
                                             </p>
+                                        </div>
+                                        <div class="stats">
+                                            <div>
+                                                <div class="badge bg-info text-wrap" style="width: 8rem;">訂閱月數</div>
+                                                <i class="fa-solid fa-trophy fa-flip" style="color: #FFD43B;"></i>
+                                                <div id="subscriptionMonth" class="value">...</div>
+                                            </div>
+                                            <div>
+                                                <div class="badge bg-info text-wrap" style="width: 8rem;">遊戲總數</div>
+                                                <i class="fa-solid fa-gamepad fa-shake" style="color: #5e4e8d;"></i>
+                                                <div id="totalAppIds" class="value">...</div>
+                                            </div>
+                                            <div>
+                                                <div class="badge bg-info text-wrap" style="width: 8rem;">好友數</div>
+                                                <i class="fa-solid fa-users"></i>
+                                                <div id="totalFriends" class="value">...</div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div id="removeUser" class="d-flex align-items-end flex-column bd-highlight mb-3" style="height: 200px;">
                                             <div  class="p-2 bd-highlight">
                                                 <button type="button" class="btn btn-secondary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
-                                                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
-                                                        <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
-                                                    </svg>
+                                                    <i class="fa-solid fa-address-card fa-lg"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -222,10 +247,7 @@
                 <div class="d-flex" role="search">
                     <input class="form-control me-2" type="search" id="searchInput" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" id="searchBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                        </svg>
+                        <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
                 <br>
@@ -251,6 +273,7 @@
                     </div>
                 </dbody>
                 <h6>待接受</h6>
+                <ebody></ebody>
                 <div id="friendListContainer"></div>
 
             </div>
@@ -270,7 +293,10 @@
                             $("#profilePicture").attr("src", data.profilePictureUrl);
                             $("#userName").text(data.userName);
                             $("#userInfo").text("Birthday: " + formatDate(data.birthDay));
-                            $("#userStatus").text("Status: Active"); // Assuming a static status, adjust as needed
+                            /* $("#userStatus").text("Status: Active"); */ // Assuming a static status, adjust as needed
+                            $("#subscriptionMonth").text(data.subscriptionMonth);
+                            $("#totalAppIds").text(data.totalAppIds);
+                            $("#totalFriends").text(data.totalFriends);
                         } else {
                             $("#userName").text("No user data found");
                         }
@@ -329,7 +355,7 @@
                 let acceptedList = dataFrom_API_Server.accepted;
                 let pendingList = dataFrom_API_Server.pending;
 
-                $("#friendList dbody").empty();
+                $("#friendList dbody,#friendList ebody").empty();
                 for (let k = 0; k < acceptedList.length; k++) {
                     let item = acceptedList[k];
                     let flHtml = createFriendCard(item);
@@ -339,7 +365,7 @@
                 for (let k = 0; k < pendingList.length; k++) {
                     let item = pendingList[k];
                     let flHtml = createFriendCard(item, "pending");
-                    $("#friendList h6").append(flHtml);
+                    $("#friendList ebody").append(flHtml);
                 }
             });
         }
@@ -351,19 +377,12 @@
                 actionButtons = `
                             <div class="p-1 bd-highlight">
                                 <button type="button" onclick="acceptFriend(${item.userId})" class="btn btn-success invitebtn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                        class="bi bi-person-plus" viewBox="0 0 16 16">
-                                        <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path>
-                                        <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"></path>
-                                    </svg>
+                                    <i class="fa-solid fa-user-check fa-lg"></i>
                                 </button>
                             </div>
                             <div class="p-1 bd-highlight">
                                 <button type="button" onclick="removeFriend(${item.userId})" class="btn btn-danger">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-dash" viewBox="0 0 16 16">
-                                      <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                                      <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                                    </svg>
+                                    <i class="fa-solid fa-user-slash fa-lg"></i>
                                 </button>
                             </div>`;
             }
@@ -376,21 +395,15 @@
                                     <div class="col-md-4">
                                         <div class="card-body">
                                             <h5 class="card-title">${item.firstName} ${item.lastName}</h5>
-                                            <p class="card-text">${item.userId}</p>
+                                            <p class="card-text"></p>
                                             <p class="card-text"><small class="text-muted">${formatDate(item.dateOfbirth)}</small></p>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                          <div class="d-flex align-items-end flex-column bd-highlight mb-3" style="height: 50px;">
                                              <div class="p-1 bd-highlight">
-                                                       <button id='userinfo' type="button" class="btn btn-secondary" onclick="showUserInfo(${item.userId})">
-                                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                                   class="bi bi-card-list" viewBox="0 0 16 16">
-                                                   <path
-                                                     d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
-                                                   <path
-                                                     d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
-                                                 </svg>
+                                               <button id='userinfo' type="button" class="btn btn-secondary" onclick="showUserInfo(${item.userId})">
+                                                  <i class="fa-solid fa-address-card fa-lg"></i>
                                                </button>
                                              </div>
                                              ${actionButtons}
@@ -408,17 +421,17 @@
                         $("#profilePicture").attr("src", data.profilePictureUrl);
                         $("#userName").text(data.userName);
                         $("#userInfo").text("Birthday: " + data.birthDay);
-                        $("#userStatus").text("Status: Active"); // Assuming a static status, adjust as needed
+                        /* $("#userStatus").text("Status: Active"); */ // Assuming a static status, adjust as needed
+                        $("#subscriptionMonth").text(data.subscriptionMonth);
+                        $("#totalAppIds").text(data.totalAppIds);
+                        $("#totalFriends").text(data.totalFriends);
                         $("#removeUser").empty();
 
                         // Add the new remove friend button
                         $("#removeUser").append(`
                             <div class="p-2 bd-highlight">
                                 <button type="button" onclick="removeFriend(${userId})" class="btn btn-danger">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-dash" viewBox="0 0 16 16">
-                                      <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                                      <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                                    </svg>
+                                    <i class="fa-solid fa-user-slash fa-lg"></i>
                                 </button>
                             </div>
                         `);
@@ -437,12 +450,14 @@
             var confirmed = window.confirm("您確定要接受該邀請嗎？");
             if (confirmed) 
             {
+                console.log(userID)
                 $.ajax({
                     url: `http://localhost:5000/api/UserFriend/${userID}`,
                     type: 'PUT',
                     data: JSON.stringify({ status: 'accepted' }),
                     contentType: 'application/json; charset=utf-8',
                     success: function (result) {
+                        $("#friendList dbody").empty();
                         downLordAndRefreshUI();
                     }
                 });
@@ -460,6 +475,7 @@
                     url: `http://localhost:5000/api/UserFriend/${userID}`,
                     type: 'DELETE',
                     success: function (result) {
+                        $("#friendList dbody").empty();
                         downLordAndRefreshUI();
                         GetUserInfo();
                         $("#removeUser").empty();
@@ -586,26 +602,17 @@
                                                         <div class="card-body">
                                                           <h5 class="card-title">${temp.userName}</h5>
                                                           <p id="userId" class="card-text">
-                                                            userinfo
                                                           </p>
                                                           <p class="card-text">
-                                                            <small class="text-muted">${temp.userID}</small>
+                                                            <small class="text-muted"></small>
                                                           </p>
                                                         </div>
                                                       </div>
                                                       <div class="col-4">
                                                         <div class="d-flex align-items-end flex-column bd-highlight mb-3" style="height: 50px;">
                                                           <div class="p-2 bd-highlight">
-                                                            <button type="button" onclick="${temp.userID}" class="btn btn-secondary invitebtn">
-                                                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
-                                                                class="bi bi-person-plus" viewBox="0 0 16 16">
-                                                                <path
-                                                                  d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z">
-                                                                </path>
-                                                                <path fill-rule="evenodd"
-                                                                  d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5">
-                                                                </path>
-                                                              </svg>
+                                                            <button type="button" onclick="${temp.userID}" class="btn btn-success invitebtn">
+                                                              <i class="fa-solid fa-user-plus fa-bounce fa-lg"></i>
                                                             </button>
                                                           </div>
                                                         </div>
@@ -625,6 +632,7 @@
                                         contentType: 'application/json',
                                         success: function (response) {
                                             console.log('Friend request sent successfully:', response);
+                                            location.reload();
                                         },
                                         error: function (error) {
                                             console.error('Error sending friend request:', error);
@@ -649,6 +657,7 @@
                                 data: JSON.stringify({ id: userId }),
                                 success: function (response) {
                                     console.log('Friend request sent successfully:', response);
+                                    location.reload();
                                 },
                                 error: function (error) {
                                     console.error('Error sending friend request:', error);

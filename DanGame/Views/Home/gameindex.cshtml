@@ -101,7 +101,7 @@
                 <div class="carousel-item @(Array.IndexOf(Model.tagApps, app) == 0 ? "active":"")" style="height:905px; background-size: cover;background-repeat: no-repeat; background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1)), url(https://cdn.cloudflare.steamstatic.com/steam/apps/@(app.AppId)/library_hero.jpg)">
                     @* <img src="@app.HeaderImage" class="d-block w-100" alt="..."> *@
                     <div class="carousel-caption d-none d-md-block">
-                        <h5>@app.AppName</h5>
+                        <h5 style="font-size: 3.5rem;">@app.AppName</h5>
                         <p>@app.ShortDescription</p>
                     </div>
                 </div>
