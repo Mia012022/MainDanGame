@@ -25,8 +25,8 @@ namespace DanGame.Controllers
 
             // 獲取好友的ID列表
             var friendIds = await _context.Friendships
-                .Where(f => f.UserId == userId && f.Status == "Accepted")
-                .Select(f => f.FriendUserId)
+                .Where(f => (f.UserId == userId || userId == f.FriendUserId) && f.Status == "Accepted")
+                .Select(f => f.UserId == userId ? f.FriendUserId : f.UserId)
                 .ToListAsync();
 
             if (!friendIds.Any())
@@ -35,6 +35,25 @@ namespace DanGame.Controllers
             }
 
             // 獲取好友的所有訂單及其詳細資訊
+            var result = await (from friendship in _context.Friendships
+                                where (friendship.UserId == userId || userId == friendship.FriendUserId)
+                                where friendship.Status == "Accepted"
+                                select (friendship.UserId == userId ? friendship.FriendUser.Orders : friendship.User.Orders)).ToArrayAsync();
+
+            var OrderIDs = result.SelectMany(a => a.Select(b => b.OrderId));
+            var query = from orderItem in _context.OrderItems
+                        where OrderIDs.Contains(orderItem.OrderId)
+                        select orderItem;
+
+            //from orderItem in order.OrderItems
+            //select new
+            //{
+            //    ProfilePictureUrl = (friendship.UserId == userId ? friendship.FriendUser.UserProfile.ProfilePictureUrl : friendship.User.UserProfile.ProfilePictureUrl),
+            //    order.OrderDate,
+            //    orderItem.App.AppName,
+            //    orderItem.App.AppDetail.HeaderImage
+            //}).ToListAsync();
+
             var results = await (from o in _context.Orders
                                  join f in _context.Friendships on o.UserId equals f.FriendUserId
                                  join oi in _context.OrderItems on o.OrderId equals oi.OrderId
@@ -47,18 +66,26 @@ namespace DanGame.Controllers
                                  {
                                      ProfilePictureUrl = up.ProfilePictureUrl,
                                      OrderDate = o.OrderDate,
+                                     UserId = o.UserId,
+                                     AppId = a.AppId,
                                      AppName = a.AppName,
                                      HeaderImage = ad.HeaderImage
-                                 }).ToListAsync();
+                                 })
+                                 .ToListAsync();
+            var distinctResults = results
+                .GroupBy(x => new { x.UserId, x.AppId })
+                .Select(g => g.First())
+                .OrderByDescending(x => x.OrderDate)
+                .ToList();
 
 
-            if (!results.Any())
+            if (!distinctResults.Any())
             {
                 return NotFound("找不到訂單");
             }
 
             // 合併結果到一個回應中
-            return Ok(results);
+            return Ok(distinctResults);
         }
         [HttpGet]
         public ActionResult GetrecentGame()
