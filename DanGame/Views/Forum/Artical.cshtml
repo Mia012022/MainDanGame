@@ -138,9 +138,9 @@
 									<span class="ms-1 CommentCreateDate" timestramp="@(((DateTimeOffset)comment.CommentCreateDate).ToUnixTimeSeconds()*1000)"></span>
 									<span class="ms-3"><button class="reply-button btn btn-light" style="font-size:x-small" data-comment-id="@comment.CommentId">回覆</button></span>
 
-									<div class="btn-group btn-group-sm ">
+									@* <div class="btn-group btn-group-sm ">
 										<button class="btn "><i class="bi bi-heart" style="font-size: x-small;"></i><span class=" ms-1" style="font-size: x-small;">@comment.ArticalCommentLikes.Count</span></button>
-									</div>
+									</div> *@
 
 								</div>
 							</div>
@@ -160,10 +160,10 @@
 										<div class="text-secondary" style="font-size: x-small;">
 											<span class="ms-1 CreatedAt" timestramp="@(((DateTimeOffset)reply.CreatedAt).ToUnixTimeSeconds()*1000)"></span>
 											<span class="ms-3"><button class="reply-button btn btn-light" style="font-size:x-small" data-comment-id="@comment.CommentId" data-reply-id="@reply.ReplyId" data-username="@reply.User.UserName">回覆</button></span>
-											<div class="btn-group btn-group-sm">
+											@* <div class="btn-group btn-group-sm">
 												<button class="btn "><i class="bi bi-heart" style="font-size: x-small;"></i></button>
 
-											</div>
+											</div> *@
 										</div>
 										<div class="input-group mb-4 reply-form w-100" id="reply-form-reply-@reply.ReplyId" style="display: none;">
 											<form asp-action="AddReply" method="post">
@@ -273,10 +273,10 @@
 							$('#btnArticalLike').data('frliked', response.liked);
 							if (response.liked) {
 								$('#btnArticalLike').addClass('frliked');
-
+								$("#frCollect").text("已收藏");
 							} else {
 								$('#btnArticalLike').removeClass('frliked');
-
+								$("#frCollect").text("收藏");
 							}
 						} else {
 							if (response.requiresLogin) {

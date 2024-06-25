@@ -276,7 +276,10 @@ namespace DenGame.Controllers
 								 ).ToListAsync();
 			var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 			var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserId == userId);
-			var articles = await _context.ArticleLists.Where(x => x.UserId == userId).ToListAsync();
+			var articles = await _context.ArticleLists
+						.Where(x => x.UserId == userId)
+						.OrderByDescending(x => x.ArticalCreateDate)
+						.ToListAsync();
 			var comments = await _context.ArticalComments.Where(x => x.UserId == userId).ToListAsync();
 			var commentsWithArticles = await (from comment in _context.ArticalComments
 											  join article in _context.ArticleLists

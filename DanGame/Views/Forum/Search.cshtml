@@ -19,6 +19,14 @@
 	.bgBody {
 		background-image: linear-gradient(to bottom, #EEDFF3 0%, #EEDFF3 100%);
 	}
+
+	.frSearchTitle{
+		color:black;
+	}
+
+	.frSearchTitle:hover{
+		color:darkblue;
+	}
 </style>
 <body class="bgBody">
 
@@ -33,7 +41,7 @@
 		<li>
 			<a asp-action="Artical" asp-route-id="@article.ArticalId" class=" text-decoration-none">
 				<div>
-					<h4>
+					<h4 class="frSearchTitle">
 						@article.ArticalTitle
 					</h4>
 				</div>
@@ -44,6 +52,7 @@
 				
 			</a>
 		</li>
+		<hr />
 	}
 
 	</ul>
