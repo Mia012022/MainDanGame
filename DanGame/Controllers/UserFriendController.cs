@@ -25,9 +25,11 @@ namespace DanGame.Controllers
                              where (friend.UserId == userId || friend.FriendUserId == userId)
                              select new
                              {
+                                 FriendUserId = friend.FriendUserId,
                                  profile = (friend.UserId == userId) ? friend.FriendUser.UserProfile : friend.User.UserProfile,
                                  status = friend.Status
                              };
+           
             return new
             {
                 Accepted = await userFriend.Where(u => u.status == "Accepted").Select(u => u.profile).ToArrayAsync(),
@@ -35,9 +37,39 @@ namespace DanGame.Controllers
             };
 
         }
+        [HttpGet("pending")]
+        public IActionResult GetUserFriendsPending()
+        {
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
+
+            var friendPending = from friend in _context.Friendships
+                                where friend.FriendUserId != userId || friend.UserId == userId && friend.Status == "pending"
+                                select new 
+                                {
+                                    profile = (friend.UserId == userId) ? friend.FriendUser.UserProfile : null
+                                };
+            return Ok(friendPending);
+        }
         [HttpGet("{id}")]
         public IActionResult GetFriendCard(int id) 
         {
+            var totalMonths = _context.Subscriptions
+            .Where(subscriptions => subscriptions.UserId == id)
+            .Sum(subscriptions => subscriptions.SubscriptionPlanId == 1 ? 3 : 1);
+
+            var totalAppIds = _context.Orders
+            .Where(order => order.UserId == id)
+            .SelectMany(order => order.OrderItems)
+            .Select(orderItem => orderItem.AppId)
+            .Distinct()
+            .Count();
+
+            var totalFriends = _context.Friendships
+            .Where(f => (f.UserId == id || f.FriendUserId == id) && f.Status == "Accepted")
+            .Select(f => f.UserId == id ? f.FriendUserId : f.UserId)
+            .Distinct()
+            .Count();
+
             var q = from user in _context.Users
                     join profile in _context.UserProfiles on user.UserId equals profile.UserId
                     where user.UserId == id
@@ -46,7 +78,10 @@ namespace DanGame.Controllers
                         userId = user.UserId,
                         userName = user.UserName,
                         birthDay = profile.DateOfbirth,
-                        profilePictureUrl = profile.ProfilePictureUrl
+                        profilePictureUrl = profile.ProfilePictureUrl,
+                        subscriptionMonth = totalMonths,
+                        totalAppIds = totalAppIds,
+                        totalFriends = totalFriends
                     };
 
             return Ok(q.FirstOrDefault());

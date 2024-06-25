@@ -11,7 +11,7 @@
         <div class="border container d-flex flex-column" style="background-color: white; padding: 2rem;">
             <br>
         <form method="post" asp-controller="User" asp-action="Login">
-            <input id="redirectTo" name="redirectTo" value="@(Model.redirectTo != null ? $"{System.Web.HttpUtility.UrlDecode(Model.redirectTo)}" : "")" hidden>
+            <input id="redirectTo" name="redirectTo" value="@(Model?.redirectTo != null ? $"{System.Web.HttpUtility.UrlDecode(Model.redirectTo)}" : "")" hidden>
                 <div class="p-2">
                     <label for="useremail">帳號：</label>
                 <input type="text" id="useremail" name="useremail" pattern="[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="請輸入有效的電子郵件地址，如 example@example.com"
