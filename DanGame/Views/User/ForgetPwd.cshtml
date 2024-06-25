@@ -1,0 +1,18 @@
+﻿<div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="border container d-flex flex-column">
+        <br>
+        <h2>我忘了我的帳戶登入名稱或密碼</h2>
+
+        <!-- 重設密碼頁面還沒寫 -->
+        <form action="reset_pw.html" method="post">
+            <div class="mb-3">
+                <label class="form-label fs-6" for="">輸入您的電子郵件地址</label>
+                <input class="form-control w-50" type="text" name="email" id="email">
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">寄送驗證信</button>
+                <button type="button" class="btn btn-outline-secondary"><a asp-controller="User" asp-action="Login" class="text-decoration-none text-body-secondary">返回登入</a></button>
+            </div>
+        </form>
+    </div>
+</div>
