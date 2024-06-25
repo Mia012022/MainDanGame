@@ -87,7 +87,7 @@ namespace DanGame.Controllers
             using (var connection = new SqlConnection(connectionString))
             {
                 var query = "UPDATE UserProfile SET ProfilePictureUrl = @ProfilePictureUrl WHERE UserId = @UserId";
-                await connection.ExecuteAsync(query, new { ProfilePictureUrl = model.UserProfile.ProfilePictureUrl, UserId = 13 });
+                await connection.ExecuteAsync(query, new { ProfilePictureUrl = model.UserProfile.ProfilePictureUrl, UserId = HttpContext.Session.GetInt32("UserId") });
             }
             Console.WriteLine(model.UserProfile.ProfilePictureUrl);
             Console.WriteLine(model.User?.UserId);

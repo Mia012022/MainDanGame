@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using DanGame.Models;
+using DanGame.Hubs;
+using System.Linq;
 
 public class AuthorizeUserAttribute : ActionFilterAttribute
 {
@@ -57,7 +59,7 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         async public Task<UserProfile?> GetUserProfile()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var query = from profile in _context.UserProfiles
                         where profile.UserId == userId
@@ -71,13 +73,29 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         async public Task<dynamic> GetUserChatRooms()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var query = from chatRoom in _context.ChatRooms
                         from member in chatRoom.ChatRoomMembers
                         where member.UserId == userId
-                        select new { chatRoomId = chatRoom.ChatRoomId, members = chatRoom.ChatRoomMembers };
+                        select new { 
+                            chatRoomId = chatRoom.ChatRoomId, 
+                            members = chatRoom.ChatRoomMembers.Select(m => new { member = m, profile = m.User.UserProfile}) 
+                        };
 
+            return await query.ToArrayAsync();
+        }
+
+        // API: GET API/User/ChatRoomMessages 取得聊天室訊息
+        [HttpGet("User/ChatRoomMessages/{chatRoomID}")]
+        [AuthorizeUser]
+        async public Task<dynamic> GetChatMessages(int chatRoomID)
+        {
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
+            
+            var query = from message in _context.ChatMessages
+                        where message.ChatRoomId == chatRoomID && message.ChatRoom.ChatRoomMembers.Any(m => m.UserId == userId)
+                        select message;
             return await query.ToArrayAsync();
         }
 
@@ -86,21 +104,27 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         async public Task<dynamic> GetUserFriends()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var userFriend = from friend in _context.Friendships
                              where (friend.UserId == userId || friend.FriendUserId == userId)
                              select new
                              {
                                  profile = (friend.UserId == userId) ? friend.FriendUser.UserProfile : friend.User.UserProfile,
-                                 status = friend.Status
+                                 status = friend.Status,
+                                 isOnline = ChatHub.onlineUsers.Contains((friend.UserId == userId.Value) ? friend.FriendUserId : friend.UserId.Value)
                              };
+            
             return new
             {
-                Accepted = await userFriend.Where(u => u.status == "Accepted").Select(u => u.profile).ToArrayAsync(),
-                Pending = await userFriend.Where(u => u.status == "Pending").Select(u => u.profile).ToArrayAsync()
+                Accepted = await userFriend.Where(u => u.status == "Accepted").Select(u => new { u.profile, u.isOnline }).ToArrayAsync(),
+                Pending = await userFriend.Where(u => u.status == "Pending").Select(u => new { u.profile, u.isOnline }).ToArrayAsync()
             };
+        }
 
+        public class ShoppingCartRequest
+        {
+            public int AppId { get; set; }
         }
 
         // API: GET API/User/ShoppingCart 取得個人購物車品項
@@ -108,7 +132,7 @@ namespace DanGame.Controllers
         [AuthorizeUser]
         async public Task<ShoppingCart[]> GetUserShoppingItem()
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var query = from shoppingCart in _context.ShoppingCarts
                         where shoppingCart.UserId == userId
@@ -120,14 +144,19 @@ namespace DanGame.Controllers
         // API: POST API/User/ShoppingCart 新增個人購物車品項
         [HttpPost("User/ShoppingCart")]
         [AuthorizeUser]
-        async public Task<ShoppingCart[]> AddUserShoppingItem([FromBody] int appId)
+        async public Task<ShoppingCart[]> AddUserShoppingItem(ShoppingCartRequest shoppingCartRequest)
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
+
+            if (userId == null)
+        {
+                return [];
+            }
 
             var newShoppingItem = new ShoppingCart()
             {
-                UserId = userId,
-                AppId = appId,
+                UserId = userId.Value,
+                AppId = shoppingCartRequest.AppId,
                 AddedTime = DateTime.UtcNow,
             };
 
@@ -145,15 +174,15 @@ namespace DanGame.Controllers
         // API: DELETE API/User/ShoppingCart 刪除個人購物車品項
         [HttpDelete("User/ShoppingCart")]
         [AuthorizeUser]
-        async public Task<ShoppingCart[]> DelUserShoppingItem([FromBody] int appId)
+        async public Task<ShoppingCart[]> DelUserShoppingItem(ShoppingCartRequest shoppingCartRequest)
         {
-            int userId = Convert.ToInt32(Request.HttpContext.Session.GetString("UserId"));
+            var userId = Request.HttpContext.Session.GetInt32("UserId");
 
             var query = from shoppingCart in _context.ShoppingCarts
                         where shoppingCart.UserId == userId
                         select shoppingCart;
 
-            var target = query.Where((c) => c.AppId == appId).First();
+            var target = query.Where((c) => c.AppId == shoppingCartRequest.AppId).First();
 
             if (target != null)
             {
@@ -214,8 +243,8 @@ namespace DanGame.Controllers
         public async Task<dynamic> GetAppsByTags([FromBody] int[] tagIds)
         {
             var query = from tag in _context.GenreTags
-                         where tagIds.Contains(tag.TagId)
-                         select new { tagId = tag.TagId, tagName = tag.TagName, apps = tag.Apps };
+                        where tag.TagId == 70
+                        select new { tagId = tag.TagId, tagName = tag.TagName, apps = tag.Apps.Select(a => a.AppDetail) };
 
             return await query.ToArrayAsync();
         }

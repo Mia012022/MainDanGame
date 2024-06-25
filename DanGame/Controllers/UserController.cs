@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using System.Dynamic;
 
 
 namespace DanGame.Controllers
@@ -78,14 +79,14 @@ namespace DanGame.Controllers
 
         // GET: User/Login
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login([FromQuery] string? redirectTo)
         {
-            return View();
+            return View(new { redirectTo });
         }
 
         // POST: User/Login
         [HttpPost]
-        public async Task<IActionResult> Login(string useremail, string password)
+        public async Task<IActionResult> Login(string useremail, string password, string? redirectTo)
         {
             // 假設我們有一個方法來驗證使用者帳號和密碼
             var user = await ValidateUser(useremail, password);
@@ -97,12 +98,20 @@ namespace DanGame.Controllers
                 HttpContext.Session.SetString("Username", user.UserName);
 
                 // 重新導向至HomeController的index頁面
-                return RedirectToAction("Index", "Home");
+                if (redirectTo != null)
+                {
+                    return Redirect(redirectTo);
+                } else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
             // 驗證失敗，顯示錯誤訊息
             ViewBag.ErrorMessage = "Invalid email or password.";
-            return View();
+            dynamic model = new ExpandoObject();
+            model.redirectTo = redirectTo;
+            return View("Login", model);
         }
 
         // 驗證使用者帳號及密碼的方法
@@ -166,7 +175,7 @@ namespace DanGame.Controllers
         {
             // 清除 session
             HttpContext.Session.Clear();
-
+           
             // 重新導向至首頁
             return RedirectToAction("Index", "Home");
         }
@@ -285,7 +294,7 @@ namespace DanGame.Controllers
             }
 
             // 驗證密碼是否正確
-            if (user.PasswordHash != password)
+            if (user.PasswordHash != GetSHA256(password))
             {
                 // 密碼錯誤，返回錯誤訊息
                 ViewBag.ErrorMessage = "密碼錯誤，請重試。";

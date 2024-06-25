@@ -38,7 +38,7 @@
     <!-- ---------------------------------------------------------------------------------------------------------------->
     <div class="check_container">
         <div class="main" style="color: aliceblue">
-            <h3>付款方式</h3>
+            <h3>選擇卡片</h3>
             <div style="width: 800px">
                 <div class="formtop">
                     <div class="row">
@@ -316,7 +316,7 @@
             // 先存物件，post物件出去
             var formData = {
                
-                PaymentMethod: $('.cardNumber').val().slice(-4),
+                PaymentMethod: $('.diffcard').val(),
                 CardNumber: $('.cardNumber').val(),
                 ExpiryMonth: parseInt($('.expiryMonth').val()),
                 ExpiryYear: parseInt($('.expiryYear').val()),

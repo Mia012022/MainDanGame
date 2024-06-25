@@ -28,7 +28,7 @@
             <div>
                 <div class="d-flex flex-column">
                     <div class="mb-3">
-                        <a asp-controller="User" asp-action="UserIndex" class="text-decoration-none">帳戶詳細資料</a>
+                        <a asp-controller="User" asp-action="UserIndex" class="text-decoration-none fs-5">帳戶詳細資料</a>
                     </div>
                     @* <div class="mb-3">
                         <a asp-controller="User" asp-action="Preferences" class="text-decoration-none">偏好設定</a>
@@ -100,8 +100,8 @@
                             {
                                 <div>
                                     已訂閱<br>
-                                    訂閱開始日期:@Model.UserSubscription.StartDate.ToString("")<br>
-                                    訂閱結束日期:@Model.UserSubscription.EndDate.ToString("")<br>
+                                    訂閱開始日期： @Model.UserSubscription.StartDate.ToString("yyyy / MM / dd")<br>
+                                    訂閱結束日期： @Model.UserSubscription.EndDate.ToString("yyyy / MM / dd")<br>
                                     <br>
                                 </div>
                             }

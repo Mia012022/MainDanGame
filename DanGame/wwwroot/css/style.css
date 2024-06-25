@@ -250,7 +250,7 @@ bottom: -150px;
 
 .snow-container {
     position: absolute;
-    height: 1072px;
+    height: 960px;
     width: 100%;
     max-width: 100%;
     top: 0;
@@ -346,6 +346,54 @@ bottom: -150px;
     object-fit: cover;
     object-position: center;
     border-radius: 50%;
+
+}
+
+.topbox {
+    width: 100%;
+    animation: rotatebox 2s linear infinite;
+}
+
+@keyframes rotatebox {
+    0% { transform: rotate(0deg)}
+    100% { transform: rotate(360deg)}
+}
+
+
+
+/* 粒子特效的容器 */
+.particles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* 粒子樣式 */
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: particle-animation 0.8s ease-out forwards;
+}
+
+@keyframes particle-animation {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+    }
 }
 
 .avatar-preview-wrapper {

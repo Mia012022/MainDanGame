@@ -5,7 +5,7 @@ namespace DanGame.Models;
 
 public partial class Friendship
 {
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     public int FriendUserId { get; set; }
 

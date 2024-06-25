@@ -9,7 +9,7 @@ public partial class ArticalLike
 
     public int ArticalId { get; set; }
 
-    public int UserId { get; set; }
+    public int? UserId { get; set; }
 
     public virtual ArticleList Artical { get; set; } = null!;
 

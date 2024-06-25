@@ -258,7 +258,7 @@
                 method:"GET",
                 success:function(data){
                     console.log(data)
-                    $(".creditnumberlast").text("卡號末四碼" + data.creditCardInfo.paymentMethod.slice(-4))
+                    $(".creditnumberlast").text("卡號末四碼" + data.creditCardInfo.cardNumber.slice(-4))
                     $(".creditname").text(data.creditCardInfo.lastName + data.creditCardInfo.firstName)
                     $(".creditnumber").text(data.creditCardInfo.phoneNumber)
                     $(".creditdowntown").text(data.creditCardInfo.billingAddress)

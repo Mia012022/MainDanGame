@@ -5,17 +5,18 @@
 }
 
 <!-- 麵包屑 breadcrumb start ordered list 有序列表-->
-<div class="container-fluid overflow-x-auto" style="padding-top: 4rem;">
+<div class="container-fluid overflow-x-auto" style="padding-top: 4rem; background-image: linear-gradient(to right, rgba(238, 162, 162, 0.5) 0%, rgba(187, 193, 191, 0.5) 19%, rgba(87, 198, 225, 0.5) 42%, rgba(180, 159, 218, 0.5) 79%, rgba(122, 197, 216, 0.5) 100%)">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb mt-5 mx-5">
             <li class="breadcrumb-item"><a class="text-decoration-none" asp-controller="Home" asp-action="Index">首頁</a></li>
-            <li class="breadcrumb-item">帳戶</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" asp-controller="User" asp-action="UserIndex">帳戶</a></li>
+            <li class="breadcrumb-item active" aria-current="page">變更密碼</li>
         </ol>
     </nav>
 </div>
 <!-- 麵包屑 breadcrumb end -->
 
-<div class="container-fluid overflow-x-auto">
+<div class="container-fluid overflow-x-auto" style="padding-top: 1rem; background-image: linear-gradient(to right, rgba(238, 162, 162, 0.5) 0%, rgba(187, 193, 191, 0.5) 19%, rgba(87, 198, 225, 0.5) 42%, rgba(180, 159, 218, 0.5) 79%, rgba(122, 197, 216, 0.5) 100%); min-height: 960px;">
     <div class="row mx-5">
         <div class="col d-flex justify-content-between align-items-center mb-2">
             <h1>@Model.User?.UserName 的帳戶</h1>
