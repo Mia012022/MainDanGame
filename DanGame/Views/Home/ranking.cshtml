@@ -195,7 +195,7 @@
 									style="padding: 5px 15px; background-color: rgb(226, 226, 226); margin: 5px;" id="app-genre">${tag.tagName}</small>`
 					);
 					appDetail.find(".readmore").append(
-						`<button class="btn btn-outline-primary" style="margin: 0 20px; position: absolute; bottom: 9%; right: 2%;">詳細資訊</button>`
+						`<button class="btn btn-outline-primary" style="margin: 0 20px; position: absolute; bottom: 9%; right: 2%;" onclick="window.open('/Game/${app.appId}')">詳細資訊</button>`
 					);
 				}
 			}
