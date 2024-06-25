@@ -143,10 +143,9 @@
                                         <div class="card-body">
                                             <h5 id="userName" class="p-2 w-100 bd-highlight">userName</h5>
                                             <p id="userInfo" class="card-text">
-                                                userinfo
                                             </p>
                                             <p class="card-text">
-                                                <small class="text-muted">userStatus</small>
+                                                <small class="text-muted"></small>
                                             </p>
                                         </div>
                                         <div class="stats">
@@ -294,7 +293,7 @@
                             $("#profilePicture").attr("src", data.profilePictureUrl);
                             $("#userName").text(data.userName);
                             $("#userInfo").text("Birthday: " + formatDate(data.birthDay));
-                            $("#userStatus").text("Status: Active"); // Assuming a static status, adjust as needed
+                            /* $("#userStatus").text("Status: Active"); */ // Assuming a static status, adjust as needed
                             $("#subscriptionMonth").text(data.subscriptionMonth);
                             $("#totalAppIds").text(data.totalAppIds);
                             $("#totalFriends").text(data.totalFriends);
@@ -396,7 +395,7 @@
                                     <div class="col-md-4">
                                         <div class="card-body">
                                             <h5 class="card-title">${item.firstName} ${item.lastName}</h5>
-                                            <p class="card-text">${item.userId}</p>
+                                            <p class="card-text"></p>
                                             <p class="card-text"><small class="text-muted">${formatDate(item.dateOfbirth)}</small></p>
                                         </div>
                                     </div>
@@ -422,7 +421,7 @@
                         $("#profilePicture").attr("src", data.profilePictureUrl);
                         $("#userName").text(data.userName);
                         $("#userInfo").text("Birthday: " + data.birthDay);
-                        $("#userStatus").text("Status: Active"); // Assuming a static status, adjust as needed
+                        /* $("#userStatus").text("Status: Active"); */ // Assuming a static status, adjust as needed
                         $("#subscriptionMonth").text(data.subscriptionMonth);
                         $("#totalAppIds").text(data.totalAppIds);
                         $("#totalFriends").text(data.totalFriends);
@@ -605,7 +604,7 @@
                                                           <p id="userId" class="card-text">
                                                           </p>
                                                           <p class="card-text">
-                                                            <small class="text-muted">${temp.userID}</small>
+                                                            <small class="text-muted"></small>
                                                           </p>
                                                         </div>
                                                       </div>
@@ -633,6 +632,7 @@
                                         contentType: 'application/json',
                                         success: function (response) {
                                             console.log('Friend request sent successfully:', response);
+                                            location.reload();
                                         },
                                         error: function (error) {
                                             console.error('Error sending friend request:', error);
@@ -657,6 +657,7 @@
                                 data: JSON.stringify({ id: userId }),
                                 success: function (response) {
                                     console.log('Friend request sent successfully:', response);
+                                    location.reload();
                                 },
                                 error: function (error) {
                                     console.error('Error sending friend request:', error);
