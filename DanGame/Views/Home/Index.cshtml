@@ -518,10 +518,12 @@
 		// 預設隱藏導航欄
 		hideHeader();
 
+		let scrollThresholdExceeded = false;
 		// 滾動時顯示和隱藏導覽列
 		$(window).on("scroll", function () {
-			let value = $(document).scrollTop() > 20;
-			if (value) {
+			let scrollTop = $(document).scrollTop();
+			scrollThresholdExceeded = scrollTop > 15;
+			if (scrollThresholdExceeded) {
 				showHeader();
 			} else {
 				hideHeader();
@@ -530,10 +532,8 @@
 
 		// 當鼠標靠近視窗頂部時顯示導航欄
 		$(window).mousemove(function (event) {
-			if (event.clientY < 100) { // 當鼠標靠近頂部 100px 範圍內時
+			if (!scrollThresholdExceeded && event.clientY < 100) { 
 				showHeader();
-			} else {
-				hideHeader();
 			}
 		});
 
@@ -543,7 +543,7 @@
 				showHeader(); // 顯示導航欄
 			},
 			function () {
-				if ($(document).scrollTop() <= 15) {
+				if (!scrollThresholdExceeded && $(document).scrollTop() <= 15) {
 					hideHeader(); // 隱藏導航欄
 				}
 			}
