@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OpenAI.Interfaces;
-using OpenAI.ObjectModels.RequestModels;
 using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using OpenAI.Extensions;
 using OpenAI.ObjectModels;
-using Microsoft.AspNetCore.Cors;
+using OpenAI.ObjectModels.RequestModels;
+using DanGame.Models;
+
+using ChatMessage = OpenAI.ObjectModels.RequestModels.ChatMessage;
+
 
 namespace DanGame.Controllers
 {

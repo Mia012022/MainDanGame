@@ -128,3 +128,4 @@ artifacts/
 _chutzpah/
 
 .vs/
+/node_modules/.deno
