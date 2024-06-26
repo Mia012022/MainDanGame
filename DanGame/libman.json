@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "color-thief@2.4.0",
+      "destination": "wwwroot/lib/color-thief/",
+      "files": [
+        "color-thief.min.js"
+      ]
+    },
+    {
+      "library": "markdown.js@0.5.0",
+      "destination": "wwwroot/lib/markdown.js/",
+      "files": [
+        "markdown.min.js"
+      ]
+    }
+  ]
+}
