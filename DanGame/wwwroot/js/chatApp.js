@@ -696,7 +696,7 @@ class Message {
 
         this.WindowElement.messageAvatar.attr("src", sender.avatarUrl);
 
-        this.WindowElement.messageBubble.text(content);
+        this.WindowElement.messageBubble.html(markdown.toHTML(content));
 
         this.WindowElement.messageDate.text($.format.prettyDate(this.createAt));
     }
