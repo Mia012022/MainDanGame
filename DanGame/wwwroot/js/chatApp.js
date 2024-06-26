@@ -543,6 +543,8 @@ class AIAssistantWindow {
             }
         });
 
+        this.loadMessageFromLocalStorage();
+
         setInterval(() => {
             this.messages.forEach((message) => {
                 message.updateTimeText();
@@ -556,6 +558,37 @@ class AIAssistantWindow {
 
     get nowTimestramp() {
         return new Date().getTime();
+    }
+
+    loadMessageFromLocalStorage() {
+        var messageData = JSON.parse(localStorage.getItem("AIAssistantMessages"));
+        this.messages = [];
+        
+        if (messageData?.[clientUser.userID]) {
+            for (const localStorageMessage of messageData[clientUser.userID]) {
+                const sender = localStorageMessage.senderID == 0 ? robot : clientUser;
+                const message = new Message(sender, localStorageMessage.content, localStorageMessage.createAt, clientUser)
+                this.messages.push(message);
+
+                this.WindowElement.messageContainer.append(message.element);
+            }
+            this.scrollToBottom()
+        }
+    }
+
+    saveMessageToLocalStorage() {
+        var messageData = JSON.parse(localStorage.getItem("AIAssistantMessages")) || [];
+
+        messageData[clientUser.userID] = [];
+        for (const message of this.messages) {
+            messageData[clientUser.userID].push({
+                senderID: message.sender.userID,
+                content: message.content,
+                createAt: message.createAt,
+                clientUserID: message.clientUserID
+            })
+        }
+        localStorage.setItem("AIAssistantMessages", JSON.stringify(messageData))  
     }
 
     getMessageContext() {
@@ -609,7 +642,7 @@ class AIAssistantWindow {
             this.messages.push(message);
             this.WindowElement.messageContainer.append(message.element);
             this.WindowElement.chatWindowBody.scrollTop(
-                this.WindowElement.messageContainer.height(),
+            this.saveMessageToLocalStorage()
             );
         })
     }
