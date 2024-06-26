@@ -41,7 +41,7 @@ namespace DanGame.Hubs
                         ChatRoomId = chatRoomID,
                         SenderId = senderID,
                         MessageContent = message,
-                        CreatedTime = DateTime.UtcNow
+                        CreatedTime = DateTime.Now
                     };
                     await _context.ChatMessages.AddAsync(chatMessage);
                     await _context.SaveChangesAsync();
