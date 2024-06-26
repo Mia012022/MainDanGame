@@ -182,10 +182,10 @@
 			<div class="col-md-5 border rounded"
 				 style="background-color: rgb(231, 231, 231, 0.5); padding: 20px 0 20px 20px; margin: 20px 20px 20px 50px;">
 				<div class="shadow rounded text-bg-warning" style="margin-right: 20px; padding-bottom: 10px;">
-					<h4 style="padding: 5px;">&#160;訂閱</h4>
-					<span style="padding: 5px;">&#160;全面存取，無限制</span>
+					<h4 class="fw-bold" style="padding: 5px;">&#160;訂閱</h4>
+					<span style="padding: 5px;color: white;">&#160;全面存取，無限制</span>
 				</div>
-				<div style="padding: 5px; margin: 5px 30px 0 20px;">
+				<div style="padding: 5px; margin: 15px 30px 0 20px;">
 					<svg xmlns="http://www.w3.org/2000/svg" width="20"
 						 height="20" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
 						<path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
@@ -253,10 +253,10 @@
 			<div class="col-md-5 border rounded"
 				 style="background-color: rgb(231, 231, 231,0.5); padding: 20px 0 20px 20px; margin: 20px 0 20px 20px;">
 				<div class="shadow rounded text-bg-secondary" style="margin-right: 20px; padding-bottom: 10px;">
-					<h4 style="padding: 5px;">&#160;基本</h4>
+					<h4 class="fw-bold" style="padding: 5px;">&#160;基本</h4>
 					<span style="padding: 5px;">&#160;可探索好友，觀看論壇留言，遊戲須購買才可遊玩</span>
 				</div>
-				<div style="padding: 5px; margin: 5px 30px 0 20px;">
+				<div style="padding: 5px; margin: 15px 30px 0 20px;">
 					<svg xmlns="http://www.w3.org/2000/svg" width="20"
 						 height="20" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
 						<path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
@@ -366,15 +366,15 @@
 					<div class="col-sm-3 choose-box">
 						<div class="btn-group d-block  border-start button-container" role="group" aria-label="Basic example"
 							 style="height: 300px; padding: 10px;">
-							<h4 class="mt-3 ps-2"> 請選擇 </h4>
+							<h4 class="mt-3 ps-2" style="color: white; text-shadow: black 0.2em 0.1em 0.2em"> 請選擇 </h4>
 							<div class="btn-group-vertical d-block" role="group">
 
 								@for (int i = 0; i < Model.subscriptionPlans.Count; i++)
 								{
 									var plan = Model.subscriptionPlans[i];
 									<label class="btn mt-3 ms-4 w-75" style="border-radius: 10px;">
-										<input type="radio" name="options" id="option@(i+1)" class="button"
-											   onclick="toggleButtons(@i)"> @(plan.PlanName) 方案
+										<input type="radio" name="options" id="option@(i+1)" class="button" plan_id="@plan.PlanId"
+											   onclick="toggleButtons(@plan.PlanId)"> @(plan.PlanName) 方案
 									</label>
 								}
 
@@ -518,10 +518,12 @@
 		// 預設隱藏導航欄
 		hideHeader();
 
-		// 滚动时显示或隐藏导航栏
+		let scrollThresholdExceeded = false;
+		// 滾動時顯示和隱藏導覽列
 		$(window).on("scroll", function () {
-			let value = $(document).scrollTop() > 20;
-			if (value) {
+			let scrollTop = $(document).scrollTop();
+			scrollThresholdExceeded = scrollTop > 15;
+			if (scrollThresholdExceeded) {
 				showHeader();
 			} else {
 				hideHeader();
@@ -530,10 +532,8 @@
 
 		// 當鼠標靠近視窗頂部時顯示導航欄
 		$(window).mousemove(function (event) {
-			if (event.clientY < 100) { // 當鼠標靠近頂部 100px 範圍內時
+			if (!scrollThresholdExceeded && event.clientY < 100) { 
 				showHeader();
-			} else {
-				hideHeader();
 			}
 		});
 
@@ -543,7 +543,7 @@
 				showHeader(); // 顯示導航欄
 			},
 			function () {
-				if ($(document).scrollTop() <= 15) {
+				if (!scrollThresholdExceeded && $(document).scrollTop() <= 15) {
 					hideHeader(); // 隱藏導航欄
 				}
 			}
@@ -557,6 +557,11 @@
 		// 初始化顯示第一個 my-subscription，隱藏其他的 my-subscription
 		$(".my-subscription").hide();
 		$(".my-subscription").eq(0).show();
+
+		$("#selectButton").on("click", () => { 
+			let planID = $("input[name='options']:checked").attr("plan_id")
+			window.open(`\ShoppingCart/Gotosubscriptcheck/${planID}`)
+		})
 
 		// 監聽單選按鈕的點擊
 		$("input[name='options']").change(function () {
@@ -612,7 +617,6 @@
         currentIndex = Math.abs(currentIndex + direction) % totalItems;
         updateCarousel();
     }
-
 
 
 	// //

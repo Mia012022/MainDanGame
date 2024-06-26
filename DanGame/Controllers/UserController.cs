@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using System.Dynamic;
 
 
 namespace DanGame.Controllers
@@ -108,7 +109,9 @@ namespace DanGame.Controllers
 
             // 驗證失敗，顯示錯誤訊息
             ViewBag.ErrorMessage = "Invalid email or password.";
-            return View();
+            dynamic model = new ExpandoObject();
+            model.redirectTo = redirectTo;
+            return View("Login", model);
         }
 
         // 驗證使用者帳號及密碼的方法
@@ -134,19 +137,34 @@ namespace DanGame.Controllers
 
         // POST: User/Register
         [HttpPost]
-        public async Task<IActionResult> Register(User model)
+        public async Task<IActionResult> Register(UserProfileViewModel model)
         {
+            var encryptedPassword = GetSHA256(model.User?.PasswordHash ?? string.Empty);
+
             var user = new User
             {
-                UserName = model.UserName ?? string.Empty,
-                Email = model.Email ?? string.Empty,
-                PasswordHash = model.PasswordHash ?? string.Empty,
+                UserName = model.User?.UserName ?? string.Empty,
+                Email = model.User?.Email ?? string.Empty,
+                PasswordHash = encryptedPassword,
                 CreatedAt = DateTime.Now,
                 UpdateAt = DateTime.Now
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            var userProfile = new UserProfile
+            {
+                UserId = user.UserId,
+                FirstName = model.UserProfile?.FirstName ?? string.Empty,
+                LastName = model.UserProfile?.LastName ?? string.Empty,
+                CreatedAt = DateTime.Now,
+                UpdateAt = DateTime.Now
+            };
+
+            _context.UserProfiles.Add(userProfile);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("Index", "Home");
             //return Ok(model);
         }
@@ -161,50 +179,6 @@ namespace DanGame.Controllers
             // 重新導向至首頁
             return RedirectToAction("Index", "Home");
         }
-
-        //---------------------------------------------------------------------------------------------
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateProfilePicture(IFormFile profilePicture)
-        {
-            if (profilePicture != null && profilePicture.Length > 0)
-            {
-                var fileName = Path.GetFileName(profilePicture.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profile", fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await profilePicture.CopyToAsync(stream);
-                }
-
-                var userId = HttpContext.Session.GetInt32("UserId");
-                if (userId.HasValue)
-                {
-                    var userProfile = await GetUserProfileFromDatabase(userId.Value);
-                    if (userProfile != null)
-                    {
-                        userProfile.ProfilePictureUrl = "/images/profile/" + fileName;
-                        await UpdateUserProfileInDatabase(userProfile);
-
-                        return Json(new { success = true, url = userProfile.ProfilePictureUrl });
-                    }
-                }
-            }
-
-            return Json(new { success = false });
-        }
-
-        private async Task<UserProfile?> GetUserProfileFromDatabase(int userId)
-        {
-            return await _context.UserProfiles.SingleOrDefaultAsync(up => up.UserId == userId);
-        }
-
-        private async Task UpdateUserProfileInDatabase(UserProfile userProfile)
-        {
-            _context.UserProfiles.Update(userProfile);
-            await _context.SaveChangesAsync();
-        }
-        //----------------------------------------------------------------------------------------------------
 
         // GET: /User/UserIndex/CheckEmail
         [HttpGet]
@@ -320,7 +294,7 @@ namespace DanGame.Controllers
             }
 
             // 驗證密碼是否正確
-            if (user.PasswordHash != password)
+            if (user.PasswordHash != GetSHA256(password))
             {
                 // 密碼錯誤，返回錯誤訊息
                 ViewBag.ErrorMessage = "密碼錯誤，請重試。";
@@ -517,5 +491,12 @@ namespace DanGame.Controllers
 
             return View(viewModel);
         }
-	}
+
+        // GET: /User/ForgetPwd
+        [HttpGet]
+        public IActionResult ForgetPwd()
+        {
+            return View();
+        }
+    }
 }

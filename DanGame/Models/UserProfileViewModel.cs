@@ -11,4 +11,3 @@ namespace DanGame.Models
         public Subscription? UserSubscription { get; set; }
     }
 }
-
