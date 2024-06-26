@@ -13,7 +13,7 @@ connection.start().then(function() {
 });
 
 connection.on("ReceiveMessage", function (chatRoomID, senderID, message) {
-    console.log(`chatRoomID: ${chatRoomID},senderID: ${senderID}, message: ${message}`);
+    //console.log(`chatRoomID: ${chatRoomID},senderID: ${senderID}, message: ${message}`);
     const chatWindow = chatapp.windows.find(c => c?.chatRoomID === chatRoomID);
     const receiveMessage = chatWindow.createMessage(
         chatWindow.members.find(m => m.userID == senderID),
@@ -28,11 +28,9 @@ connection.on("ReceiveMessage", function (chatRoomID, senderID, message) {
 });
 
 connection.on("UserStatusChange", function (userID, status) {
-    console.log(userID, status);
     chatapp.FriendWindow.friends.forEach((friend) => {
         if (friend.userID === userID) {
             friend.isOnline = (status == "online");
-            console.log(`status-${status}`);
             friend.element.detach().appendTo(`.status-${status}`);
         }
     })
@@ -88,7 +86,7 @@ class UserFriend extends User {
     static #ElementBuilder = class FriendElementBuilder{
         constructor(user) {
             this.element = $(`
-                <div class="friend-item">
+                <div class="friend-item" friend-id="${user.userID}">
                     <i class="status-light"></i>
                     <img class="friend-avatar" height="80%" src="${user.avatarUrl}" alt="friend-avatar">
                     <h6 class="friend-name">${user.firstName + user.lastName}</h6>
@@ -176,7 +174,7 @@ class ChatApp {
             this.FriendWindow?.hide();
             this.AIAssistantWindow.toggle({
                 direction: "right",
-                complete: this.autoChatWindow.bind(this)
+                complete: this.autoResize.bind(this)
             });
         })
 
@@ -189,7 +187,7 @@ class ChatApp {
             this.AIAssistantWindow.hide()
             this.FriendWindow?.toggle({
                 direction: "right",
-                complete: this.autoChatWindow.bind(this)
+                complete: this.autoResize.bind(this)
             });
         })
 
@@ -209,15 +207,15 @@ class ChatApp {
                     }
                     chatWindow.toggle({
                         direction: "right",
-                        complete: this.autoChatWindow.bind(this)
+                        complete: this.autoResize.bind(this)
                     });
                 })
             }; 
-            this.autoChatWindow();
+            this.autoResize();
         })
     }
 
-    autoChatWindow() {
+    autoResize() {
         if (this.windows.every(w => !$(w.element).is(":visible"))) {
             this.AppElement.chatAppSideBar.css({
                 height: "120px",
@@ -250,10 +248,20 @@ class ChatApp {
 }
 
 class Window {
-    
+    hide() {
+        this.element.hide("slide", { direction: "right" });
+    }
+
+    show() {
+        this.element.show("slide", { direction: "right" });
+    }
+
+    toggle(option) {
+        this.element.toggle("slide", option);
+    }
 }
 
-class FriendWindow {
+class FriendWindow extends Window {
     static #ElementBuilder = class FriendWindowElementBuilder {
         constructor() {
             this.friendWindow = $(`
@@ -288,6 +296,8 @@ class FriendWindow {
     };
 
     constructor(clientUser) {
+        super();
+
         this.WindowElement = new FriendWindow.#ElementBuilder();
         this.clientUser = clientUser;
         this.friends;
@@ -329,26 +339,16 @@ class FriendWindow {
                 }
             }
         });
+
     }
 
     get element() {
         return this.WindowElement.friendWindow;
     }
 
-    hide() {
-        this.element.hide("slide", { direction: "right" });
-    }
-
-    show() {
-        this.element.show("slide", { direction: "right" });
-    }
-
-    toggle(option) {
-        this.element.toggle("slide", option);
-    }
 }
 
-class ChatWindow {
+class ChatWindow extends Window {
     static #ElementBuilder = class ChatWindowElementBuilder {
         constructor(member) {
             this.ChatWindow = $(`
@@ -391,6 +391,8 @@ class ChatWindow {
     };
 
     constructor(clientUser, chatRoom) {
+        super();
+
         this.members = [];
 
         for (const memberData of chatRoom.members) {
@@ -477,20 +479,9 @@ class ChatWindow {
         this.WindowElement.chatWindowBody.scrollTop(this.WindowElement.messageContainer.height());
     }
 
-    hide() {
-        this.element.hide("slide", { direction: "right" });
-    }
-
-    show() {
-        this.element.show("slide", { direction: "right" });
-    }
-
-    toggle(option) {
-        this.element.toggle("slide", option);
-    }
 }
 
-class AIAssistantWindow {
+class AIAssistantWindow extends Window {
     static #ElementBuilder = class AIAssistantWindowElementBuilder {
             constructor() {
                 this.AIAssistantWindow = $(`
@@ -526,6 +517,8 @@ class AIAssistantWindow {
         };
 
     constructor(clientUser) {
+        super();
+
         this.WindowElement = new AIAssistantWindow.#ElementBuilder();
 
         this.clientUser = clientUser;
@@ -616,7 +609,7 @@ class AIAssistantWindow {
         this.messages.push(clientUserMessage);
 
         this.WindowElement.messageContainer.append(clientUserMessage.element);
-        this.WindowElement.chatWindowBody.scrollTop(this.WindowElement.messageContainer.height());
+        this.scrollToBottom()
 
         var message; 
         $.ajax({
@@ -641,9 +634,8 @@ class AIAssistantWindow {
         .always((dataOrjqXHR, textStatus, jqXHRorErrorThrown) => {
             this.messages.push(message);
             this.WindowElement.messageContainer.append(message.element);
-            this.WindowElement.chatWindowBody.scrollTop(
+            this.scrollToBottom()
             this.saveMessageToLocalStorage()
-            );
         })
     }
 
@@ -651,17 +643,10 @@ class AIAssistantWindow {
         return new Message(sender, content, timestramp, this.clientUser);
     }
 
-    hide() {
-        this.element.hide("slide", { direction: "right" });
+    scrollToBottom() {
+        this.WindowElement.chatWindowBody.scrollTop(this.WindowElement.messageContainer.height());
     }
 
-    show() {
-        this.element.show("slide", { direction: "right" });
-    }
-
-    toggle(option) {
-        this.element.toggle("slide", option);
-    }
 }
 
 class Message {
