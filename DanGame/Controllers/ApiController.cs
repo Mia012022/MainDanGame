@@ -8,7 +8,7 @@ using DanGame.Models;
 using DanGame.Hubs;
 using System.Linq;
 
-public class AuthorizeUserAttribute : ActionFilterAttribute
+public class APIAuthorizeUserAttribute : ActionFilterAttribute
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {
@@ -19,6 +19,27 @@ public class AuthorizeUserAttribute : ActionFilterAttribute
         {
             context.Result = new UnauthorizedResult();
         }else
+        {
+            // 若在後續代碼中使用userId，可以將其添加到 context.HttpContext.Items 中
+            context.HttpContext.Items["UserId"] = userId.Value;
+        }
+        base.OnActionExecuting(context);
+    }
+}
+
+public class PageAuthorizeUserAttribute : ActionFilterAttribute
+{
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        var session = context.HttpContext.Session;
+        var userId = session.GetInt32("UserId");
+
+        if (!userId.HasValue)
+        {
+            context.Result = new RedirectResult($"/User/Login?redirectTo={context.HttpContext.Request.Path}");
+
+		}
+        else
         {
             // 若在後續代碼中使用userId，可以將其添加到 context.HttpContext.Items 中
             context.HttpContext.Items["UserId"] = userId.Value;
@@ -56,7 +77,7 @@ namespace DanGame.Controllers
 
         // API: GET API/User/Profile 登入後取得個人 Profile
         [HttpGet("User/Profile")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         async public Task<UserProfile?> GetUserProfile()
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
@@ -70,7 +91,7 @@ namespace DanGame.Controllers
 
         // API: GET API/User/ChatRooms 登入後取得個人所有聊天室
         [HttpGet("User/ChatRooms")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         async public Task<dynamic> GetUserChatRooms()
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
@@ -88,7 +109,7 @@ namespace DanGame.Controllers
 
         // API: GET API/User/ChatRoomMessages 取得聊天室訊息
         [HttpGet("User/ChatRoomMessages/{chatRoomID}")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         async public Task<dynamic> GetChatMessages(int chatRoomID)
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
@@ -101,7 +122,7 @@ namespace DanGame.Controllers
 
         // API: GET API/User/Friends 登入後取得個人所有好友
         [HttpGet("User/Friends")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         async public Task<dynamic> GetUserFriends()
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
@@ -129,7 +150,7 @@ namespace DanGame.Controllers
 
         // API: GET API/User/ShoppingCart 取得個人購物車品項
         [HttpGet("User/ShoppingCart")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         async public Task<ShoppingCart[]> GetUserShoppingItem()
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
@@ -143,7 +164,7 @@ namespace DanGame.Controllers
 
         // API: POST API/User/ShoppingCart 新增個人購物車品項
         [HttpPost("User/ShoppingCart")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         async public Task<ShoppingCart[]> AddUserShoppingItem(ShoppingCartRequest shoppingCartRequest)
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
@@ -173,7 +194,7 @@ namespace DanGame.Controllers
 
         // API: DELETE API/User/ShoppingCart 刪除個人購物車品項
         [HttpDelete("User/ShoppingCart")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         async public Task<ShoppingCart[]> DelUserShoppingItem(ShoppingCartRequest shoppingCartRequest)
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
