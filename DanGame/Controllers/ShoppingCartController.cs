@@ -17,7 +17,7 @@ using static OpenAI.ObjectModels.StaticValues.AssistantsStatics.MessageStatics;
 using System.Numerics;
 
 
-//public class AuthorizeUserAttribute : ActionFilterAttribute
+//public class APIAuthorizeUserAttribute : ActionFilterAttribute
 //{
 //    public override void OnActionExecuting(ActionExecutingContext context)
 //    {
@@ -44,7 +44,7 @@ namespace DanGame.Controllers
         private DanGameContext context;
 
         [HttpGet("User/Profile")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
 
 
         [HttpGet("apps")]
@@ -74,7 +74,7 @@ namespace DanGame.Controllers
 
         //取得使用者購物車的資料
         [HttpGet("User/ShoppingCart")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         async public Task<ShoppingCart[]> GetUserShoppingItem()
         {
             var session = Request.HttpContext.Session;
@@ -91,7 +91,7 @@ namespace DanGame.Controllers
         //刪除使用者購物車的資料
       
         [HttpDelete("delete/ShoppingCart/{id}")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         public IActionResult DeletceShoppingCart( int id  )
         {
             var userId = Request.HttpContext.Session.GetInt32("UserId");
@@ -105,7 +105,7 @@ namespace DanGame.Controllers
         //刪除購物車全部的資料
 
         [HttpPost("delete/allShoppingCart")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         public IActionResult DeletceAllShoppingCart([FromBody] List<int> appidsarry)
         {
             var userid = Request.HttpContext.Session.GetInt32("UserId");
@@ -130,7 +130,7 @@ namespace DanGame.Controllers
 
         //POST: /CreditCardInfo
         [HttpPost("PostCreditCardInfo")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         public async Task<ActionResult<CreditCardInfo>> PostCreditCardInfo([FromBody] CreditCardInfo creditCardInfo, [FromQuery] bool save) //這邊帶兩個參數，透過 save: $("#gridCheck").is(":checked")傳進來是bool來判斷
         {
             //前端送進來的creditCardInfo，是沒有設定userId的，所以這邊要透過認證跟seeion拿Id，確定這個信用卡資訊是哪一個用戶得
@@ -236,7 +236,7 @@ namespace DanGame.Controllers
 
         //當進入Gotocheck先把相關資料算好給前端
         [HttpGet("Gotocheck")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         public IActionResult Gotocheck()
         {
             var session = Request.HttpContext.Session;
@@ -278,7 +278,7 @@ namespace DanGame.Controllers
 
         //當進入Gotocheckmethod先把相關資料算好給前端
         [HttpGet("Gotocheckmethod")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         public IActionResult Gotocheckmethod()
         {
             var session = Request.HttpContext.Session;
@@ -322,7 +322,7 @@ namespace DanGame.Controllers
 
         //當進入Gotocheckmethod先把相關資料算好給前端
         [HttpGet("Gotosubscriptcheck/{id}")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         public IActionResult Gotosubscriptcheck(int id )
         {
             var session = Request.HttpContext.Session;
@@ -569,7 +569,7 @@ namespace DanGame.Controllers
 
         //第三頁結帳取得信用卡資料
         [HttpGet("GetCreditCardInfo/check")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         public IActionResult GetCreditCardInfo()
         {
 
@@ -604,7 +604,7 @@ namespace DanGame.Controllers
 
         //前往結帳成功頁面
         [HttpGet("successbuy/{method}")]
-        [AuthorizeUser]
+        [APIAuthorizeUser]
         public IActionResult successbuy(string method, [FromQuery] int? planid)
         {
             var userId=Request.HttpContext.Session.GetInt32("UserId");

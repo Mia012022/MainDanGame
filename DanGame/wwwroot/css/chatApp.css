@@ -71,10 +71,11 @@
             top: 10px;
         }
     }
-    
+
     .chat-window-body::-webkit-scrollbar {
-        width: 10px;
+        width: 3px;
     }
+
     .chat-window-body {
         flex: 1;
         overflow: auto;
@@ -90,6 +91,10 @@
                 flex-wrap: wrap;
                 align-items: flex-end;
                 margin: 0px 0px;
+
+                p {
+                    margin: 0px;
+                }
 
                 .message-avatar {
                     border-radius: 50%;
@@ -268,9 +273,11 @@
             }
         }
     }
+
     .friends-contener::-webkit-scrollbar {
         width: 2px;
     }
+
     .friends-contener {
         display: flex;
         flex-direction: column;

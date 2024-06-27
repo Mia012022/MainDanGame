@@ -12,6 +12,8 @@ namespace DanGame.Controllers
         {
             _context = dbContext;
         }
+
+		[PageAuthorizeUser]
         public IActionResult Index()
         {
 			var id = Request.HttpContext.Session.GetInt32("UserId");

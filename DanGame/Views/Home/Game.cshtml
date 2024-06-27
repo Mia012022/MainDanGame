@@ -23,7 +23,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <script src="~/lib/color-thife/color-thief.umd.js"></script>
+    <script src="~/lib/color-thief/color-thief.min.js"></script>
     <script src="~/js/colorTool.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="~/css/style.css">
@@ -221,6 +221,8 @@
             background-size: cover;
             background-repeat: no-repeat;
             
+
+
             .game-desc-title{
                 color: white;
                 font-size: 45px;
@@ -592,7 +594,7 @@
                                             <div class="swiper-slide">
                                                 <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/@dlcApp.AppId/header.jpg" />
                                                 <p>@dlcApp.AppName</p>
-                                                <p>NT$@dlcApp.Price</p>
+                                                @* <p>NT$@dlcApp.Price</p> *@
                                             </div>
                                         }
                                     </div>
@@ -614,20 +616,20 @@
                     <div class="subscript-check check">
                         <input class="form-check-input" type="radio" name="RadioDefault" id="Radio-subscript" @(Model.alreadySubscription ? "disabled" : "checked")>
                         <label class="form-check-label" for="Radio-subscript">
-                            @(Model.alreadySubscription ? "已訂閱" : "訂閱")
+                            @(Model.alreadySubscription ? "🎉已訂閱" : "訂閱")
                             <p class="form-check-label-desc" style="color: goldenrod;">DanGame Plus升級即可存取此遊戲和其他數款作品</p>
                         </label>
                     </div>
                     <div class="add-to-cart-check check">
-                        <input class="form-check-input" type="radio" name="RadioDefault" id="Radio-add-to-cart" @(Model.alreadyOwnThisGame ? "disabled" : "")>
+                        <input class="form-check-input" type="radio" name="RadioDefault" id="Radio-add-to-cart" @(Model.alreadyOwnThisGame ? "disabled" : (Model.alreadySubscription ? "checked" : ""))>
                         <label class="form-check-label" for="Radio-add-to-cart">
                             購買 NT$ @Model.detail.Price.ToString("N0")
                             <p class="form-check-label-desc" style="color: gray;">@(Model.alreadyOwnThisGame ? "已擁有此遊戲" : "單獨購買此遊戲")</p>
                         </label>
                     </div>
                 </div>
-                <div class="check-button" @(Model.alreadySubscription && Model.alreadyOwnThisGame && !Model.alreadyInShoppingCart ? "disabled" : "")>
-                    訂閱 DanGame Plus
+                <div class="check-button">
+                    @(Model.alreadySubscription ? (Model.alreadyOwnThisGame ? "可隨時暢玩" : (Model.alreadyInShoppingCart ? "已加入購物車" : "加入購物車")) : "訂閱 DanGame Plus")
                 </div>
             </div>
         </div>
@@ -640,6 +642,34 @@
         let alreadyOwnThisGame = @(Model.alreadyOwnThisGame ? "true" : "false");
         let alreadyInShoppingCart = @(Model.alreadyInShoppingCart ? "true" : "false");
         let alreadyLogin = @(Model.alreadyLogin ? "true" : "false");
+
+        if (alreadyInShoppingCart && $("#Radio-add-to-cart").is(':checked')) {
+            $(".check-button").text("已加入購物車").css({
+                cursor: "default",
+                filter: "brightness(0.5)"
+            })
+        }
+
+        getMainColors("https://steamcdn-a.akamaihd.net/steam/apps/@Model.detail.AppId/library_600x900.jpg", 2).then((result) => {
+            const mainColors = result;
+            if (2 == 1) {
+                const gradientColor = "rgb(" + mainColors.join(', ') + ")";
+                $(".game-desc a").css({ 
+                    "background": `linear-gradient(to top, ${gradientColor}, ${gradientColor})`,
+                    "background-clip": "text",
+                    "color": "transparent"
+                });
+            } else {
+                const gradientColors = mainColors.map(color => `rgb(${color.join(',')})`).join(', ');
+                $(".game-desc a").css({ 
+                    "background": `linear-gradient(to top, ${gradientColors})`,
+                    "background-clip": "text",
+                    "color": "transparent"
+                });
+            }
+
+        });
+
 
         document.addEventListener('DOMContentLoaded', function () {
             var thumbnailSwiper = new Swiper('.game-media-thumbnail', {
