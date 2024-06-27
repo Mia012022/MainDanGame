@@ -79,7 +79,7 @@ function updataprice() {
                                   <p class="item-version">
                                       平台:  ${app.platform.split(",").map((p) => platformIconMap[p]).join(" ")}
                                   </p>
-                                  <p class="relese-date">上架日期:${app.releaseDate}</p>
+                                  <p class="relesedate">上架日期:${app.releaseDate}</p>
                                   <p class="developer">發行商:${app.devloperName}</p>
                                   <div class="price">
                                       <div>
@@ -106,6 +106,7 @@ function updataprice() {
                                   ></a>
                               </div>
                           </div>`);
+        
         gameitem.find(".deletebutton").on("click", function (e) {
             e.preventDefault(); // 防止點擊鏈接時跳轉
             mymodalremoveone.show();
@@ -168,6 +169,7 @@ function updataprice() {
             });
         });
         itembox.append(gameitem);
+      
         console.log($(".gameitem").length);
       
         //結帳金額的部分
@@ -397,14 +399,14 @@ function canvascalculate() {
 var bsOffcanvas = new bootstrap.Offcanvas(myOffcanvas);
 
 //點擊跳窗
-$(".bi-cart-plus").on("click", (event) => {
-    event.preventDefault()
-    // if (canvastotal == 0) {
-    //     bsOffcanvas.block();
-    // }
-    bsOffcanvas.toggle();
-    console.log("嗨");
-});
+//$(".bi-cart-plus").on("click", (event) => {
+//    event.preventDefault()
+//    // if (canvastotal == 0) {
+//    //     bsOffcanvas.block();
+//    // }
+//    bsOffcanvas.toggle();
+//    console.log("嗨");
+//});
 
 //購物車圖標model功能結束
 
